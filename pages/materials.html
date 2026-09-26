@@ -1,0 +1,133 @@
+<!-- ======================================================================== -->
+<!-- Файл: pages/materials.html — МАТЕРИАЛЫ партнёрства: фото задач,          -->
+<!-- конспекты, PDF. Адрес: materials.html?id=12 (номер партнёрства).        -->
+<!-- Файлы лежат в закрытой корзине Supabase Storage «materials»; видят их   -->
+<!-- только участники партнёрства. Можно только картинки и PDF до 5 МБ.     -->
+<!-- Связи: логика — js/pages/materials.js; проверки — js/files.js;          -->
+<!-- правила доступа — часть 10 файла sql/schema.sql.                        -->
+<!-- ======================================================================== -->
+<!-- тип документа -->
+<!DOCTYPE html>
+<!-- язык — русский -->
+<html lang="ru">
+<!-- служебная часть -->
+<head>
+  <!-- кодировка -->
+  <meta charset="UTF-8">
+  <!-- масштаб на телефоне -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- название вкладки -->
+  <title>Материалы — SkillSwap</title>
+  <!-- значок -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <!-- подключение к Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- сервер шрифтов -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- шрифт Manrope -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+  <!-- переменные -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <!-- базовые стили -->
+  <link rel="stylesheet" href="/css/base.css">
+  <!-- компоненты -->
+  <link rel="stylesheet" href="/css/components.css">
+  <!-- стили страниц -->
+  <link rel="stylesheet" href="/css/pages.css">
+  <!-- тема -->
+  <script src="/js/theme-init.js"></script>
+  <!-- скрипт страницы -->
+  <script type="module" src="/js/pages/materials.js"></script>
+<!-- конец head -->
+</head>
+<!-- видимая часть -->
+<body>
+  <!-- шапка -->
+  <header class="site-header" id="app-header"></header>
+  <!-- основное содержимое -->
+  <main class="page">
+    <!-- контейнер страницы -->
+    <div class="container" id="page">
+      <!-- ссылка назад в чат (адрес подставит скрипт) -->
+      <p><a href="/pages/partners.html" id="back-to-chat">← Назад</a></p>
+      <!-- заголовок страницы -->
+      <div class="page-title">
+        <!-- заголовок -->
+        <h1>Материалы</h1>
+        <!-- с кем партнёрство (заполнит скрипт) -->
+        <p id="materials-subtitle">Файлы видят только участники партнёрства.</p>
+      <!-- конец заголовка -->
+      </div>
+      <!-- состояния: загрузка, ошибка -->
+      <div id="materials-state">
+        <!-- загрузка -->
+        <div class="state" role="status"><div class="spinner" aria-hidden="true"></div><p class="state-title">Загружаем материалы…</p></div>
+      <!-- конец состояний -->
+      </div>
+
+      <!-- содержимое; скрыто до загрузки -->
+      <div id="materials-content" hidden>
+        <!-- загрузка файла (только в активном партнёрстве) -->
+        <section class="card section-card" id="upload-section" aria-labelledby="upload-title">
+          <!-- заголовок -->
+          <h2 id="upload-title"><span aria-hidden="true">📎</span> Добавить файл</h2>
+          <!-- форма загрузки -->
+          <form class="form" id="upload-form" novalidate>
+            <!-- зона перетаскивания: label связан с полем выбора файла, клик по ней открывает окно выбора -->
+            <label class="dropzone" for="file-input" id="dropzone">
+              <!-- большая иконка -->
+              <span class="dropzone-icon" aria-hidden="true">📤</span>
+              <!-- главный текст -->
+              <strong>Перетащи файл сюда или нажми, чтобы выбрать</strong>
+              <!-- подсказка о правилах -->
+              <span class="muted">Фото задач, конспекты: JPG, PNG, WebP, GIF или PDF, до 5 МБ</span>
+            <!-- конец зоны -->
+            </label>
+            <!-- поле выбора файла; accept — в окне выбора сразу показываются только подходящие файлы; visually-hidden — спрятано, но работает -->
+            <input class="visually-hidden" id="file-input" type="file" accept="image/jpeg,image/png,image/webp,image/gif,application/pdf">
+            <!-- выбранный файл (покажет скрипт) -->
+            <div class="selected-file" id="selected-file" hidden>
+              <!-- иконка -->
+              <span class="selected-file-icon" id="selected-icon" aria-hidden="true">📄</span>
+              <!-- имя и размер -->
+              <div class="file-info">
+                <!-- имя файла -->
+                <strong class="file-name" id="selected-name"></strong>
+                <!-- размер -->
+                <span class="muted" id="selected-size"></span>
+              <!-- конец информации -->
+              </div>
+              <!-- кнопка «убрать выбор» -->
+              <button class="btn btn-ghost btn-sm" id="clear-file" type="button">Убрать</button>
+            <!-- конец блока -->
+            </div>
+            <!-- ошибка проверки файла -->
+            <p class="field-error" id="file-error" role="alert" hidden></p>
+            <!-- общая ошибка загрузки -->
+            <div class="alert alert-error" data-form-error role="alert" hidden></div>
+            <!-- кнопка загрузки; disabled — пока файл не выбран -->
+            <button class="btn btn-primary" id="upload-button" type="submit" disabled>Загрузить</button>
+          <!-- конец формы -->
+          </form>
+        <!-- конец раздела -->
+        </section>
+        <!-- сообщение, если загружать нельзя (партнёрство не активно) -->
+        <p class="alert section-card" id="upload-closed" hidden></p>
+        <!-- список файлов -->
+        <section class="section-card" aria-labelledby="files-title">
+          <!-- заголовок со счётчиком -->
+          <h2 id="files-title"><span aria-hidden="true">🗂️</span> Файлы <span class="chip chip-primary" id="files-count">0</span></h2>
+          <!-- сетка карточек файлов -->
+          <div class="grid" id="files-list"></div>
+        <!-- конец раздела -->
+        </section>
+      <!-- конец содержимого -->
+      </div>
+    <!-- конец контейнера -->
+    </div>
+  <!-- конец main -->
+  </main>
+<!-- конец body -->
+</body>
+<!-- конец html -->
+</html>

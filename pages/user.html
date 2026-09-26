@@ -1,0 +1,137 @@
+<!-- ======================================================================== -->
+<!-- Файл: pages/user.html — ПРОФИЛЬ ДРУГОГО УЧЕНИКА. Адрес: user.html?id=... -->
+<!-- Показывает аватар, имя с первой буквой фамилии, класс, очки, предметы,  -->
+<!-- средний рейтинг и отзывы партнёров. Видны только ученики своей школы    -->
+<!-- (так настроено правило RLS profiles_select в sql/schema.sql).           -->
+<!-- Связи: логика — js/pages/user.js; отзывы — js/reviews.js.               -->
+<!-- ======================================================================== -->
+<!-- тип документа -->
+<!DOCTYPE html>
+<!-- язык — русский -->
+<html lang="ru">
+<!-- служебная часть -->
+<head>
+  <!-- кодировка -->
+  <meta charset="UTF-8">
+  <!-- масштаб на телефоне -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- название вкладки (скрипт заменит на имя ученика) -->
+  <title>Профиль ученика — SkillSwap</title>
+  <!-- значок -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <!-- подключение к Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- сервер шрифтов -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- шрифт Manrope -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+  <!-- переменные -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <!-- базовые стили -->
+  <link rel="stylesheet" href="/css/base.css">
+  <!-- компоненты -->
+  <link rel="stylesheet" href="/css/components.css">
+  <!-- стили страниц -->
+  <link rel="stylesheet" href="/css/pages.css">
+  <!-- тема -->
+  <script src="/js/theme-init.js"></script>
+  <!-- скрипт страницы -->
+  <script type="module" src="/js/pages/user.js"></script>
+<!-- конец head -->
+</head>
+<!-- видимая часть -->
+<body>
+  <!-- шапка -->
+  <header class="site-header" id="app-header"></header>
+  <!-- основное содержимое -->
+  <main class="page">
+    <!-- контейнер страницы -->
+    <div class="container" id="page">
+      <!-- состояния -->
+      <div id="user-state">
+        <!-- загрузка -->
+        <div class="state" role="status"><div class="spinner" aria-hidden="true"></div><p class="state-title">Загружаем профиль…</p></div>
+      <!-- конец состояний -->
+      </div>
+      <!-- содержимое; скрыто до загрузки -->
+      <div id="user-content" hidden>
+        <!-- ссылка назад; скрипт сделает так, чтобы она возвращала на предыдущую страницу -->
+        <p><a href="/pages/matches.html" id="back-link">← Назад</a></p>
+        <!-- верхняя карточка -->
+        <section class="card profile-hero fade-in" aria-label="Кратко об ученике">
+          <!-- аватар -->
+          <span class="avatar avatar-lg" id="user-avatar" aria-hidden="true"></span>
+          <!-- имя и класс -->
+          <div class="profile-hero-info">
+            <!-- имя -->
+            <h1 id="user-name"></h1>
+            <!-- класс и школа -->
+            <p class="muted" id="user-meta"></p>
+          <!-- конец информации -->
+          </div>
+          <!-- плашка рейтинга -->
+          <div class="stat-box">
+            <!-- средняя оценка -->
+            <span class="stat-value" id="user-rating">—</span>
+            <!-- подпись с количеством отзывов -->
+            <span class="stat-label" id="user-rating-label">нет оценок</span>
+          <!-- конец плашки -->
+          </div>
+          <!-- плашка очков -->
+          <div class="stat-box">
+            <!-- очки -->
+            <span class="stat-value" id="user-points">0</span>
+            <!-- подпись -->
+            <span class="stat-label">очков</span>
+          <!-- конец плашки -->
+          </div>
+          <!-- плашка серии; скрыта, пока не загрузится (и у учителей её нет) -->
+          <div class="stat-box" id="user-streak-box" hidden>
+            <!-- число недель с огоньком -->
+            <span class="stat-value" id="user-streak">🔥 0</span>
+            <!-- подпись -->
+            <span class="stat-label" id="user-streak-label">недель подряд</span>
+          <!-- конец плашки -->
+          </div>
+        <!-- конец карточки -->
+        </section>
+        <!-- предметы -->
+        <section class="card section-card" aria-labelledby="user-subjects-title">
+          <!-- заголовок -->
+          <h2 id="user-subjects-title"><span aria-hidden="true">📚</span> Предметы</h2>
+          <!-- «может помочь» -->
+          <p class="field-label">Может помочь</p>
+          <!-- плашки заполнит скрипт -->
+          <div class="row section-hint" id="user-knows"></div>
+          <!-- «хочет подтянуть» -->
+          <p class="field-label">Хочет подтянуть</p>
+          <!-- плашки -->
+          <div class="row" id="user-learns"></div>
+        <!-- конец раздела -->
+        </section>
+        <!-- бейджи ученика (скрыты, пока скрипт их не загрузит) -->
+        <section class="card section-card" id="user-badges-section" aria-labelledby="user-badges-title" hidden>
+          <!-- заголовок -->
+          <h2 id="user-badges-title"><span aria-hidden="true">🏅</span> Бейджи</h2>
+          <!-- список бейджей -->
+          <div id="user-badges"></div>
+        <!-- конец раздела -->
+        </section>
+        <!-- отзывы -->
+        <section class="card section-card" aria-labelledby="user-reviews-title">
+          <!-- заголовок -->
+          <h2 id="user-reviews-title"><span aria-hidden="true">💬</span> Отзывы партнёров</h2>
+          <!-- список отзывов -->
+          <div id="user-reviews"></div>
+        <!-- конец раздела -->
+        </section>
+      <!-- конец содержимого -->
+      </div>
+    <!-- конец контейнера -->
+    </div>
+  <!-- конец main -->
+  </main>
+<!-- конец body -->
+</body>
+<!-- конец html -->
+</html>

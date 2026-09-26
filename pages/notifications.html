@@ -1,0 +1,85 @@
+<!-- ======================================================================== -->
+<!-- Файл: pages/notifications.html — ВСЕ УВЕДОМЛЕНИЯ.                        -->
+<!-- Полный список (последние 100) с фильтром «Все / Непрочитанные» и        -->
+<!-- кнопкой «Прочитать все». Колокольчик в шапке показывает только 10.     -->
+<!-- Связи: логика — js/pages/notifications.js; общие функции —              -->
+<!-- js/notifications.js; уведомления создаёт база (sql/schema.sql).         -->
+<!-- ======================================================================== -->
+<!-- тип документа -->
+<!DOCTYPE html>
+<!-- язык — русский -->
+<html lang="ru">
+<!-- служебная часть -->
+<head>
+  <!-- кодировка -->
+  <meta charset="UTF-8">
+  <!-- масштаб на телефоне -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- название вкладки -->
+  <title>Уведомления — SkillSwap</title>
+  <!-- значок -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <!-- подключение к Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- сервер шрифтов -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- шрифт Manrope -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+  <!-- переменные -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <!-- базовые стили -->
+  <link rel="stylesheet" href="/css/base.css">
+  <!-- компоненты -->
+  <link rel="stylesheet" href="/css/components.css">
+  <!-- стили страниц -->
+  <link rel="stylesheet" href="/css/pages.css">
+  <!-- тема -->
+  <script src="/js/theme-init.js"></script>
+  <!-- скрипт страницы -->
+  <script type="module" src="/js/pages/notifications.js"></script>
+<!-- конец head -->
+</head>
+<!-- видимая часть -->
+<body>
+  <!-- шапка -->
+  <header class="site-header" id="app-header"></header>
+  <!-- основное содержимое -->
+  <main class="page">
+    <!-- контейнер страницы; narrow — узкая колонка, список легче читать -->
+    <div class="container narrow" id="page">
+      <!-- заголовок страницы -->
+      <div class="page-title">
+        <!-- заголовок -->
+        <h1>Уведомления</h1>
+        <!-- пояснение -->
+        <p>Запросы, сообщения, занятия и бейджи — всё в одном месте.</p>
+      <!-- конец заголовка -->
+      </div>
+      <!-- панель управления: фильтр и «Прочитать все» -->
+      <div class="notif-toolbar section-card">
+        <!-- фильтр: две радиокнопки в виде переключателя -->
+        <div class="segmented" role="radiogroup" aria-label="Какие уведомления показать">
+          <!-- все -->
+          <label><input type="radio" name="filter" value="all" checked><span>Все</span></label>
+          <!-- только непрочитанные -->
+          <label><input type="radio" name="filter" value="unread"><span>Непрочитанные</span></label>
+        <!-- конец фильтра -->
+        </div>
+        <!-- кнопка -->
+        <button class="btn btn-secondary btn-sm" id="read-all" type="button">Прочитать все</button>
+      <!-- конец панели -->
+      </div>
+      <!-- список (заполнит скрипт); начальное состояние — загрузка -->
+      <div class="card notif-page" id="notif-page">
+        <!-- загрузка -->
+        <div class="state" role="status"><div class="spinner" aria-hidden="true"></div><p class="state-title">Загружаем уведомления…</p></div>
+      <!-- конец списка -->
+      </div>
+    <!-- конец контейнера -->
+    </div>
+  <!-- конец main -->
+  </main>
+<!-- конец body -->
+</body>
+<!-- конец html -->
+</html>

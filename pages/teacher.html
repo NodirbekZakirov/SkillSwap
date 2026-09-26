@@ -1,0 +1,117 @@
+<!-- ======================================================================== -->
+<!-- Файл: pages/teacher.html — ПАНЕЛЬ УЧИТЕЛЯ. Только для роли teacher.       -->
+<!-- Статистика своей школы, диаграмма спроса на предметы, жалобы на          -->
+<!-- сообщения и действия с ними, заблокированные ученики.                    -->
+<!-- Связи: логика — js/pages/teacher.js; данные и права — SQL-функции         -->
+<!-- get_school_stats и teacher_* и RLS-правила в sql/schema.sql.             -->
+<!-- ======================================================================== -->
+<!-- тип документа -->
+<!DOCTYPE html>
+<!-- язык — русский -->
+<html lang="ru">
+<!-- служебная часть -->
+<head>
+  <!-- кодировка -->
+  <meta charset="UTF-8">
+  <!-- масштаб на телефоне -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- название вкладки -->
+  <title>Панель учителя — SkillSwap</title>
+  <!-- значок -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <!-- подключение к Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- сервер шрифтов -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- шрифт Manrope -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+  <!-- переменные -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <!-- базовые стили -->
+  <link rel="stylesheet" href="/css/base.css">
+  <!-- компоненты -->
+  <link rel="stylesheet" href="/css/components.css">
+  <!-- стили страниц -->
+  <link rel="stylesheet" href="/css/pages.css">
+  <!-- тема -->
+  <script src="/js/theme-init.js"></script>
+  <!-- скрипт страницы -->
+  <script type="module" src="/js/pages/teacher.js"></script>
+<!-- конец head -->
+</head>
+<!-- видимая часть -->
+<body>
+  <!-- шапка -->
+  <header class="site-header" id="app-header"></header>
+  <!-- основное содержимое -->
+  <main class="page">
+    <!-- контейнер страницы -->
+    <div class="container" id="page">
+      <!-- заголовок страницы -->
+      <div class="page-title">
+        <!-- заголовок -->
+        <h1>Панель учителя</h1>
+        <!-- название школы (заполнит скрипт) -->
+        <p id="teacher-school">Твоя школа</p>
+      <!-- конец заголовка -->
+      </div>
+      <!-- состояния -->
+      <div id="teacher-state">
+        <!-- загрузка -->
+        <div class="state" role="status"><div class="spinner" aria-hidden="true"></div><p class="state-title">Загружаем данные школы…</p></div>
+      <!-- конец состояний -->
+      </div>
+      <!-- содержимое; скрыто до загрузки -->
+      <div id="teacher-content" hidden>
+        <!-- четыре плашки со статистикой (заполнит скрипт) -->
+        <div class="stats-grid section-card" id="stats-grid"></div>
+        <!-- диаграмма спроса на предметы -->
+        <section class="card section-card" aria-labelledby="demand-title">
+          <!-- заголовок -->
+          <h2 id="demand-title"><span aria-hidden="true">📊</span> Какие предметы нужнее всего</h2>
+          <!-- пояснение -->
+          <p class="section-hint">Сколько учеников отметили предмет как «хочу подтянуть». Можно подумать о дополнительных занятиях.</p>
+          <!-- столбики диаграммы (заполнит скрипт) -->
+          <div id="demand-chart"></div>
+        <!-- конец раздела -->
+        </section>
+        <!-- жалобы -->
+        <section class="section-card" aria-labelledby="complaints-title">
+          <!-- заголовок и фильтр в строку -->
+          <div class="section-head">
+            <!-- заголовок -->
+            <h2 id="complaints-title"><span aria-hidden="true">🚩</span> Жалобы</h2>
+            <!-- фильтр по статусу -->
+            <div class="segmented" role="radiogroup" aria-label="Какие жалобы показать">
+              <!-- открытые -->
+              <label><input type="radio" name="complaint-filter" value="open" checked><span>Открытые</span></label>
+              <!-- закрытые -->
+              <label><input type="radio" name="complaint-filter" value="closed"><span>Закрытые</span></label>
+              <!-- все -->
+              <label><input type="radio" name="complaint-filter" value="all"><span>Все</span></label>
+            <!-- конец фильтра -->
+            </div>
+          <!-- конец строки -->
+          </div>
+          <!-- список жалоб (заполнит скрипт) -->
+          <div class="complaint-list" id="complaints-list"></div>
+        <!-- конец раздела -->
+        </section>
+        <!-- заблокированные ученики -->
+        <section class="card section-card" aria-labelledby="blocked-title">
+          <!-- заголовок -->
+          <h2 id="blocked-title"><span aria-hidden="true">🔒</span> Заблокированные ученики</h2>
+          <!-- список (заполнит скрипт) -->
+          <div id="blocked-list"></div>
+        <!-- конец раздела -->
+        </section>
+      <!-- конец содержимого -->
+      </div>
+    <!-- конец контейнера -->
+    </div>
+  <!-- конец main -->
+  </main>
+<!-- конец body -->
+</body>
+<!-- конец html -->
+</html>

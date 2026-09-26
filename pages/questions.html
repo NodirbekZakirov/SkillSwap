@@ -1,0 +1,172 @@
+<!-- ======================================================================== -->
+<!-- Файл: pages/questions.html — ВОПРОСЫ И ОТВЕТЫ (общая лента всех школ).   -->
+<!-- Ученик задаёт вопрос (предмет, заголовок, подробности, фото задачи),     -->
+<!-- ищет и фильтрует вопросы и открывает их, чтобы ответить.                 -->
+<!-- Связи: логика — js/pages/questions.js; общие функции — js/qa.js;         -->
+<!-- данные — таблицы questions и answers (sql/schema.sql).                   -->
+<!-- ======================================================================== -->
+<!-- тип документа -->
+<!DOCTYPE html>
+<!-- язык — русский -->
+<html lang="ru">
+<!-- служебная часть -->
+<head>
+  <!-- кодировка -->
+  <meta charset="UTF-8">
+  <!-- масштаб на телефоне -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- название вкладки -->
+  <title>Вопросы — SkillSwap</title>
+  <!-- значок -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <!-- подключение к Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- сервер шрифтов -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- шрифт Manrope -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+  <!-- переменные -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <!-- базовые стили -->
+  <link rel="stylesheet" href="/css/base.css">
+  <!-- компоненты -->
+  <link rel="stylesheet" href="/css/components.css">
+  <!-- стили страниц -->
+  <link rel="stylesheet" href="/css/pages.css">
+  <!-- тема -->
+  <script src="/js/theme-init.js"></script>
+  <!-- скрипт страницы -->
+  <script type="module" src="/js/pages/questions.js"></script>
+<!-- конец head -->
+</head>
+<!-- видимая часть -->
+<body>
+  <!-- шапка -->
+  <header class="site-header" id="app-header"></header>
+  <!-- основное содержимое -->
+  <main class="page">
+    <!-- контейнер страницы -->
+    <div class="container" id="page">
+      <!-- заголовок страницы с кнопкой -->
+      <div class="page-title page-title-row">
+        <!-- текст заголовка -->
+        <div>
+          <!-- заголовок -->
+          <h1>Вопросы и ответы</h1>
+          <!-- пояснение -->
+          <p>Не получается задача? Спроси — ученики всех школ помогут. Знаешь ответ? Помоги другим: за ответ, одобренный администратором, <strong>+15 очков</strong>.</p>
+        <!-- конец текста -->
+        </div>
+        <!-- кнопка «Задать вопрос» (только ученикам; покажет скрипт) -->
+        <button class="btn btn-primary btn-lg" id="ask-toggle" type="button" aria-expanded="false" aria-controls="ask-card" hidden>✍️ Задать вопрос</button>
+      <!-- конец заголовка -->
+      </div>
+
+      <!-- форма нового вопроса; hidden — скрыта, пока не нажали «Задать вопрос» -->
+      <section class="card section-card ask-card" id="ask-card" aria-labelledby="ask-title" hidden>
+        <!-- заголовок формы -->
+        <h2 id="ask-title"><span aria-hidden="true">✍️</span> Новый вопрос</h2>
+        <!-- форма; novalidate — проверяем сами -->
+        <form class="form" id="ask-form" novalidate>
+          <!-- предмет -->
+          <div class="field">
+            <!-- подпись -->
+            <label for="ask-subject">Предмет</label>
+            <!-- список предметов заполнит скрипт -->
+            <select class="input" id="ask-subject" name="subject" aria-describedby="ask-subject-error"></select>
+            <!-- ошибка -->
+            <p class="field-error" id="ask-subject-error" hidden></p>
+          <!-- конец поля -->
+          </div>
+          <!-- заголовок вопроса -->
+          <div class="field">
+            <!-- подпись и счётчик символов -->
+            <label for="ask-title-input">Коротко: что непонятно? <span class="char-counter" data-counter-for="ask-title-input"></span></label>
+            <!-- поле; maxlength — как в базе -->
+            <input class="input" id="ask-title-input" name="title" type="text" maxlength="150" placeholder="Например: Как решить уравнение x² − 5x + 6 = 0?" aria-describedby="ask-title-input-error">
+            <!-- ошибка -->
+            <p class="field-error" id="ask-title-input-error" hidden></p>
+          <!-- конец поля -->
+          </div>
+          <!-- подробности -->
+          <div class="field">
+            <!-- подпись и счётчик -->
+            <label for="ask-body">Подробности (необязательно) <span class="char-counter" data-counter-for="ask-body"></span></label>
+            <!-- многострочное поле -->
+            <textarea class="input" id="ask-body" name="body" maxlength="2000" placeholder="Что уже пробовал(а)? На каком шаге застрял(а)?" aria-describedby="ask-body-error"></textarea>
+            <!-- ошибка -->
+            <p class="field-error" id="ask-body-error" hidden></p>
+          <!-- конец поля -->
+          </div>
+          <!-- фото задачи: кнопка, превью, ошибка (работает через setupPhotoPicker в js/qa.js) -->
+          <div class="photo-picker" id="ask-photo">
+            <!-- label-кнопка открывает выбор файла; скрытое поле внутри -->
+            <label class="btn btn-secondary btn-sm photo-button"><span aria-hidden="true">📷</span> Прикрепить фото задачи<input class="photo-input visually-hidden" type="file" accept="image/jpeg,image/png,image/webp,image/gif"></label>
+            <!-- подсказка -->
+            <span class="muted">JPG, PNG, WebP или GIF, до 5 МБ</span>
+            <!-- превью выбранного фото -->
+            <div class="photo-preview" hidden><img alt=""><button class="btn btn-ghost btn-sm photo-remove" type="button">Убрать фото</button></div>
+            <!-- ошибка фото -->
+            <p class="field-error photo-error" role="alert" hidden></p>
+          <!-- конец блока фото -->
+          </div>
+          <!-- общая ошибка -->
+          <div class="alert alert-error" data-form-error role="alert" hidden></div>
+          <!-- кнопки -->
+          <div class="row">
+            <!-- опубликовать -->
+            <button class="btn btn-primary" id="ask-submit" type="submit">Опубликовать вопрос</button>
+            <!-- отмена -->
+            <button class="btn btn-ghost" id="ask-cancel" type="button">Отмена</button>
+          <!-- конец кнопок -->
+          </div>
+        <!-- конец формы -->
+        </form>
+      <!-- конец формы нового вопроса -->
+      </section>
+
+      <!-- панель фильтров -->
+      <div class="card filters section-card" role="search" aria-label="Поиск и фильтры вопросов">
+        <!-- поиск -->
+        <div class="field">
+          <!-- подпись -->
+          <label for="q-search">Поиск</label>
+          <!-- поле поиска -->
+          <input class="input" id="q-search" type="search" placeholder="Например: дискриминант" autocomplete="off">
+        <!-- конец поля -->
+        </div>
+        <!-- предмет -->
+        <div class="field">
+          <!-- подпись -->
+          <label for="q-subject">Предмет</label>
+          <!-- список заполнит скрипт -->
+          <select class="input" id="q-subject"></select>
+        <!-- конец поля -->
+        </div>
+        <!-- переключатель: все / без ответа / мои -->
+        <div class="segmented q-mode" role="radiogroup" aria-label="Какие вопросы показать">
+          <!-- все -->
+          <label><input type="radio" name="q-mode" value="all" checked><span>Все</span></label>
+          <!-- без ответа -->
+          <label><input type="radio" name="q-mode" value="unanswered"><span>Без ответа</span></label>
+          <!-- мои -->
+          <label><input type="radio" name="q-mode" value="mine"><span>Мои</span></label>
+        <!-- конец переключателя -->
+        </div>
+      <!-- конец фильтров -->
+      </div>
+
+      <!-- состояния и список вопросов -->
+      <div id="questions-list">
+        <!-- загрузка -->
+        <div class="state" role="status"><div class="spinner" aria-hidden="true"></div><p class="state-title">Загружаем вопросы…</p></div>
+      <!-- конец списка -->
+      </div>
+    <!-- конец контейнера -->
+    </div>
+  <!-- конец main -->
+  </main>
+<!-- конец body -->
+</body>
+<!-- конец html -->
+</html>

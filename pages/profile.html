@@ -1,0 +1,287 @@
+<!-- ======================================================================== -->
+<!-- Файл: pages/profile.html — МОЙ ПРОФИЛЬ.                                  -->
+<!-- Здесь ученик меняет имя, фамилию, класс и аватар, отмечает предметы      -->
+<!-- («знаю» и «хочу подтянуть» с уровнем 1–5) и удобное время.               -->
+<!-- Учитель и администратор видят только личные данные.                     -->
+<!-- Связи: логика — js/pages/profile.js; стили — css/pages.css.              -->
+<!-- ======================================================================== -->
+<!-- тип документа -->
+<!DOCTYPE html>
+<!-- язык — русский -->
+<html lang="ru">
+<!-- служебная часть -->
+<head>
+  <!-- кодировка -->
+  <meta charset="UTF-8">
+  <!-- масштаб на телефоне -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- название вкладки -->
+  <title>Мой профиль — SkillSwap</title>
+  <!-- значок -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <!-- подключение к Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- сервер шрифтов -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- шрифт Manrope -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+  <!-- переменные -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <!-- базовые стили -->
+  <link rel="stylesheet" href="/css/base.css">
+  <!-- компоненты -->
+  <link rel="stylesheet" href="/css/components.css">
+  <!-- стили страниц -->
+  <link rel="stylesheet" href="/css/pages.css">
+  <!-- тема -->
+  <script src="/js/theme-init.js"></script>
+  <!-- скрипт страницы -->
+  <script type="module" src="/js/pages/profile.js"></script>
+<!-- конец head -->
+</head>
+<!-- видимая часть -->
+<body>
+  <!-- шапка с меню (нарисует layout.js) -->
+  <header class="site-header" id="app-header"></header>
+  <!-- основное содержимое -->
+  <main class="page">
+    <!-- контейнер страницы -->
+    <div class="container" id="page">
+      <!-- состояние «загрузка»: видно, пока скрипт получает данные -->
+      <div id="profile-loading">
+        <!-- блок состояния -->
+        <div class="state" role="status">
+          <!-- крутящийся кружок -->
+          <div class="spinner" aria-hidden="true"></div>
+          <!-- текст -->
+          <p class="state-title">Загружаем профиль…</p>
+        <!-- конец блока -->
+        </div>
+      <!-- конец загрузки -->
+      </div>
+
+      <!-- содержимое профиля; hidden — скрыто до загрузки данных -->
+      <div id="profile-content" hidden>
+        <!-- приветствие после регистрации -->
+        <div class="alert alert-success section-card" id="welcome-alert" role="status" hidden>
+          <!-- текст -->
+          <strong>Добро пожаловать в SkillSwap!</strong> Отметь предметы и удобное время — и мы подберём тебе партнёра.
+        <!-- конец приветствия -->
+        </div>
+        <!-- сообщение о блокировке учителем -->
+        <div class="alert alert-error section-card" id="blocked-alert" role="alert" hidden>
+          <!-- текст -->
+          Твой аккаунт заблокирован учителем: ты не можешь писать в чат и не появляешься в подборе. Обратись к учителю.
+        <!-- конец сообщения -->
+        </div>
+        <!-- сообщение о предупреждениях -->
+        <div class="alert alert-warning section-card" id="warnings-alert" role="status" hidden></div>
+
+        <!-- верхняя карточка: аватар, имя, очки -->
+        <section class="card profile-hero fade-in" aria-label="Кратко о тебе">
+          <!-- большой аватар -->
+          <span class="avatar avatar-lg" id="hero-avatar" aria-hidden="true"></span>
+          <!-- имя и школа -->
+          <div class="profile-hero-info">
+            <!-- имя (заполнит скрипт) -->
+            <h1 id="hero-name"></h1>
+            <!-- класс, школа, роль -->
+            <p class="muted" id="hero-meta"></p>
+          <!-- конец информации -->
+          </div>
+          <!-- плашка с очками -->
+          <div class="stat-box" id="hero-points-box">
+            <!-- число -->
+            <span class="stat-value" id="hero-points">0</span>
+            <!-- подпись -->
+            <span class="stat-label">очков</span>
+          <!-- конец плашки -->
+          </div>
+          <!-- плашка средней оценки (только ученику) -->
+          <div class="stat-box" data-student-only>
+            <!-- средняя оценка (заполнит скрипт) -->
+            <span class="stat-value" id="hero-rating">—</span>
+            <!-- подпись -->
+            <span class="stat-label" id="hero-rating-label">нет оценок</span>
+          <!-- конец плашки -->
+          </div>
+          <!-- плашка проведённых занятий (только ученику) -->
+          <div class="stat-box" data-student-only>
+            <!-- число занятий -->
+            <span class="stat-value" id="hero-lessons">0</span>
+            <!-- подпись -->
+            <span class="stat-label">занятий</span>
+          <!-- конец плашки -->
+          </div>
+        <!-- конец верхней карточки -->
+        </section>
+
+        <!-- серия «недель подряд помогаешь» (только ученику); id="streak" — сюда ведёт значок 🔥 в шапке -->
+        <section class="card section-card streak-card" id="streak" data-student-only aria-labelledby="streak-title">
+          <!-- заголовок; visually-hidden — только для программ чтения с экрана (на экране крупное число) -->
+          <h2 class="visually-hidden" id="streak-title">Моя серия</h2>
+          <!-- содержимое (заполнит js/streaks.js) -->
+          <div id="my-streak"><p class="muted">Считаем серию…</p></div>
+        <!-- конец раздела -->
+        </section>
+
+        <!-- заполненность профиля (только для ученика: data-student-only) -->
+        <section class="card section-card" data-student-only>
+          <!-- заголовок раздела; текст обёрнут в один span, иначе промежуток gap у заголовка встанет перед знаком % -->
+          <h2><span aria-hidden="true">✅</span><span>Профиль заполнен на <span id="completion-percent">0</span>%</span></h2>
+          <!-- полоска; role="progressbar" и aria-* — программа чтения с экрана скажет процент -->
+          <div class="progress" id="completion-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Заполненность профиля">
+            <!-- заливка; ширину задаст скрипт -->
+            <div class="progress-bar" id="completion-bar" style="width: 0%"></div>
+          <!-- конец полоски -->
+          </div>
+          <!-- список пунктов (заполнит скрипт) -->
+          <ul class="checklist" id="completion-list"></ul>
+        <!-- конец раздела -->
+        </section>
+
+        <!-- форма профиля; novalidate — проверяем сами -->
+        <form id="profile-form" novalidate>
+          <!-- раздел «Личные данные» -->
+          <section class="card section-card">
+            <!-- заголовок -->
+            <h2><span aria-hidden="true">👤</span>Личные данные</h2>
+            <!-- поля в столбик -->
+            <div class="form">
+              <!-- строка «имя + фамилия» -->
+              <div class="form-row">
+                <!-- поле «Имя» -->
+                <div class="field">
+                  <!-- подпись -->
+                  <label for="first-name">Имя</label>
+                  <!-- поле -->
+                  <input class="input" id="first-name" name="first_name" type="text" autocomplete="given-name" maxlength="40" aria-describedby="first-name-error">
+                  <!-- ошибка -->
+                  <p class="field-error" id="first-name-error" hidden></p>
+                <!-- конец поля -->
+                </div>
+                <!-- поле «Фамилия» -->
+                <div class="field">
+                  <!-- подпись -->
+                  <label for="last-name">Фамилия</label>
+                  <!-- поле -->
+                  <input class="input" id="last-name" name="last_name" type="text" autocomplete="family-name" maxlength="40" aria-describedby="last-name-error last-name-hint">
+                  <!-- подсказка -->
+                  <p class="field-hint" id="last-name-hint">Другим ученикам видна только первая буква.</p>
+                  <!-- ошибка -->
+                  <p class="field-error" id="last-name-error" hidden></p>
+                <!-- конец поля -->
+                </div>
+              <!-- конец строки -->
+              </div>
+              <!-- поле «Класс» (только ученику) -->
+              <div class="field" data-student-only>
+                <!-- подпись -->
+                <label for="grade">Класс</label>
+                <!-- список классов заполнит скрипт -->
+                <select class="input" id="grade" name="grade" aria-describedby="grade-error"></select>
+                <!-- ошибка -->
+                <p class="field-error" id="grade-error" hidden></p>
+              <!-- конец поля -->
+              </div>
+              <!-- выбор аватара -->
+              <div class="field">
+                <!-- подпись группы -->
+                <p class="field-label">Аватар</p>
+                <!-- сюда скрипт вставит сетку аватаров -->
+                <div id="avatar-picker"></div>
+              <!-- конец поля -->
+              </div>
+            <!-- конец полей -->
+            </div>
+          <!-- конец раздела -->
+          </section>
+
+          <!-- раздел «Предметы» (только ученику) -->
+          <section class="card section-card" data-student-only>
+            <!-- заголовок -->
+            <h2><span aria-hidden="true">📚</span>Мои предметы</h2>
+            <!-- пояснение -->
+            <p class="section-hint">Для каждого предмета выбери: «Знаю» — можешь помочь другим, или «Подтянуть» — нужна помощь. Уровень: 1 — совсем слабо, 5 — отлично. Помогать можно с предметами на 4–5.</p>
+            <!-- ошибка раздела -->
+            <p class="field-error" id="subjects-error" role="alert" hidden></p>
+            <!-- сюда скрипт вставит карточки 13 предметов -->
+            <div class="subject-grid" id="subject-grid"></div>
+          <!-- конец раздела -->
+          </section>
+
+          <!-- раздел «Удобное время» (только ученику) -->
+          <section class="card section-card" data-student-only>
+            <!-- заголовок -->
+            <h2><span aria-hidden="true">🕒</span>Когда мне удобно заниматься</h2>
+            <!-- пояснение -->
+            <p class="section-hint">Отметь дни и части дня. Чем больше совпадений с партнёром, тем выше процент совместимости.</p>
+            <!-- сетку дней заполнит скрипт -->
+            <div class="time-grid" id="time-grid"></div>
+          <!-- конец раздела -->
+          </section>
+
+          <!-- общая ошибка сохранения -->
+          <div class="alert alert-error section-card" data-form-error role="alert" hidden></div>
+          <!-- панель сохранения, прилипает к низу экрана -->
+          <div class="save-bar">
+            <!-- статус: сохранено или нет; aria-live — программа чтения с экрана сообщит об изменении -->
+            <span class="muted" id="save-status" aria-live="polite">Все изменения сохранены</span>
+            <!-- кнопка сохранения -->
+            <button class="btn btn-primary" id="save-button" type="submit">Сохранить профиль</button>
+          <!-- конец панели -->
+          </div>
+        <!-- конец формы -->
+        </form>
+
+        <!-- подтверждение уровня мини-тестом (только ученику) -->
+        <section class="card section-card profile-after-form" id="verify" data-student-only aria-labelledby="verify-title">
+          <!-- заголовок -->
+          <h2 id="verify-title"><span aria-hidden="true">🎯</span> Подтверди свои знания</h2>
+          <!-- пояснение -->
+          <p class="muted">Пройди короткий тест по предмету, который знаешь на 4–5: 5 вопросов, нужно ответить правильно минимум на 4. Подтверждённый уровень отмечается галочкой ✔, поднимает тебя в подборе и даёт +10 очков.</p>
+          <!-- список предметов с кнопками (заполнит скрипт) -->
+          <ul class="verify-list" id="verify-list"></ul>
+        <!-- конец раздела -->
+        </section>
+
+        <!-- бейджи и правила очков (только ученику); id="badges" — на этот раздел ведёт уведомление о новом бейдже -->
+        <section class="card section-card profile-after-form" id="badges" data-student-only aria-labelledby="my-badges-title">
+          <!-- заголовок -->
+          <h2 id="my-badges-title"><span aria-hidden="true">🏅</span> Мои бейджи</h2>
+          <!-- сетка бейджей (заполнит скрипт) -->
+          <div id="my-badges"><p class="muted">Загружаем бейджи…</p></div>
+          <!-- подзаголовок правил -->
+          <h3 class="rules-title"><span aria-hidden="true">💡</span> Как заработать очки</h3>
+          <!-- правила (заполнит скрипт из js/config.js) -->
+          <div id="my-points-rules"></div>
+        <!-- конец раздела -->
+        </section>
+
+        <!-- отзывы партнёров обо мне (только ученику) -->
+        <section class="card section-card" data-student-only aria-labelledby="my-reviews-title">
+          <!-- заголовок -->
+          <h2 id="my-reviews-title"><span aria-hidden="true">💬</span> Отзывы партнёров</h2>
+          <!-- список отзывов (заполнит скрипт) -->
+          <div id="my-reviews"><p class="muted">Загружаем отзывы…</p></div>
+        <!-- конец раздела -->
+        </section>
+
+        <!-- история проведённых занятий (только ученику); details — раскрывается по клику -->
+        <details class="card section-card" data-student-only>
+          <!-- заголовок с количеством -->
+          <summary class="history-summary">📜 История занятий (<span id="history-count">0</span>)</summary>
+          <!-- список занятий (заполнит скрипт) -->
+          <ul class="history-lessons" id="my-history"></ul>
+        <!-- конец раздела -->
+        </details>
+      <!-- конец содержимого профиля -->
+      </div>
+    <!-- конец контейнера -->
+    </div>
+  <!-- конец main -->
+  </main>
+<!-- конец body -->
+</body>
+<!-- конец html -->
+</html>

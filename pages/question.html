@@ -1,0 +1,149 @@
+<!-- ======================================================================== -->
+<!-- Файл: pages/question.html — ОДИН ВОПРОС и ответы на него.                -->
+<!-- Адрес: question.html?id=15. Ответ можно дать текстом и/или фото         -->
+<!-- решения. У каждого ответа — статус: «не проверено администратором»      -->
+<!-- или «одобрено администратором». Удалённый админом ответ видит только    -->
+<!-- его автор — вместе с комментарием, почему ответ удалён.                  -->
+<!-- Связи: логика — js/pages/question.js; общие функции — js/qa.js;         -->
+<!-- блок «Подсказка от ИИ» — js/ai.js.                                       -->
+<!-- ======================================================================== -->
+<!-- тип документа -->
+<!DOCTYPE html>
+<!-- язык — русский -->
+<html lang="ru">
+<!-- служебная часть -->
+<head>
+  <!-- кодировка -->
+  <meta charset="UTF-8">
+  <!-- масштаб на телефоне -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- название вкладки (скрипт заменит на заголовок вопроса) -->
+  <title>Вопрос — SkillSwap</title>
+  <!-- значок -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <!-- подключение к Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- сервер шрифтов -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- шрифт Manrope -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+  <!-- переменные -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <!-- базовые стили -->
+  <link rel="stylesheet" href="/css/base.css">
+  <!-- компоненты -->
+  <link rel="stylesheet" href="/css/components.css">
+  <!-- стили страниц -->
+  <link rel="stylesheet" href="/css/pages.css">
+  <!-- тема -->
+  <script src="/js/theme-init.js"></script>
+  <!-- скрипт страницы -->
+  <script type="module" src="/js/pages/question.js"></script>
+<!-- конец head -->
+</head>
+<!-- видимая часть -->
+<body>
+  <!-- шапка -->
+  <header class="site-header" id="app-header"></header>
+  <!-- основное содержимое -->
+  <main class="page">
+    <!-- узкий контейнер: длинный текст так удобнее читать -->
+    <div class="container narrow" id="page">
+      <!-- ссылка к ленте -->
+      <p><a href="/pages/questions.html">← Все вопросы</a></p>
+      <!-- состояния -->
+      <div id="question-state">
+        <!-- загрузка -->
+        <div class="state" role="status"><div class="spinner" aria-hidden="true"></div><p class="state-title">Загружаем вопрос…</p></div>
+      <!-- конец состояний -->
+      </div>
+      <!-- содержимое; скрыто до загрузки -->
+      <div id="question-content" hidden>
+        <!-- сообщение «вопрос опубликован» (покажет скрипт после ?new=1) -->
+        <div class="alert alert-success section-card" id="new-question-alert" role="status" hidden>Вопрос опубликован! Ученики всех школ уже могут на него ответить. Мы пришлём уведомление о каждом новом ответе.</div>
+        <!-- сам вопрос (заполнит скрипт) -->
+        <article class="card section-card question-full" id="question-card"></article>
+        <!-- «Подсказка от ИИ»: скрыта, пока js/ai.js не проверит, есть ли готовая подсказка; aria-labelledby — заголовок блока для программ чтения с экрана -->
+        <section class="card section-card ai-card" id="ai-card" aria-labelledby="ai-title" hidden>
+          <!-- шапка блока: значок, заголовок и плашка «ИИ» -->
+          <div class="ai-head">
+            <!-- значок-лампочка в цветном кружке -->
+            <span class="ai-icon" aria-hidden="true">💡</span>
+            <!-- заголовок и пояснение -->
+            <div>
+              <!-- заголовок блока -->
+              <h2 class="ai-title" id="ai-title">Подсказка от ИИ</h2>
+              <!-- пояснение -->
+              <p class="muted ai-sub">Не решит задачу за тебя, но подскажет, с чего начать</p>
+            <!-- конец заголовка -->
+            </div>
+            <!-- плашка «ИИ» -->
+            <span class="chip ai-badge">🤖 Gemini</span>
+          <!-- конец шапки -->
+          </div>
+          <!-- сюда js/ai.js рисует кнопку, «ИИ думает…» или саму подсказку; aria-live="polite" — программа чтения с экрана прочитает новый текст -->
+          <div class="ai-body" id="ai-body" aria-live="polite"></div>
+        <!-- конец блока подсказки -->
+        </section>
+        <!-- как работает проверка ответов -->
+        <p class="alert section-card qa-hint">
+          <!-- пояснение -->
+          Ответы проверяет администратор. <strong>✅ Одобрено</strong> — ответ проверен и верный. <strong>⏳ Не проверено</strong> — ответ ещё не проверяли: будь внимателен, в нём может быть ошибка.
+        <!-- конец пояснения -->
+        </p>
+        <!-- ответы -->
+        <section class="section-card" aria-labelledby="answers-title">
+          <!-- заголовок со счётчиком -->
+          <h2 id="answers-title"><span aria-hidden="true">💬</span> Ответы <span class="chip chip-primary" id="answers-count">0</span></h2>
+          <!-- список ответов (заполнит скрипт) -->
+          <div class="answer-list" id="answers-list"></div>
+        <!-- конец раздела -->
+        </section>
+        <!-- форма ответа -->
+        <section class="card section-card" id="answer-section" aria-labelledby="answer-form-title">
+          <!-- заголовок -->
+          <h2 id="answer-form-title"><span aria-hidden="true">✏️</span> Твой ответ</h2>
+          <!-- сообщение, если отвечать нельзя (свой вопрос, не ученик, блокировка) -->
+          <p class="muted" id="answer-closed" hidden></p>
+          <!-- форма -->
+          <form class="form" id="answer-form" novalidate>
+            <!-- текст ответа -->
+            <div class="field">
+              <!-- подпись и счётчик -->
+              <label for="answer-body">Объясни решение по шагам <span class="char-counter" data-counter-for="answer-body"></span></label>
+              <!-- поле; maxlength — как в базе -->
+              <textarea class="input answer-input" id="answer-body" maxlength="3000" placeholder="Напиши ответ так, чтобы было понятно, как ты его получил(а). Можно приложить фото решения." aria-describedby="answer-body-error"></textarea>
+              <!-- ошибка -->
+              <p class="field-error" id="answer-body-error" hidden></p>
+            <!-- конец поля -->
+            </div>
+            <!-- фото решения -->
+            <div class="photo-picker" id="answer-photo">
+              <!-- кнопка выбора фото -->
+              <label class="btn btn-secondary btn-sm photo-button"><span aria-hidden="true">📷</span> Прикрепить фото решения<input class="photo-input visually-hidden" type="file" accept="image/jpeg,image/png,image/webp,image/gif"></label>
+              <!-- подсказка -->
+              <span class="muted">JPG, PNG, WebP или GIF, до 5 МБ</span>
+              <!-- превью -->
+              <div class="photo-preview" hidden><img alt=""><button class="btn btn-ghost btn-sm photo-remove" type="button">Убрать фото</button></div>
+              <!-- ошибка фото -->
+              <p class="field-error photo-error" role="alert" hidden></p>
+            <!-- конец блока фото -->
+            </div>
+            <!-- общая ошибка -->
+            <div class="alert alert-error" data-form-error role="alert" hidden></div>
+            <!-- кнопка -->
+            <button class="btn btn-primary" id="answer-submit" type="submit">Опубликовать ответ</button>
+          <!-- конец формы -->
+          </form>
+        <!-- конец раздела -->
+        </section>
+      <!-- конец содержимого -->
+      </div>
+    <!-- конец контейнера -->
+    </div>
+  <!-- конец main -->
+  </main>
+<!-- конец body -->
+</body>
+<!-- конец html -->
+</html>

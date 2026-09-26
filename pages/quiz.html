@@ -1,0 +1,82 @@
+<!-- ======================================================================== -->
+<!-- Файл: pages/quiz.html — МИНИ-ТЕСТ для подтверждения уровня предмета.    -->
+<!-- Адрес: quiz.html?subject=algebra. 5 случайных вопросов, нужно 4 верных. -->
+<!-- Правильные ответы знает только база: вопросы выдаёт start_quiz, а        -->
+<!-- проверяет submit_quiz. Сдал — уровень отмечается галочкой ✔, +10 очков. -->
+<!-- Связи: логика — js/pages/quiz.js; данные — таблицы quiz_questions,       -->
+<!-- quiz_attempts, skills.verified_at (sql/schema.sql).                      -->
+<!-- ======================================================================== -->
+<!-- тип документа -->
+<!DOCTYPE html>
+<!-- язык — русский -->
+<html lang="ru">
+<!-- служебная часть -->
+<head>
+  <!-- кодировка -->
+  <meta charset="UTF-8">
+  <!-- масштаб на телефоне -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- название вкладки -->
+  <title>Тест — SkillSwap</title>
+  <!-- значок -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <!-- подключение к Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- сервер шрифтов -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- шрифт Manrope -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+  <!-- переменные -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <!-- базовые стили -->
+  <link rel="stylesheet" href="/css/base.css">
+  <!-- компоненты -->
+  <link rel="stylesheet" href="/css/components.css">
+  <!-- стили страниц -->
+  <link rel="stylesheet" href="/css/pages.css">
+  <!-- тема -->
+  <script src="/js/theme-init.js"></script>
+  <!-- скрипт страницы -->
+  <script type="module" src="/js/pages/quiz.js"></script>
+<!-- конец head -->
+</head>
+<!-- видимая часть -->
+<body>
+  <!-- шапка -->
+  <header class="site-header" id="app-header"></header>
+  <!-- основное содержимое -->
+  <main class="page">
+    <!-- контейнер страницы; quiz-page — узкая колонка по центру -->
+    <div class="container quiz-page" id="page">
+      <!-- ссылка назад в профиль, к разделу теста -->
+      <p><a href="/pages/profile.html#verify">← К профилю</a></p>
+
+      <!-- шапка теста: предмет и правила (заполнит скрипт) -->
+      <section class="card quiz-hero" id="quiz-hero" hidden>
+        <!-- большая иконка предмета -->
+        <span class="quiz-subject-icon" id="quiz-icon" aria-hidden="true"></span>
+        <!-- название и правила -->
+        <div>
+          <!-- «Тест: Алгебра» -->
+          <h1 id="quiz-title">Тест</h1>
+          <!-- плашки с правилами -->
+          <div class="row quiz-rules" id="quiz-rules"></div>
+        <!-- конец блока -->
+        </div>
+      <!-- конец шапки -->
+      </section>
+
+      <!-- главная карточка: вступление, вопросы или результат (всё рисует скрипт); aria-live — программа чтения с экрана прочитает смену вопроса -->
+      <section class="card quiz-card" id="quiz-card" aria-live="polite">
+        <!-- загрузка -->
+        <div class="state" role="status"><div class="spinner" aria-hidden="true"></div><p class="state-title">Готовим тест…</p></div>
+      <!-- конец карточки -->
+      </section>
+    <!-- конец контейнера -->
+    </div>
+  <!-- конец main -->
+  </main>
+<!-- конец body -->
+</body>
+<!-- конец html -->
+</html>

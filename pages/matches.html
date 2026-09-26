@@ -1,0 +1,126 @@
+<!-- ======================================================================== -->
+<!-- Файл: pages/matches.html — экран СОВПАДЕНИЙ (главный экран ученика).     -->
+<!-- Показывает найденные пары и тройки с процентом совместимости,           -->
+<!-- фильтры по предмету и классу и кнопку «Предложить обмен».               -->
+<!-- Связи: логика — js/pages/matches.js, алгоритм — js/matching.js,          -->
+<!-- стили карточек — css/pages.css.                                          -->
+<!-- ======================================================================== -->
+<!-- тип документа -->
+<!DOCTYPE html>
+<!-- язык — русский -->
+<html lang="ru">
+<!-- служебная часть -->
+<head>
+  <!-- кодировка -->
+  <meta charset="UTF-8">
+  <!-- масштаб на телефоне -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- название вкладки -->
+  <title>Совпадения — SkillSwap</title>
+  <!-- значок -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <!-- подключение к Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- сервер шрифтов -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- шрифт Manrope -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+  <!-- переменные -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <!-- базовые стили -->
+  <link rel="stylesheet" href="/css/base.css">
+  <!-- компоненты -->
+  <link rel="stylesheet" href="/css/components.css">
+  <!-- стили страниц -->
+  <link rel="stylesheet" href="/css/pages.css">
+  <!-- тема -->
+  <script src="/js/theme-init.js"></script>
+  <!-- скрипт страницы -->
+  <script type="module" src="/js/pages/matches.js"></script>
+<!-- конец head -->
+</head>
+<!-- видимая часть -->
+<body>
+  <!-- шапка -->
+  <header class="site-header" id="app-header"></header>
+  <!-- основное содержимое -->
+  <main class="page">
+    <!-- контейнер страницы -->
+    <div class="container" id="page">
+      <!-- заголовок страницы -->
+      <div class="page-title">
+        <!-- заголовок -->
+        <h1>Совпадения</h1>
+        <!-- пояснение -->
+        <p>Ученики твоей школы, с которыми можно обменяться знаниями: они помогут тебе, а ты — им.</p>
+      <!-- конец заголовка -->
+      </div>
+
+      <!-- сюда скрипт выводит состояния: загрузка, пусто, ошибка -->
+      <div id="matches-state">
+        <!-- пока идёт загрузка -->
+        <div class="state" role="status"><div class="spinner" aria-hidden="true"></div><p class="state-title">Ищем тебе партнёров…</p></div>
+      <!-- конец блока состояний -->
+      </div>
+
+      <!-- найденные совпадения; скрыто до загрузки -->
+      <div id="matches-content" hidden>
+        <!-- подсказка, если не отмечено удобное время -->
+        <div class="alert alert-warning section-card" id="time-hint" hidden>
+          <!-- текст со ссылкой -->
+          В профиле не отмечено удобное время, поэтому процент совместимости ниже. <a href="/pages/profile.html">Отметить в профиле</a>
+        <!-- конец подсказки -->
+        </div>
+
+        <!-- панель фильтров -->
+        <div class="card filters section-card" role="search" aria-label="Фильтры совпадений">
+          <!-- фильтр по предмету -->
+          <div class="field">
+            <!-- подпись -->
+            <label for="filter-subject">Предмет</label>
+            <!-- список предметов заполнит скрипт -->
+            <select class="input" id="filter-subject"></select>
+          <!-- конец поля -->
+          </div>
+          <!-- фильтр по классу -->
+          <div class="field">
+            <!-- подпись -->
+            <label for="filter-grade">Класс партнёра</label>
+            <!-- список классов заполнит скрипт -->
+            <select class="input" id="filter-grade"></select>
+          <!-- конец поля -->
+          </div>
+          <!-- кнопка сброса фильтров -->
+          <button class="btn btn-ghost" id="filter-reset" type="button">Сбросить</button>
+        <!-- конец панели фильтров -->
+        </div>
+
+        <!-- блок пар -->
+        <section class="section-card" aria-labelledby="pairs-title">
+          <!-- заголовок блока со счётчиком -->
+          <h2 id="pairs-title"><span aria-hidden="true">🤝</span> Пары <span class="chip chip-primary" id="pairs-count">0</span></h2>
+          <!-- сетка карточек пар -->
+          <div class="grid match-grid" id="pairs-list"></div>
+        <!-- конец блока пар -->
+        </section>
+
+        <!-- блок троек -->
+        <section class="section-card" aria-labelledby="triples-title">
+          <!-- заголовок блока со счётчиком -->
+          <h2 id="triples-title"><span aria-hidden="true">🔺</span> Тройки <span class="chip chip-accent" id="triples-count">0</span></h2>
+          <!-- пояснение, что такое тройка -->
+          <p class="section-hint">Тройка — это круг из трёх учеников: каждый помогает следующему. Тройки ищем, когда прямой пары нет.</p>
+          <!-- сетка карточек троек -->
+          <div class="grid match-grid" id="triples-list"></div>
+        <!-- конец блока троек -->
+        </section>
+      <!-- конец совпадений -->
+      </div>
+    <!-- конец контейнера -->
+    </div>
+  <!-- конец main -->
+  </main>
+<!-- конец body -->
+</body>
+<!-- конец html -->
+</html>

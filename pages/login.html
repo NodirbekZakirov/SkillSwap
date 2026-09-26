@@ -1,0 +1,100 @@
+<!-- ======================================================================== -->
+<!-- Файл: pages/login.html — страница ВХОДА по email и паролю.               -->
+<!-- Связи: логика — js/pages/login.js; после входа ученик попадает на свою   -->
+<!-- главную страницу (или туда, откуда его отправили на вход: ?next=...).   -->
+<!-- Сюда же возвращает ссылка подтверждения email из письма.                 -->
+<!-- ======================================================================== -->
+<!-- тип документа -->
+<!DOCTYPE html>
+<!-- язык — русский -->
+<html lang="ru">
+<!-- служебная часть -->
+<head>
+  <!-- кодировка -->
+  <meta charset="UTF-8">
+  <!-- масштаб на телефоне -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- название вкладки -->
+  <title>Вход — SkillSwap</title>
+  <!-- значок -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <!-- подключение к Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- сервер шрифтов -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- шрифт Manrope -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+  <!-- переменные -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <!-- базовые стили -->
+  <link rel="stylesheet" href="/css/base.css">
+  <!-- компоненты -->
+  <link rel="stylesheet" href="/css/components.css">
+  <!-- стили страниц -->
+  <link rel="stylesheet" href="/css/pages.css">
+  <!-- тема -->
+  <script src="/js/theme-init.js"></script>
+  <!-- скрипт страницы -->
+  <script type="module" src="/js/pages/login.js"></script>
+<!-- конец head -->
+</head>
+<!-- видимая часть -->
+<body>
+  <!-- шапка (нарисует layout.js) -->
+  <header class="site-header" id="app-header"></header>
+  <!-- основное содержимое -->
+  <main class="page">
+    <!-- контейнер страницы -->
+    <div class="container auth-page" id="page">
+      <!-- карточка формы -->
+      <div class="card auth-card">
+        <!-- заголовок -->
+        <h1>С возвращением!</h1>
+        <!-- подзаголовок -->
+        <p class="muted">Войди, чтобы увидеть партнёров и занятия.</p>
+        <!-- форма входа; novalidate — проверяем сами -->
+        <form class="form" id="login-form" novalidate>
+          <!-- поле email -->
+          <div class="field">
+            <!-- подпись -->
+            <label for="email">Email</label>
+            <!-- поле; autocomplete="email" — браузер подставит сохранённый адрес -->
+            <input class="input" id="email" name="email" type="email" autocomplete="email" aria-describedby="email-error">
+            <!-- ошибка -->
+            <p class="field-error" id="email-error" hidden></p>
+          <!-- конец поля -->
+          </div>
+          <!-- поле пароля -->
+          <div class="field">
+            <!-- подпись -->
+            <label for="password">Пароль</label>
+            <!-- current-password — браузер подставит сохранённый пароль -->
+            <input class="input" id="password" name="password" type="password" autocomplete="current-password" aria-describedby="password-error">
+            <!-- ошибка -->
+            <p class="field-error" id="password-error" hidden></p>
+          <!-- конец поля -->
+          </div>
+          <!-- общая ошибка формы -->
+          <div class="alert alert-error" data-form-error role="alert" hidden></div>
+          <!-- кнопка входа -->
+          <button class="btn btn-primary btn-block btn-lg" id="login-button" type="submit">Войти</button>
+        <!-- конец формы -->
+        </form>
+        <!-- ссылки -->
+        <div class="auth-links">
+          <!-- восстановление пароля -->
+          <a href="/pages/forgot-password.html">Забыли пароль?</a>
+          <!-- регистрация -->
+          <span>Нет аккаунта? <a href="/pages/register.html">Регистрация</a></span>
+        <!-- конец ссылок -->
+        </div>
+      <!-- конец карточки -->
+      </div>
+    <!-- конец контейнера -->
+    </div>
+  <!-- конец main -->
+  </main>
+<!-- конец body -->
+</body>
+<!-- конец html -->
+</html>

@@ -1,0 +1,108 @@
+<!-- ======================================================================== -->
+<!-- Файл: pages/partners.html — ПАРТНЁРЫ И ЗАПРОСЫ.                          -->
+<!-- Входящие запросы (принять / отклонить), мои запросы (ждут ответа),      -->
+<!-- активные обмены (чат / завершить) и история.                            -->
+<!-- Связи: логика — js/pages/partners.js; общие функции —                    -->
+<!-- js/partnerships.js; действия выполняют SQL-функции respond_partnership   -->
+<!-- и finish_partnership (sql/schema.sql).                                   -->
+<!-- ======================================================================== -->
+<!-- тип документа -->
+<!DOCTYPE html>
+<!-- язык — русский -->
+<html lang="ru">
+<!-- служебная часть -->
+<head>
+  <!-- кодировка -->
+  <meta charset="UTF-8">
+  <!-- масштаб на телефоне -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- название вкладки -->
+  <title>Партнёры — SkillSwap</title>
+  <!-- значок -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <!-- подключение к Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- сервер шрифтов -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- шрифт Manrope -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+  <!-- переменные -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <!-- базовые стили -->
+  <link rel="stylesheet" href="/css/base.css">
+  <!-- компоненты -->
+  <link rel="stylesheet" href="/css/components.css">
+  <!-- стили страниц -->
+  <link rel="stylesheet" href="/css/pages.css">
+  <!-- тема -->
+  <script src="/js/theme-init.js"></script>
+  <!-- скрипт страницы -->
+  <script type="module" src="/js/pages/partners.js"></script>
+<!-- конец head -->
+</head>
+<!-- видимая часть -->
+<body>
+  <!-- шапка -->
+  <header class="site-header" id="app-header"></header>
+  <!-- основное содержимое -->
+  <main class="page">
+    <!-- контейнер страницы -->
+    <div class="container" id="page">
+      <!-- заголовок страницы -->
+      <div class="page-title">
+        <!-- заголовок -->
+        <h1>Партнёры</h1>
+        <!-- пояснение -->
+        <p>Запросы на обмен и твои текущие партнёры. Обмен начинается, когда согласились все участники.</p>
+      <!-- конец заголовка -->
+      </div>
+      <!-- состояния: загрузка, пусто, ошибка -->
+      <div id="partners-state">
+        <!-- загрузка -->
+        <div class="state" role="status"><div class="spinner" aria-hidden="true"></div><p class="state-title">Загружаем партнёров…</p></div>
+      <!-- конец состояний -->
+      </div>
+      <!-- содержимое; скрыто до загрузки -->
+      <div id="partners-content" hidden>
+        <!-- входящие запросы -->
+        <section class="section-card" id="incoming-section" aria-labelledby="incoming-title">
+          <!-- заголовок -->
+          <h2 id="incoming-title"><span aria-hidden="true">📩</span> Тебе предлагают обмен</h2>
+          <!-- карточки -->
+          <div class="grid match-grid" id="incoming-list"></div>
+        <!-- конец раздела -->
+        </section>
+        <!-- активные обмены -->
+        <section class="section-card" id="active-section" aria-labelledby="active-title">
+          <!-- заголовок -->
+          <h2 id="active-title"><span aria-hidden="true">🤝</span> Активные обмены</h2>
+          <!-- карточки -->
+          <div class="grid match-grid" id="active-list"></div>
+        <!-- конец раздела -->
+        </section>
+        <!-- мои запросы -->
+        <section class="section-card" id="outgoing-section" aria-labelledby="outgoing-title">
+          <!-- заголовок -->
+          <h2 id="outgoing-title"><span aria-hidden="true">⏳</span> Ждут ответа</h2>
+          <!-- карточки -->
+          <div class="grid match-grid" id="outgoing-list"></div>
+        <!-- конец раздела -->
+        </section>
+        <!-- история; <details> — раскрывается по клику -->
+        <details class="card section-card" id="history-section">
+          <!-- заголовок раскрывающегося блока -->
+          <summary class="history-summary">📜 История (завершённые и отклонённые)</summary>
+          <!-- карточки -->
+          <div class="grid match-grid history-list" id="history-list"></div>
+        <!-- конец истории -->
+        </details>
+      <!-- конец содержимого -->
+      </div>
+    <!-- конец контейнера -->
+    </div>
+  <!-- конец main -->
+  </main>
+<!-- конец body -->
+</body>
+<!-- конец html -->
+</html>

@@ -1,0 +1,185 @@
+<!-- ======================================================================== -->
+<!-- Файл: pages/chat.html — ЧАТ партнёрства. Адрес: chat.html?id=12.         -->
+<!-- Здесь же: голосовые сообщения, общая доска (🎨) и общий таймер (⏱).     -->
+<!-- Писать можно только в активном партнёрстве. Сообщения приходят          -->
+<!-- мгновенно (Supabase Realtime). Если в сообщении есть телефон, ссылка     -->
+<!-- или @ник — предупреждение. У чужих сообщений — «Пожаловаться».           -->
+<!-- Связи: логика — js/pages/chat.js; поиск контактов — js/safety.js;        -->
+<!-- защита данных — RLS-правила messages_* в sql/schema.sql.                 -->
+<!-- ======================================================================== -->
+<!-- тип документа -->
+<!DOCTYPE html>
+<!-- язык — русский -->
+<html lang="ru">
+<!-- служебная часть -->
+<head>
+  <!-- кодировка -->
+  <meta charset="UTF-8">
+  <!-- масштаб на телефоне -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- название вкладки -->
+  <title>Чат — SkillSwap</title>
+  <!-- значок -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <!-- подключение к Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- сервер шрифтов -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- шрифт Manrope -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+  <!-- переменные -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <!-- базовые стили -->
+  <link rel="stylesheet" href="/css/base.css">
+  <!-- компоненты -->
+  <link rel="stylesheet" href="/css/components.css">
+  <!-- стили страниц -->
+  <link rel="stylesheet" href="/css/pages.css">
+  <!-- тема -->
+  <script src="/js/theme-init.js"></script>
+  <!-- скрипт страницы -->
+  <script type="module" src="/js/pages/chat.js"></script>
+<!-- конец head -->
+</head>
+<!-- видимая часть -->
+<body>
+  <!-- шапка -->
+  <header class="site-header" id="app-header"></header>
+  <!-- основное содержимое; chat-page — страница без большого нижнего отступа -->
+  <main class="page chat-page">
+    <!-- контейнер страницы -->
+    <div class="container" id="page">
+      <!-- состояния: загрузка, ошибка -->
+      <div id="chat-state">
+        <!-- загрузка -->
+        <div class="state" role="status"><div class="spinner" aria-hidden="true"></div><p class="state-title">Открываем чат…</p></div>
+      <!-- конец состояний -->
+      </div>
+
+      <!-- сам чат; скрыт до загрузки -->
+      <div class="chat-layout" id="chat-content" hidden>
+        <!-- верхняя панель чата -->
+        <div class="card chat-header">
+          <!-- ссылка назад -->
+          <a class="btn btn-ghost btn-sm" href="/pages/partners.html" aria-label="Назад к партнёрам">←</a>
+          <!-- аватары собеседников (заполнит скрипт) -->
+          <div class="triple-avatars" id="chat-avatars" aria-hidden="true"></div>
+          <!-- имена и статус -->
+          <div class="match-person">
+            <!-- имена собеседников -->
+            <h1 class="chat-title" id="chat-title"></h1>
+            <!-- статус партнёрства -->
+            <span class="muted" id="chat-subtitle"></span>
+          <!-- конец имён -->
+          </div>
+          <!-- кнопки инструментов занятия -->
+          <div class="chat-tools">
+            <!-- общая доска; has-news (точка) — партнёр нарисовал что-то, пока доска закрыта -->
+            <button class="btn btn-ghost btn-sm chat-tool" id="board-button" type="button" title="Общая доска" aria-label="Общая доска"><span aria-hidden="true">🎨</span><span class="chat-tool-label">Доска</span></button>
+            <!-- таймер занятия (скрыт, если управлять нельзя); aria-expanded — открыта ли панель -->
+            <button class="btn btn-ghost btn-sm chat-tool" id="timer-button" type="button" title="Таймер занятия" aria-label="Таймер занятия" aria-expanded="false" hidden><span aria-hidden="true">⏱</span><span class="chat-tool-label">Таймер</span></button>
+          <!-- конец кнопок -->
+          </div>
+          <!-- меню «Участники и действия» — раскрывающийся блок -->
+          <details class="chat-menu">
+            <!-- кнопка меню -->
+            <summary class="btn btn-ghost btn-sm" aria-label="Участники и действия">⋯</summary>
+            <!-- выпадающая панель -->
+            <div class="card chat-menu-panel">
+              <!-- заголовок -->
+              <h2 class="chat-menu-title">Участники</h2>
+              <!-- список участников с кнопками «Заблокировать» (заполнит скрипт) -->
+              <ul class="chat-members" id="chat-members"></ul>
+              <!-- ссылка на страницу занятий (адрес подставит скрипт) -->
+              <a class="btn btn-secondary btn-block" id="lesson-link" href="/pages/lessons.html">📅 Назначить занятие</a>
+              <!-- ссылка на материалы партнёрства (адрес подставит скрипт) -->
+              <a class="btn btn-secondary btn-block" id="materials-link" href="/pages/partners.html">📎 Материалы</a>
+              <!-- кнопка «Завершить обмен» -->
+              <button class="btn btn-danger btn-block" id="finish-button" type="button">Завершить обмен</button>
+            <!-- конец панели -->
+            </div>
+          <!-- конец меню -->
+          </details>
+        <!-- конец верхней панели -->
+        </div>
+
+        <!-- панель настройки таймера (заполнит js/timer.js) -->
+        <div class="card timer-panel" id="timer-panel" hidden></div>
+        <!-- полоска идущего таймера: видна всем участникам (заполнит js/timer.js); role="timer" — это таймер -->
+        <div class="card timer-bar" id="timer-bar" role="timer" hidden></div>
+
+        <!-- карточка с сообщениями и полем ввода -->
+        <div class="card chat-card">
+          <!-- лента сообщений; role="log" + aria-live — программа чтения с экрана сообщит о новых сообщениях -->
+          <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-label="Сообщения"></div>
+          <!-- сообщение, почему писать нельзя (партнёрство не активно, блокировка) -->
+          <p class="alert chat-closed" id="chat-closed" hidden></p>
+          <!-- форма отправки -->
+          <form class="chat-form" id="chat-form" novalidate hidden>
+            <!-- предупреждение о контактах (появляется при наборе текста) -->
+            <p class="alert alert-warning chat-contact-warning" id="contact-warning" role="alert" hidden></p>
+            <!-- строка: поле и кнопка -->
+            <div class="chat-input-row">
+              <!-- подпись для программ чтения с экрана (visually-hidden — не видна глазами) -->
+              <label class="visually-hidden" for="chat-input">Сообщение</label>
+              <!-- поле; rows="1" — одна строка, растёт по мере ввода; maxlength — не больше 1000 символов (как в базе) -->
+              <textarea class="input chat-input" id="chat-input" rows="1" maxlength="1000" placeholder="Напиши сообщение… (Enter — отправить)"></textarea>
+              <!-- кнопка записи голосового (скрыта, если браузер не умеет записывать звук) -->
+              <button class="btn btn-ghost chat-mic" id="mic-button" type="button" aria-label="Записать голосовое сообщение" title="Голосовое сообщение" hidden>🎤</button>
+              <!-- кнопка отправки -->
+              <button class="btn btn-primary" id="send-button" type="submit" aria-label="Отправить">➤</button>
+            <!-- конец строки -->
+            </div>
+            <!-- панель записи голоса: видна во время записи вместо поля ввода -->
+            <div class="voice-recorder" id="voice-recorder" hidden>
+              <!-- отмена записи -->
+              <button class="btn btn-ghost" id="voice-cancel" type="button" aria-label="Отменить запись" title="Отменить">✕</button>
+              <!-- красная мигающая точка — идёт запись -->
+              <span class="voice-rec-dot" aria-hidden="true"></span>
+              <!-- сколько записано; aria-live — программа чтения с экрана будет сообщать время -->
+              <span class="voice-rec-time" id="voice-time" aria-live="off">0:00</span>
+              <!-- полоски громкости (заполнит скрипт) -->
+              <div class="voice-meter" id="voice-meter" aria-hidden="true"></div>
+              <!-- отправить запись -->
+              <button class="btn btn-primary" id="voice-send" type="button" aria-label="Отправить голосовое сообщение">➤</button>
+            <!-- конец панели записи -->
+            </div>
+          <!-- конец формы -->
+          </form>
+        <!-- конец карточки -->
+        </div>
+      <!-- конец чата -->
+      </div>
+    <!-- конец контейнера -->
+    </div>
+
+    <!-- ОБЩАЯ ДОСКА: во весь экран поверх чата (логика — js/board.js) -->
+    <section class="board" id="board" aria-label="Общая доска" hidden>
+      <!-- верхняя строка: название, статус, закрыть -->
+      <div class="board-bar">
+        <!-- название -->
+        <h2 class="board-title">🎨 Общая доска</h2>
+        <!-- статус: «Лена рисует…»; aria-live — сообщать изменения спокойно -->
+        <span class="board-status" id="board-status" aria-live="polite">Рисуйте вместе — всё сохраняется</span>
+        <!-- закрыть -->
+        <button class="icon-btn" id="board-close" type="button" aria-label="Закрыть доску" title="Закрыть (Esc)">✕</button>
+      <!-- конец верхней строки -->
+      </div>
+      <!-- сцена с холстом; холст сам сохранит пропорции 16 : 10 -->
+      <div class="board-stage">
+        <!-- холст для рисования; touch-action: none в CSS — палец рисует, а не прокручивает -->
+        <canvas class="board-canvas" id="board-canvas" aria-label="Холст для рисования"></canvas>
+      <!-- конец сцены -->
+      </div>
+      <!-- сообщение для режима «только просмотр» -->
+      <p class="board-readonly" id="board-readonly" hidden>Доска только для просмотра: рисовать можно в активном обмене.</p>
+      <!-- панель инструментов (заполнит скрипт); role="toolbar" — панель кнопок -->
+      <div class="board-tools" id="board-tools" role="toolbar" aria-label="Инструменты доски"></div>
+    <!-- конец доски -->
+    </section>
+  <!-- конец main -->
+  </main>
+<!-- конец body -->
+</body>
+<!-- конец html -->
+</html>

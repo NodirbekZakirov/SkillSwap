@@ -1,0 +1,193 @@
+<!-- ======================================================================== -->
+<!-- Файл: pages/register.html — страница РЕГИСТРАЦИИ.                        -->
+<!-- Форма: имя, фамилия, email, пароль, школа, класс, аватар.                -->
+<!-- Телефон и адрес НЕ спрашиваем (безопасность детей).                      -->
+<!-- Связи: логика формы — js/pages/register.js; стили — css/*.css;           -->
+<!-- после регистрации база сама создаёт профиль (триггер в sql/schema.sql).  -->
+<!-- ======================================================================== -->
+<!-- тип документа HTML5 -->
+<!DOCTYPE html>
+<!-- язык страницы — русский -->
+<html lang="ru">
+<!-- служебная часть -->
+<head>
+  <!-- кодировка UTF-8 -->
+  <meta charset="UTF-8">
+  <!-- правильный масштаб на телефоне -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- название во вкладке -->
+  <title>Регистрация — SkillSwap</title>
+  <!-- значок сайта -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <!-- заранее подключаемся к Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- сервер с файлами шрифтов -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- шрифт Manrope -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+  <!-- переменные дизайна -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <!-- базовые стили -->
+  <link rel="stylesheet" href="/css/base.css">
+  <!-- компоненты -->
+  <link rel="stylesheet" href="/css/components.css">
+  <!-- стили страниц -->
+  <link rel="stylesheet" href="/css/pages.css">
+  <!-- тема до отрисовки -->
+  <script src="/js/theme-init.js"></script>
+  <!-- скрипт страницы (модуль) -->
+  <script type="module" src="/js/pages/register.js"></script>
+<!-- конец head -->
+</head>
+<!-- видимая часть -->
+<body>
+  <!-- шапку нарисует js/layout.js -->
+  <header class="site-header" id="app-header"></header>
+  <!-- основное содержимое -->
+  <main class="page">
+    <!-- контейнер; id="page" — сюда layout.js покажет ошибку, если что-то пошло не так -->
+    <div class="container auth-page" id="page">
+      <!-- карточка формы; широкая, потому что есть выбор аватара -->
+      <div class="card auth-card auth-card-wide">
+        <!-- заголовок -->
+        <h1>Создать аккаунт</h1>
+        <!-- подзаголовок -->
+        <p class="muted">Заполни анкету — и найди партнёра для учёбы в своей школе.</p>
+        <!-- <form> — форма; novalidate — отключаем встроенные подсказки браузера, проверяем сами с понятными сообщениями -->
+        <form class="form" id="register-form" novalidate>
+          <!-- строка из двух полей -->
+          <div class="form-row">
+            <!-- поле «Имя» -->
+            <div class="field">
+              <!-- for="first-name" связывает подпись с полем: клик по подписи ставит курсор в поле -->
+              <label for="first-name">Имя</label>
+              <!-- input — поле ввода; autocomplete подсказывает браузеру, что это имя; aria-describedby связывает поле с текстом ошибки -->
+              <input class="input" id="first-name" name="first_name" type="text" autocomplete="given-name" maxlength="40" aria-describedby="first-name-error">
+              <!-- сюда validation.js запишет ошибку; hidden — пока скрыто -->
+              <p class="field-error" id="first-name-error" hidden></p>
+            <!-- конец поля -->
+            </div>
+            <!-- поле «Фамилия» -->
+            <div class="field">
+              <!-- подпись -->
+              <label for="last-name">Фамилия</label>
+              <!-- поле -->
+              <input class="input" id="last-name" name="last_name" type="text" autocomplete="family-name" maxlength="40" aria-describedby="last-name-error last-name-hint">
+              <!-- подсказка про безопасность -->
+              <p class="field-hint" id="last-name-hint">Другие ученики увидят только первую букву.</p>
+              <!-- ошибка -->
+              <p class="field-error" id="last-name-error" hidden></p>
+            <!-- конец поля -->
+            </div>
+          <!-- конец строки -->
+          </div>
+          <!-- поле email -->
+          <div class="field">
+            <!-- подпись -->
+            <label for="email">Email</label>
+            <!-- type="email" — на телефоне появится клавиатура с @ -->
+            <input class="input" id="email" name="email" type="email" autocomplete="email" aria-describedby="email-error">
+            <!-- ошибка -->
+            <p class="field-error" id="email-error" hidden></p>
+          <!-- конец поля -->
+          </div>
+          <!-- строка паролей -->
+          <div class="form-row">
+            <!-- поле пароля -->
+            <div class="field">
+              <!-- подпись -->
+              <label for="password">Пароль</label>
+              <!-- type="password" — символы скрыты точками; new-password — браузер предложит придумать надёжный пароль -->
+              <input class="input" id="password" name="password" type="password" autocomplete="new-password" aria-describedby="password-error">
+              <!-- ошибка -->
+              <p class="field-error" id="password-error" hidden></p>
+            <!-- конец поля -->
+            </div>
+            <!-- повтор пароля -->
+            <div class="field">
+              <!-- подпись -->
+              <label for="password-confirm">Повтори пароль</label>
+              <!-- поле -->
+              <input class="input" id="password-confirm" name="password_confirm" type="password" autocomplete="new-password" aria-describedby="password-confirm-error">
+              <!-- ошибка -->
+              <p class="field-error" id="password-confirm-error" hidden></p>
+            <!-- конец поля -->
+            </div>
+          <!-- конец строки -->
+          </div>
+          <!-- строка «школа + класс» -->
+          <div class="form-row">
+            <!-- поле школы -->
+            <div class="field">
+              <!-- подпись -->
+              <label for="school">Школа</label>
+              <!-- select — выпадающий список; варианты загрузит register.js из базы -->
+              <select class="input" id="school" name="school_id" aria-describedby="school-error">
+                <!-- первый вариант-подсказка с пустым значением -->
+                <option value="">Загружаем список…</option>
+              <!-- конец списка -->
+              </select>
+              <!-- ошибка -->
+              <p class="field-error" id="school-error" hidden></p>
+            <!-- конец поля -->
+            </div>
+            <!-- поле класса -->
+            <div class="field">
+              <!-- подпись -->
+              <label for="grade">Класс</label>
+              <!-- список классов 1–11 заполнит register.js -->
+              <select class="input" id="grade" name="grade" aria-describedby="grade-error">
+                <!-- вариант-подсказка -->
+                <option value="">Выбери класс</option>
+              <!-- конец списка -->
+              </select>
+              <!-- ошибка -->
+              <p class="field-error" id="grade-error" hidden></p>
+            <!-- конец поля -->
+            </div>
+          <!-- конец строки -->
+          </div>
+          <!-- выбор аватара -->
+          <div class="field">
+            <!-- подпись группы (это не одно поле, поэтому не label, а p) -->
+            <p class="field-label">Аватар</p>
+            <!-- подсказка -->
+            <p class="field-hint">Вместо фото — картинка из набора. Так безопаснее.</p>
+            <!-- сюда register.js вставит сетку аватаров -->
+            <div id="avatar-picker"></div>
+          <!-- конец поля -->
+          </div>
+          <!-- общий блок ошибки формы; data-form-error — по этому атрибуту его находит validation.js; role="alert" — прочитается сразу -->
+          <div class="alert alert-error" data-form-error role="alert" hidden></div>
+          <!-- кнопка отправки; type="submit" — отправляет форму -->
+          <button class="btn btn-primary btn-block btn-lg" id="register-button" type="submit">Зарегистрироваться</button>
+        <!-- конец формы -->
+        </form>
+        <!-- блок успеха (показывается вместо формы, если нужно подтвердить email) -->
+        <div class="alert alert-success" id="register-success" role="status" hidden>
+          <!-- жирный заголовок -->
+          <strong>Почти готово!</strong>
+          <!-- пояснение -->
+          <p>Мы отправили письмо на твой email. Открой ссылку из письма, чтобы подтвердить адрес, а потом войди.</p>
+          <!-- кнопка на страницу входа -->
+          <a class="btn btn-primary" href="/pages/login.html">Перейти ко входу</a>
+        <!-- конец блока -->
+        </div>
+        <!-- ссылки под формой -->
+        <div class="auth-links">
+          <!-- ссылка на вход -->
+          <span>Уже есть аккаунт? <a href="/pages/login.html">Войти</a></span>
+          <!-- ссылка на главную -->
+          <a href="/">На главную</a>
+        <!-- конец ссылок -->
+        </div>
+      <!-- конец карточки -->
+      </div>
+    <!-- конец контейнера -->
+    </div>
+  <!-- конец main -->
+  </main>
+<!-- конец body -->
+</body>
+<!-- конец html -->
+</html>

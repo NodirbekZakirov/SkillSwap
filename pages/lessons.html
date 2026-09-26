@@ -1,0 +1,180 @@
+<!-- ======================================================================== -->
+<!-- Файл: pages/lessons.html — ЗАНЯТИЯ.                                      -->
+<!-- Назначить занятие (дата, время, тема, место), отметить «проведено» или   -->
+<!-- «отменено», после занятия — оценка 1–5 и короткий отзыв.                 -->
+<!-- Связи: логика — js/pages/lessons.js; оценки — js/reviews.js;             -->
+<!-- в базе — таблицы lessons и reviews, функция leave_review, триггеры       -->
+<!-- начисления очков (sql/schema.sql).                                       -->
+<!-- ======================================================================== -->
+<!-- тип документа -->
+<!DOCTYPE html>
+<!-- язык — русский -->
+<html lang="ru">
+<!-- служебная часть -->
+<head>
+  <!-- кодировка -->
+  <meta charset="UTF-8">
+  <!-- масштаб на телефоне -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- название вкладки -->
+  <title>Занятия — SkillSwap</title>
+  <!-- значок -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <!-- подключение к Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- сервер шрифтов -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- шрифт Manrope -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+  <!-- переменные -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <!-- базовые стили -->
+  <link rel="stylesheet" href="/css/base.css">
+  <!-- компоненты -->
+  <link rel="stylesheet" href="/css/components.css">
+  <!-- стили страниц -->
+  <link rel="stylesheet" href="/css/pages.css">
+  <!-- тема -->
+  <script src="/js/theme-init.js"></script>
+  <!-- скрипт страницы -->
+  <script type="module" src="/js/pages/lessons.js"></script>
+<!-- конец head -->
+</head>
+<!-- видимая часть -->
+<body>
+  <!-- шапка -->
+  <header class="site-header" id="app-header"></header>
+  <!-- основное содержимое -->
+  <main class="page">
+    <!-- контейнер страницы -->
+    <div class="container" id="page">
+      <!-- заголовок страницы -->
+      <div class="page-title">
+        <!-- заголовок -->
+        <h1>Занятия</h1>
+        <!-- пояснение -->
+        <p>Назначай встречи с партнёрами, отмечай проведённые и оценивай помощь.</p>
+      <!-- конец заголовка -->
+      </div>
+      <!-- состояния: загрузка, ошибка -->
+      <div id="lessons-state">
+        <!-- загрузка -->
+        <div class="state" role="status"><div class="spinner" aria-hidden="true"></div><p class="state-title">Загружаем занятия…</p></div>
+      <!-- конец состояний -->
+      </div>
+
+      <!-- содержимое; скрыто до загрузки -->
+      <div id="lessons-content" hidden>
+        <!-- карточка «Назначить занятие» -->
+        <section class="card section-card" aria-labelledby="new-lesson-title">
+          <!-- заголовок -->
+          <h2 id="new-lesson-title"><span aria-hidden="true">➕</span> Назначить занятие</h2>
+          <!-- сообщение, если активных партнёров нет (покажет скрипт) -->
+          <div id="no-partners" hidden></div>
+          <!-- форма; novalidate — проверяем сами -->
+          <form class="form" id="lesson-form" novalidate>
+            <!-- выбор партнёрства -->
+            <div class="field">
+              <!-- подпись -->
+              <label for="lesson-partnership">С кем</label>
+              <!-- список активных партнёрств заполнит скрипт -->
+              <select class="input" id="lesson-partnership" name="partnership" aria-describedby="lesson-partnership-error"></select>
+              <!-- ошибка -->
+              <p class="field-error" id="lesson-partnership-error" hidden></p>
+            <!-- конец поля -->
+            </div>
+            <!-- строка «дата + время» -->
+            <div class="form-row">
+              <!-- дата -->
+              <div class="field">
+                <!-- подпись -->
+                <label for="lesson-date">Дата</label>
+                <!-- type="date" — браузер покажет календарь -->
+                <input class="input" id="lesson-date" name="date" type="date" aria-describedby="lesson-date-error">
+                <!-- ошибка -->
+                <p class="field-error" id="lesson-date-error" hidden></p>
+              <!-- конец поля -->
+              </div>
+              <!-- время -->
+              <div class="field">
+                <!-- подпись -->
+                <label for="lesson-time">Время</label>
+                <!-- type="time" — выбор часов и минут -->
+                <input class="input" id="lesson-time" name="time" type="time" aria-describedby="lesson-time-error">
+                <!-- ошибка -->
+                <p class="field-error" id="lesson-time-error" hidden></p>
+              <!-- конец поля -->
+              </div>
+            <!-- конец строки -->
+            </div>
+            <!-- тема -->
+            <div class="field">
+              <!-- подпись -->
+              <label for="lesson-topic">Тема</label>
+              <!-- maxlength="120" — как в базе -->
+              <input class="input" id="lesson-topic" name="topic" type="text" maxlength="120" placeholder="Например: квадратные уравнения" aria-describedby="lesson-topic-error">
+              <!-- ошибка -->
+              <p class="field-error" id="lesson-topic-error" hidden></p>
+            <!-- конец поля -->
+            </div>
+            <!-- место: радиокнопки, их заполнит скрипт -->
+            <fieldset class="field place-field">
+              <!-- legend — подпись группы полей -->
+              <legend class="field-label">Где</legend>
+              <!-- кнопки мест -->
+              <div class="segmented" id="lesson-places"></div>
+              <!-- ошибка -->
+              <p class="field-error" id="lesson-place-error" hidden></p>
+            <!-- конец группы -->
+            </fieldset>
+            <!-- общая ошибка -->
+            <div class="alert alert-error" data-form-error role="alert" hidden></div>
+            <!-- кнопка -->
+            <button class="btn btn-primary" id="lesson-button" type="submit">Назначить занятие</button>
+          <!-- конец формы -->
+          </form>
+        <!-- конец карточки -->
+        </section>
+
+        <!-- занятия, которые уже прошли, но ещё не отмечены -->
+        <section class="section-card" id="to-mark-section" aria-labelledby="to-mark-title">
+          <!-- заголовок -->
+          <h2 id="to-mark-title"><span aria-hidden="true">✅</span> Отметь, как прошло</h2>
+          <!-- список -->
+          <div class="lesson-list" id="to-mark-list"></div>
+        <!-- конец раздела -->
+        </section>
+        <!-- предстоящие -->
+        <section class="section-card" aria-labelledby="upcoming-title">
+          <!-- заголовок -->
+          <h2 id="upcoming-title"><span aria-hidden="true">📅</span> Предстоящие</h2>
+          <!-- список -->
+          <div class="lesson-list" id="upcoming-list"></div>
+        <!-- конец раздела -->
+        </section>
+        <!-- проведённые -->
+        <section class="section-card" aria-labelledby="done-title">
+          <!-- заголовок -->
+          <h2 id="done-title"><span aria-hidden="true">🎓</span> Проведённые</h2>
+          <!-- список -->
+          <div class="lesson-list" id="done-list"></div>
+        <!-- конец раздела -->
+        </section>
+        <!-- отменённые — раскрывающийся блок -->
+        <details class="card section-card" id="cancelled-section">
+          <!-- заголовок -->
+          <summary class="history-summary">🚫 Отменённые</summary>
+          <!-- список -->
+          <div class="lesson-list history-list" id="cancelled-list"></div>
+        <!-- конец блока -->
+        </details>
+      <!-- конец содержимого -->
+      </div>
+    <!-- конец контейнера -->
+    </div>
+  <!-- конец main -->
+  </main>
+<!-- конец body -->
+</body>
+<!-- конец html -->
+</html>

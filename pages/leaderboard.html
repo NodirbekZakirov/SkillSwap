@@ -1,0 +1,88 @@
+<!-- ======================================================================== -->
+<!-- Файл: pages/leaderboard.html — РЕЙТИНГ лучших помощников школы за месяц. -->
+<!-- Список считает SQL-функция get_school_leaderboard (sql/schema.sql):     -->
+<!-- сумма очков из журнала points_log за текущий месяц, только своя школа.  -->
+<!-- Связи: логика — js/pages/leaderboard.js; правила очков — js/badges.js.  -->
+<!-- ======================================================================== -->
+<!-- тип документа -->
+<!DOCTYPE html>
+<!-- язык — русский -->
+<html lang="ru">
+<!-- служебная часть -->
+<head>
+  <!-- кодировка -->
+  <meta charset="UTF-8">
+  <!-- масштаб на телефоне -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- название вкладки -->
+  <title>Рейтинг — SkillSwap</title>
+  <!-- значок -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <!-- подключение к Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- сервер шрифтов -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- шрифт Manrope -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+  <!-- переменные -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <!-- базовые стили -->
+  <link rel="stylesheet" href="/css/base.css">
+  <!-- компоненты -->
+  <link rel="stylesheet" href="/css/components.css">
+  <!-- стили страниц -->
+  <link rel="stylesheet" href="/css/pages.css">
+  <!-- тема -->
+  <script src="/js/theme-init.js"></script>
+  <!-- скрипт страницы -->
+  <script type="module" src="/js/pages/leaderboard.js"></script>
+<!-- конец head -->
+</head>
+<!-- видимая часть -->
+<body>
+  <!-- шапка -->
+  <header class="site-header" id="app-header"></header>
+  <!-- основное содержимое -->
+  <main class="page">
+    <!-- контейнер страницы -->
+    <div class="container" id="page">
+      <!-- заголовок страницы -->
+      <div class="page-title">
+        <!-- заголовок; месяц подставит скрипт -->
+        <h1>Рейтинг <span id="month-name"></span></h1>
+        <!-- пояснение -->
+        <p>Лучшие помощники твоей школы в этом месяце. Каждый месяц рейтинг начинается заново!</p>
+      <!-- конец заголовка -->
+      </div>
+      <!-- состояния -->
+      <div id="leaderboard-state">
+        <!-- загрузка -->
+        <div class="state" role="status"><div class="spinner" aria-hidden="true"></div><p class="state-title">Считаем очки…</p></div>
+      <!-- конец состояний -->
+      </div>
+      <!-- содержимое; скрыто до загрузки -->
+      <div id="leaderboard-content" hidden>
+        <!-- моё место (заполнит скрипт) -->
+        <div class="alert section-card" id="my-place" role="status"></div>
+        <!-- пьедестал для первых трёх -->
+        <ol class="podium section-card" id="podium" aria-label="Первые три места"></ol>
+        <!-- остальные места (4–10) -->
+        <ol class="card leaderboard-list section-card" id="leaderboard-list" start="4" aria-label="Места с 4 по 10"></ol>
+        <!-- как заработать очки -->
+        <section class="card section-card" aria-labelledby="rules-title">
+          <!-- заголовок -->
+          <h2 id="rules-title"><span aria-hidden="true">💡</span> Как заработать очки</h2>
+          <!-- правила (заполнит скрипт из js/config.js) -->
+          <div id="points-rules"></div>
+        <!-- конец раздела -->
+        </section>
+      <!-- конец содержимого -->
+      </div>
+    <!-- конец контейнера -->
+    </div>
+  <!-- конец main -->
+  </main>
+<!-- конец body -->
+</body>
+<!-- конец html -->
+</html>

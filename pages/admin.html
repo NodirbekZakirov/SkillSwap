@@ -1,0 +1,149 @@
+<!-- ======================================================================== -->
+<!-- Файл: pages/admin.html — ПАНЕЛЬ АДМИНИСТРАТОРА. Только для роли admin.   -->
+<!-- Школы: добавить, изменить, удалить. Пользователи: поиск, назначить      -->
+<!-- учителем школы, снять роль учителя.                                      -->
+<!-- Связи: логика — js/pages/admin.js; права — RLS-правила schools_* и       -->
+<!-- SQL-функции admin_list_users, admin_set_teacher, admin_remove_teacher.   -->
+<!-- ======================================================================== -->
+<!-- тип документа -->
+<!DOCTYPE html>
+<!-- язык — русский -->
+<html lang="ru">
+<!-- служебная часть -->
+<head>
+  <!-- кодировка -->
+  <meta charset="UTF-8">
+  <!-- масштаб на телефоне -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- название вкладки -->
+  <title>Администратор — SkillSwap</title>
+  <!-- значок -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <!-- подключение к Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- сервер шрифтов -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- шрифт Manrope -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+  <!-- переменные -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <!-- базовые стили -->
+  <link rel="stylesheet" href="/css/base.css">
+  <!-- компоненты -->
+  <link rel="stylesheet" href="/css/components.css">
+  <!-- стили страниц -->
+  <link rel="stylesheet" href="/css/pages.css">
+  <!-- тема -->
+  <script src="/js/theme-init.js"></script>
+  <!-- скрипт страницы -->
+  <script type="module" src="/js/pages/admin.js"></script>
+<!-- конец head -->
+</head>
+<!-- видимая часть -->
+<body>
+  <!-- шапка -->
+  <header class="site-header" id="app-header"></header>
+  <!-- основное содержимое -->
+  <main class="page">
+    <!-- контейнер страницы -->
+    <div class="container" id="page">
+      <!-- заголовок страницы -->
+      <div class="page-title">
+        <!-- заголовок -->
+        <h1>Администратор</h1>
+        <!-- пояснение -->
+        <p>Управление школами и ролями пользователей.</p>
+      <!-- конец заголовка -->
+      </div>
+      <!-- состояния -->
+      <div id="admin-state">
+        <!-- загрузка -->
+        <div class="state" role="status"><div class="spinner" aria-hidden="true"></div><p class="state-title">Загружаем…</p></div>
+      <!-- конец состояний -->
+      </div>
+      <!-- содержимое; скрыто до загрузки -->
+      <div id="admin-content" hidden>
+        <!-- раздел «Модерация вопросов и ответов» -->
+        <section class="card section-card" aria-labelledby="moderation-title">
+          <!-- заголовок -->
+          <h2 id="moderation-title"><span aria-hidden="true">🛡️</span> Модерация вопросов и ответов</h2>
+          <!-- пояснение -->
+          <p class="section-hint">Проверь ответы учеников: одобренный ответ получает отметку «✅ Одобрено администратором», а автор — +15 очков. Неправильный ответ удали с комментарием — автор увидит, в чём ошибка. Грубые слова подсвечены.</p>
+          <!-- вкладки: переключатель из радиокнопок -->
+          <div class="segmented mod-tabs" role="radiogroup" aria-label="Что показать">
+            <!-- непроверенные ответы; счётчик заполнит скрипт -->
+            <label><input type="radio" name="mod-tab" value="pending" checked><span>⏳ На проверке <b id="mod-count-pending"></b></span></label>
+            <!-- одобренные -->
+            <label><input type="radio" name="mod-tab" value="approved"><span>✅ Одобренные</span></label>
+            <!-- удалённые -->
+            <label><input type="radio" name="mod-tab" value="removed"><span>🗑 Удалённые</span></label>
+            <!-- вопросы -->
+            <label><input type="radio" name="mod-tab" value="questions"><span>❓ Вопросы</span></label>
+          <!-- конец вкладок -->
+          </div>
+          <!-- список карточек модерации (заполнит скрипт) -->
+          <div class="mod-list" id="mod-list"></div>
+        <!-- конец раздела -->
+        </section>
+        <!-- раздел «Школы» -->
+        <section class="card section-card" aria-labelledby="schools-title">
+          <!-- заголовок -->
+          <h2 id="schools-title"><span aria-hidden="true">🏫</span> Школы</h2>
+          <!-- форма добавления школы -->
+          <form class="school-form" id="school-form" novalidate>
+            <!-- поле названия -->
+            <div class="field">
+              <!-- подпись -->
+              <label for="school-name">Название</label>
+              <!-- поле; maxlength — как в базе -->
+              <input class="input" id="school-name" name="school_name" type="text" maxlength="120" placeholder="Например: Школа №110" aria-describedby="school-name-error">
+              <!-- ошибка -->
+              <p class="field-error" id="school-name-error" hidden></p>
+            <!-- конец поля -->
+            </div>
+            <!-- поле города -->
+            <div class="field">
+              <!-- подпись -->
+              <label for="school-city">Город</label>
+              <!-- поле -->
+              <input class="input" id="school-city" name="school_city" type="text" maxlength="60" placeholder="Ташкент" aria-describedby="school-city-error">
+              <!-- ошибка -->
+              <p class="field-error" id="school-city-error" hidden></p>
+            <!-- конец поля -->
+            </div>
+            <!-- кнопка -->
+            <button class="btn btn-primary" id="school-button" type="submit">Добавить школу</button>
+          <!-- конец формы -->
+          </form>
+          <!-- общая ошибка формы -->
+          <div class="alert alert-error" id="school-form-error" role="alert" hidden></div>
+          <!-- таблица школ (заполнит скрипт); table-wrap — прокрутка вбок на узком экране -->
+          <div class="table-wrap" id="schools-table"></div>
+        <!-- конец раздела -->
+        </section>
+        <!-- раздел «Пользователи» -->
+        <section class="card section-card" aria-labelledby="users-title">
+          <!-- заголовок -->
+          <h2 id="users-title"><span aria-hidden="true">👥</span> Пользователи</h2>
+          <!-- поиск -->
+          <div class="field section-hint">
+            <!-- подпись -->
+            <label for="user-search">Поиск по email, имени или фамилии</label>
+            <!-- type="search" — поле поиска с крестиком очистки -->
+            <input class="input" id="user-search" type="search" placeholder="Начни вводить…" autocomplete="off">
+          <!-- конец поля -->
+          </div>
+          <!-- таблица пользователей (заполнит скрипт) -->
+          <div class="table-wrap" id="users-table"></div>
+        <!-- конец раздела -->
+        </section>
+      <!-- конец содержимого -->
+      </div>
+    <!-- конец контейнера -->
+    </div>
+  <!-- конец main -->
+  </main>
+<!-- конец body -->
+</body>
+<!-- конец html -->
+</html>
