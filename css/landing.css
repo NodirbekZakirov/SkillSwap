@@ -1,0 +1,1173 @@
+/* ============================================================================ */
+/* Файл: css/landing.css                                                         */
+/* Зачем нужен: стили только для главной страницы (index.html): первый экран,  */
+/* анимации «пара» и «тройка» (их шаги переключает js/landing-animation.js),   */
+/* три шага, облако предметов, призыв.                                          */
+/* Как связан с остальными: подключается только в index.html, после           */
+/* variables.css, base.css и components.css, и использует их переменные.       */
+/* ============================================================================ */
+
+/* @media (max-width: 767px) — на телефоне */
+@media (max-width: 767px) {
+  /* .hide-mobile — элементы, которые прячем на узком экране */
+  .hide-mobile {
+    /* не показываем */
+    display: none;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* .landing — главная страница: верхний отступ убираем, у первого экрана он свой */
+.landing {
+  /* сверху 0 */
+  padding-top: 0;
+/* конец правила */
+}
+
+/* .hero — первый экран: две колонки (текст и иллюстрация) */
+.hero {
+  /* сетка */
+  display: grid;
+  /* две колонки: левая чуть шире правой (1.1fr и 1fr — доли свободного места) */
+  grid-template-columns: 1.1fr 1fr;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток между колонками 48px */
+  gap: var(--space-7);
+  /* отступы сверху и снизу 64px */
+  padding-block: var(--space-8);
+/* конец правила */
+}
+
+/* .hero-title — главный заголовок */
+.hero-title {
+  /* clamp(мин, желаемый, макс) — размер меняется с шириной окна (vw), но не меньше 32px и не больше 44px */
+  font-size: clamp(var(--font-size-2xl), 5vw, var(--font-size-3xl));
+  /* отступы: 16px сверху, 16px снизу */
+  margin-block: var(--space-4);
+/* конец правила */
+}
+
+/* .gradient-text — текст с цветным переходом */
+.gradient-text {
+  /* фон-градиент от индиго к коралловому */
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  /* background-clip: text — фон видно только «внутри букв»; -webkit- версия нужна для Safari и Chrome */
+  -webkit-background-clip: text;
+  /* стандартная версия того же свойства */
+  background-clip: text;
+  /* сами буквы прозрачные, поэтому сквозь них виден градиент */
+  color: transparent;
+/* конец правила */
+}
+
+/* .hero-lead — подзаголовок */
+.hero-lead {
+  /* 20px */
+  font-size: var(--font-size-lg);
+  /* серый */
+  color: var(--color-text-muted);
+  /* ширина строки не больше ~34 символов (ch — ширина символа «0»), так удобнее читать */
+  max-width: 34ch;
+  /* отступ снизу 24px */
+  margin-bottom: var(--space-5);
+/* конец правила */
+}
+
+/* .hero-note — подпись под кнопками */
+.hero-note {
+  /* отступ сверху 12px */
+  margin-top: var(--space-3);
+/* конец правила */
+}
+
+/* ------------------------ АНИМАЦИЯ «ПАРА» (первый экран) ------------------- */
+/* Шаги анимации переключает js/landing-animation.js: он ставит блоку         */
+/* атрибут data-step="0…4" (текущий шаг) и классы show-1…show-4 (шаг уже был). */
+
+/* .pair-demo — анимированная демонстрация: две карточки, линии обмена, круг совместимости */
+.pair-demo {
+  /* сетка в один столбец */
+  display: grid;
+  /* задержка появления 0.15 с: рисунок появляется чуть позже текста */
+  animation-delay: 0.15s;
+/* конец правила */
+}
+
+/* .demo-card — мини-карточка ученика в демонстрации */
+.demo-card {
+  /* ширина 82% блока */
+  width: 82%;
+  /* сетка */
+  display: grid;
+  /* промежуток 12px */
+  gap: var(--space-3);
+  /* плавная смена тени (подсветка на последнем шаге) */
+  transition: box-shadow 0.4s ease;
+/* конец правила */
+}
+
+/* .demo-card-b — вторая карточка */
+.demo-card-b {
+  /* justify-self: end — прижимаем карточку к правому краю сетки */
+  justify-self: end;
+/* конец правила */
+}
+
+/* .pair-demo.show-4 .demo-card — последний шаг «пара найдена»: карточки обводятся основным цветом */
+.pair-demo.show-4 .demo-card {
+  /* две тени через запятую: цветная обводка 2px и большая мягкая тень */
+  box-shadow: 0 0 0 2px var(--color-primary), var(--shadow-lg);
+/* конец правила */
+}
+
+/* .demo-check — зелёная галочка у имени (появляется на последнем шаге) */
+.demo-check {
+  /* margin-left: auto — прижимаем к правому краю строки */
+  margin-left: auto;
+  /* inline-flex для центрирования */
+  display: inline-flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* центр по горизонтали */
+  justify-content: center;
+  /* 28px */
+  width: 1.75rem;
+  /* 28px */
+  height: 1.75rem;
+  /* круг */
+  border-radius: 50%;
+  /* зелёный фон */
+  background-color: var(--color-success);
+  /* цвет галочки = цвет карточки: белая в светлой теме, тёмная в тёмной — контраст хороший в обеих */
+  color: var(--color-surface);
+  /* очень жирная */
+  font-weight: 800;
+  /* scale(0) — сжата до нуля, то есть не видна */
+  transform: scale(0);
+  /* cubic-bezier(0.34, 1.56, 0.64, 1) — кривая с «перелётом»: галочка чуть больше нужного и пружинит обратно */
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+/* конец правила */
+}
+
+/* галочка на последнем шаге */
+.pair-demo.show-4 .demo-check {
+  /* обычный размер */
+  transform: scale(1);
+/* конец правила */
+}
+
+/* у второй карточки галочка появляется чуть позже — «волной» */
+.pair-demo.show-4 .demo-card-b .demo-check {
+  /* задержка 0.15 с */
+  transition-delay: 0.15s;
+/* конец правила */
+}
+
+/* .demo-chip — плашки предметов, которые подсвечиваются */
+.demo-chip {
+  /* плавная подсветка */
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+/* конец правила */
+}
+
+/* шаг 1 (летит английский): плашки линии 1 обводятся основным цветом и чуть увеличиваются */
+.pair-demo[data-step="1"] .demo-chip[data-lane="1"] {
+  /* обводка 3px */
+  box-shadow: 0 0 0 3px var(--color-primary);
+  /* scale(1.06) — на 6% больше */
+  transform: scale(1.06);
+/* конец правила */
+}
+
+/* шаг 2 (летит алгебра): плашки линии 2 обводятся акцентным цветом */
+.pair-demo[data-step="2"] .demo-chip[data-lane="2"] {
+  /* обводка 3px */
+  box-shadow: 0 0 0 3px var(--color-accent);
+  /* чуть больше */
+  transform: scale(1.06);
+/* конец правила */
+}
+
+/* .pair-link — полоса между карточками с линиями и кругом */
+.pair-link {
+  /* от неё считается положение круга */
+  position: relative;
+  /* z-index: 1 — поверх карточек (кружки-предметы заходят на их край) */
+  z-index: 1;
+/* конец правила */
+}
+
+/* .pair-svg — рисунок линий */
+.pair-svg {
+  /* блочный элемент без лишнего места снизу */
+  display: block;
+  /* на всю ширину */
+  width: 100%;
+  /* высота — по пропорциям viewBox */
+  height: auto;
+  /* но не выше 136px: на широком экране линии не растягиваются в огромный овал (рисунок сам встаёт по центру) */
+  max-height: 8.5rem;
+  /* overflow: visible — кружки у края рисунка не обрезаются */
+  overflow: visible;
+/* конец правила */
+}
+
+/* .match-ring — круг совместимости в центре полосы */
+.match-ring {
+  /* абсолютное положение относительно .pair-link */
+  position: absolute;
+  /* по центру по вертикали */
+  top: 50%;
+  /* по центру по горизонтали */
+  left: 50%;
+  /* 92px */
+  width: 5.75rem;
+  /* 92px */
+  height: 5.75rem;
+  /* сдвиг на половину размера — центр круга точно в середине */
+  transform: translate(-50%, -50%);
+  /* сетка, чтобы поставить текст по центру */
+  display: grid;
+  /* place-items: center — по центру по обеим осям */
+  place-items: center;
+  /* круг */
+  border-radius: 50%;
+  /* фон карточки */
+  background-color: var(--color-surface);
+  /* большая тень */
+  box-shadow: var(--shadow-lg);
+/* конец правила */
+}
+
+/* .match-ring svg — кольцо поверх фона круга */
+.match-ring svg {
+  /* абсолютно, на весь круг */
+  position: absolute;
+  /* inset: 0 — прижато ко всем краям */
+  inset: 0;
+  /* поворот на −90°: дуга начинает заполняться сверху, как часы */
+  transform: rotate(-90deg);
+/* конец правила */
+}
+
+/* .ring-track — серое кольцо-основа */
+.ring-track {
+  /* fill: none — без заливки внутри */
+  fill: none;
+  /* stroke — цвет линии */
+  stroke: var(--color-primary-soft);
+  /* толщина 8 единиц рисунка */
+  stroke-width: 8;
+/* конец правила */
+}
+
+/* .ring-fill — цветная дуга процента */
+.ring-fill {
+  /* без заливки */
+  fill: none;
+  /* url(#ring-gradient) — линия окрашена градиентом из <defs> */
+  stroke: url(#ring-gradient);
+  /* толщина */
+  stroke-width: 8;
+  /* stroke-linecap: round — скруглённые концы дуги */
+  stroke-linecap: round;
+  /* штрих длиной 100 (вся окружность, см. pathLength) и такой же промежуток */
+  stroke-dasharray: 100 100;
+  /* сдвиг 100 — дуга пустая; скрипт уменьшает сдвиг до 8 (заполнено 92%) */
+  stroke-dashoffset: 100;
+/* конец правила */
+}
+
+/* цвет начала градиента кольца; stop-color — цвет точки градиента */
+.ring-stop-start {
+  /* основной цвет */
+  stop-color: var(--color-primary);
+/* конец правила */
+}
+
+/* цвет конца градиента кольца */
+.ring-stop-end {
+  /* акцентный цвет */
+  stop-color: var(--color-accent);
+/* конец правила */
+}
+
+/* .match-value — текст в центре круга */
+.match-value {
+  /* relative — поверх кольца */
+  position: relative;
+  /* 20px */
+  font-size: var(--font-size-lg);
+  /* очень жирный */
+  font-weight: 800;
+  /* tabular-nums — все цифры одной ширины, число не «дрожит», пока растёт */
+  font-variant-numeric: tabular-nums;
+/* конец правила */
+}
+
+/* .match-ring::after — «волна» вокруг круга во время поиска */
+.match-ring::after {
+  /* пустое содержимое, чтобы псевдоэлемент появился */
+  content: "";
+  /* абсолютно, на весь круг */
+  position: absolute;
+  /* прижат ко всем краям */
+  inset: 0;
+  /* круг */
+  border-radius: 50%;
+  /* рамка основного цвета */
+  border: 2px solid var(--color-primary);
+  /* по умолчанию не видна */
+  opacity: 0;
+/* конец правила */
+}
+
+/* шаг 0 (поиск): волна расходится снова и снова; infinite — бесконечно */
+.pair-demo[data-step="0"] .match-ring::after {
+  /* анимация ring-wave за 1.6 с */
+  animation: ring-wave 1.6s ease-out infinite;
+/* конец правила */
+}
+
+/* последний шаг: круг один раз «подпрыгивает» */
+.pair-demo.show-4 .match-ring {
+  /* анимация ring-pop за 0.6 с с пружинящей кривой */
+  animation: ring-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+/* конец правила */
+}
+
+/* @keyframes ring-wave — волна: круг-рамка растёт и растворяется */
+@keyframes ring-wave {
+  /* начало: обычный размер, полупрозрачная */
+  from {
+    /* размер 100% */
+    transform: scale(1);
+    /* видна на 60% */
+    opacity: 0.6;
+  /* конец шага */
+  }
+  /* конец: в 1.6 раза больше, не видна */
+  to {
+    /* размер 160% */
+    transform: scale(1.6);
+    /* прозрачная */
+    opacity: 0;
+  /* конец шага */
+  }
+/* конец @keyframes */
+}
+
+/* @keyframes ring-pop — круг увеличивается и возвращается; translate нужен, потому что transform заменяется целиком */
+@keyframes ring-pop {
+  /* 50% — середина анимации */
+  50% {
+    /* центр на месте, размер 112% */
+    transform: translate(-50%, -50%) scale(1.12);
+  /* конец шага */
+  }
+/* конец @keyframes */
+}
+
+/* .demo-status — подпись под рисунком, меняется на каждом шаге */
+.demo-status {
+  /* отступ сверху 16px, остальные 0 */
+  margin: var(--space-4) 0 0;
+  /* место под 2 строки заранее — при смене текста страница не «прыгает» */
+  min-height: 3.4em;
+  /* по центру */
+  text-align: center;
+  /* серый текст */
+  color: var(--color-text-muted);
+  /* полужирный */
+  font-weight: 600;
+/* конец правила */
+}
+
+/* ----------------- ЛИНИИ И КРУЖКИ-ПРЕДМЕТЫ (общие для пары и тройки) ------- */
+
+/* .track — серая пунктирная «дорожка», по которой потом пройдёт цветная линия */
+.track {
+  /* без заливки */
+  fill: none;
+  /* цвет рамок */
+  stroke: var(--color-border);
+  /* толщина 3 */
+  stroke-width: 3;
+  /* пунктир: штрих 2, промежуток 8 */
+  stroke-dasharray: 2 8;
+  /* круглые концы штрихов — получаются точки */
+  stroke-linecap: round;
+/* конец правила */
+}
+
+/* .flow — цветная линия; её постепенно «прорисовывает» скрипт (stroke-dashoffset) */
+.flow {
+  /* без заливки */
+  fill: none;
+  /* толщина 4 */
+  stroke-width: 4;
+  /* круглые концы */
+  stroke-linecap: round;
+/* конец правила */
+}
+
+/* линия 1 — основной цвет */
+.flow-1 {
+  /* индиго */
+  stroke: var(--color-primary);
+/* конец правила */
+}
+
+/* линия 2 — акцентный цвет */
+.flow-2 {
+  /* коралловый */
+  stroke: var(--color-accent);
+/* конец правила */
+}
+
+/* линия 3 — зелёный */
+.flow-3 {
+  /* зелёный */
+  stroke: var(--color-success);
+/* конец правила */
+}
+
+/* .token — кружок-предмет; пока его шаг не наступил, он не виден */
+.token {
+  /* прозрачный */
+  opacity: 0;
+  /* плавное появление */
+  transition: opacity 0.3s ease;
+/* конец правила */
+}
+
+/* кружок виден, начиная со своего шага (класс show-N ставит скрипт) */
+.show-1 .token-1,
+/* второй кружок */
+.show-2 .token-2,
+/* третий кружок */
+.show-3 .token-3 {
+  /* виден */
+  opacity: 1;
+/* конец правила */
+}
+
+/* .token circle — фон кружка */
+.token circle {
+  /* заливка цветом карточки */
+  fill: var(--color-surface);
+  /* толщина обводки */
+  stroke-width: 3;
+/* конец правила */
+}
+
+/* обводка кружка 1 — как у линии 1 */
+.token-1 circle {
+  /* индиго */
+  stroke: var(--color-primary);
+/* конец правила */
+}
+
+/* обводка кружка 2 */
+.token-2 circle {
+  /* коралловый */
+  stroke: var(--color-accent);
+/* конец правила */
+}
+
+/* обводка кружка 3 */
+.token-3 circle {
+  /* зелёный */
+  stroke: var(--color-success);
+/* конец правила */
+}
+
+/* .token text — эмодзи предмета в кружке */
+.token text {
+  /* 18 единиц рисунка */
+  font-size: 18px;
+  /* text-anchor: middle — центр текста по горизонтали в точке кружка */
+  text-anchor: middle;
+  /* dominant-baseline: central — центр текста по вертикали */
+  dominant-baseline: central;
+/* конец правила */
+}
+
+/* .demo-person — строка «аватар + имя» */
+.demo-person {
+  /* флексбокс в строку */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* промежуток 12px */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* .demo-line — строка «Знает / Хочет» с плашкой */
+.demo-line {
+  /* флексбокс */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* промежуток 8px */
+  gap: var(--space-2);
+  /* перенос на узком экране */
+  flex-wrap: wrap;
+/* конец правила */
+}
+
+/* .demo-line .muted — подпись «Знает» или «Хочет» */
+.demo-line .muted {
+  /* фиксированная ширина 64px, чтобы плашки стояли ровно друг под другом */
+  width: 4rem;
+/* конец правила */
+}
+
+/* .section — обычный раздел главной страницы */
+.section {
+  /* отступы сверху и снизу 48px */
+  padding-block: var(--space-7);
+/* конец правила */
+}
+
+/* .section-title — заголовок раздела по центру */
+.section-title {
+  /* по центру */
+  text-align: center;
+  /* отступ снизу 32px */
+  margin-bottom: var(--space-6);
+/* конец правила */
+}
+
+/* .steps — список трёх шагов */
+.steps {
+  /* list-style: none — убираем стандартные цифры списка (у нас свои кружки) */
+  list-style: none;
+  /* убираем отступы списка */
+  margin: 0;
+  /* убираем отступ слева */
+  padding: 0;
+  /* сетка */
+  display: grid;
+  /* три равные колонки; repeat(3, 1fr) = «1fr 1fr 1fr» */
+  grid-template-columns: repeat(3, 1fr);
+  /* промежуток 24px */
+  gap: var(--space-5);
+/* конец правила */
+}
+
+/* .step — карточка шага */
+.step {
+  /* анимация появления */
+  animation: fade-up 0.5s ease both;
+/* конец правила */
+}
+
+/* .step:nth-child(2) — второй шаг; nth-child(n) выбирает n-й дочерний элемент */
+.step:nth-child(2) {
+  /* появляется чуть позже первого */
+  animation-delay: 0.1s;
+/* конец правила */
+}
+
+/* .step:nth-child(3) — третий шаг */
+.step:nth-child(3) {
+  /* появляется ещё позже */
+  animation-delay: 0.2s;
+/* конец правила */
+}
+
+/* .step-number — номер шага в кружке */
+.step-number {
+  /* inline-flex для центрирования цифры */
+  display: inline-flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* центр по горизонтали */
+  justify-content: center;
+  /* 44px */
+  width: 2.75rem;
+  /* 44px */
+  height: 2.75rem;
+  /* круг */
+  border-radius: 50%;
+  /* светлый индиго */
+  background-color: var(--color-primary-soft);
+  /* индиго цифра */
+  color: var(--color-primary);
+  /* очень жирная */
+  font-weight: 800;
+  /* 20px */
+  font-size: var(--font-size-lg);
+  /* отступ снизу 16px */
+  margin-bottom: var(--space-4);
+/* конец правила */
+}
+
+/* .triangle-card — карточка про тройки: текст и схема рядом */
+.triangle-card {
+  /* сетка */
+  display: grid;
+  /* две равные колонки */
+  grid-template-columns: 1fr 1fr;
+  /* центр по вертикали */
+  align-items: center;
+  /* промежуток 32px */
+  gap: var(--space-6);
+  /* больше внутренний отступ 32px */
+  padding: var(--space-6);
+/* конец правила */
+}
+
+/* ------------------------ АНИМАЦИЯ «ТРОЙКА» ------------------------------- */
+
+/* .cycle-steps — список шагов рядом со схемой */
+.cycle-steps {
+  /* без стандартных цифр списка — у нас свои кружки */
+  list-style: none;
+  /* отступ сверху 24px */
+  margin: var(--space-5) 0 0;
+  /* без отступа слева */
+  padding: 0;
+  /* сетка */
+  display: grid;
+  /* промежуток 8px */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .cycle-steps li — один шаг */
+.cycle-steps li {
+  /* флексбокс: кружок и текст в строку */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* промежуток 12px */
+  gap: var(--space-3);
+  /* отступы */
+  padding: var(--space-2) var(--space-3);
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* серый текст, пока шаг не наступил */
+  color: var(--color-text-muted);
+  /* плавная подсветка */
+  transition: background-color 0.3s ease, color 0.3s ease;
+/* конец правила */
+}
+
+/* .is-active — текущий шаг (класс ставит скрипт) */
+.cycle-steps li.is-active {
+  /* светлый индиго фон */
+  background-color: var(--color-primary-soft);
+  /* обычный цвет текста */
+  color: var(--color-text);
+  /* жирный */
+  font-weight: 700;
+/* конец правила */
+}
+
+/* .is-done — пройденный шаг */
+.cycle-steps li.is-done {
+  /* обычный цвет текста */
+  color: var(--color-text);
+/* конец правила */
+}
+
+/* .cycle-step-num — кружок с номером шага */
+.cycle-step-num {
+  /* кружок не сжимается */
+  flex-shrink: 0;
+  /* inline-flex для центрирования */
+  display: inline-flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* центр по горизонтали */
+  justify-content: center;
+  /* 32px */
+  width: 2rem;
+  /* 32px */
+  height: 2rem;
+  /* круг */
+  border-radius: 50%;
+  /* светлый фон */
+  background-color: var(--color-surface-2);
+  /* очень жирная цифра */
+  font-weight: 800;
+  /* плавная смена цвета */
+  transition: background-color 0.3s ease, color 0.3s ease;
+/* конец правила */
+}
+
+/* кружок текущего шага — основной цвет */
+.cycle-steps li.is-active .cycle-step-num {
+  /* индиго фон */
+  background-color: var(--color-primary);
+  /* светлая цифра */
+  color: var(--color-on-primary);
+/* конец правила */
+}
+
+/* кружок пройденного шага — зелёный, вместо цифры галочка */
+.cycle-steps li.is-done .cycle-step-num {
+  /* зелёный фон */
+  background-color: var(--color-success);
+  /* цвет галочки = цвет карточки */
+  color: var(--color-surface);
+  /* font-size: 0 — прячем цифру */
+  font-size: 0;
+/* конец правила */
+}
+
+/* ::before — галочка вместо цифры */
+.cycle-steps li.is-done .cycle-step-num::before {
+  /* символ галочки */
+  content: "✓";
+  /* обычный размер (цифру мы спрятали размером 0) */
+  font-size: var(--font-size-sm);
+/* конец правила */
+}
+
+/* .cycle — область схемы; все размеры внутри — в процентах, поэтому схема тянется под ширину */
+.cycle {
+  /* от этого блока считаются положения учеников */
+  position: relative;
+  /* на всю колонку */
+  width: 100%;
+  /* но не шире 416px */
+  max-width: 26rem;
+  /* по центру колонки */
+  margin-inline: auto;
+  /* aspect-ratio — пропорции блока как у viewBox рисунка (400×340), тогда проценты совпадают с координатами */
+  aspect-ratio: 400 / 340;
+/* конец правила */
+}
+
+/* .cycle-svg — рисунок линий на весь блок */
+.cycle-svg {
+  /* абсолютно */
+  position: absolute;
+  /* на весь блок */
+  inset: 0;
+  /* ширина 100% */
+  width: 100%;
+  /* высота 100% */
+  height: 100%;
+  /* кружки у края не обрезаются */
+  overflow: visible;
+/* конец правила */
+}
+
+/* .cycle-orbit — пунктирный круг через всех троих */
+.cycle-orbit {
+  /* без заливки */
+  fill: none;
+  /* светлый индиго */
+  stroke: var(--color-primary-soft);
+  /* толщина */
+  stroke-width: 3;
+  /* пунктир: штрих 6, промежуток 10 (вместе 16) */
+  stroke-dasharray: 6 10;
+  /* пока цикл не замкнулся, круг не виден — схема чище */
+  opacity: 0;
+  /* плавное появление */
+  transition: opacity 0.5s ease;
+/* конец правила */
+}
+
+/* последний шаг: круг появляется, и пунктир «бежит» по нему — цикл замкнулся */
+.cycle.show-4 .cycle-orbit {
+  /* виден */
+  opacity: 1;
+  /* ярче — основной цвет */
+  stroke: var(--color-primary);
+  /* анимация orbit-run за 1 с, линейно, бесконечно */
+  animation: orbit-run 1s linear infinite;
+/* конец правила */
+}
+
+/* @keyframes orbit-run — сдвиг пунктира на два периода (2 × 16), поэтому повтор незаметен */
+@keyframes orbit-run {
+  /* к концу анимации */
+  to {
+    /* сдвиг пунктира */
+    stroke-dashoffset: -32;
+  /* конец шага */
+  }
+/* конец @keyframes */
+}
+
+/* .cycle-node — ученик (аватар); координаты ниже — в процентах от блока */
+.cycle-node {
+  /* абсолютное положение */
+  position: absolute;
+  /* ширина 15% блока — растёт вместе со схемой */
+  width: 15%;
+  /* aspect-ratio: 1 — высота равна ширине (круг) */
+  aspect-ratio: 1;
+  /* центр аватара — ровно в точке left/top */
+  transform: translate(-50%, -50%);
+  /* сетка для центрирования эмодзи */
+  display: grid;
+  /* по центру */
+  place-items: center;
+  /* круг */
+  border-radius: 50%;
+  /* светлый индиго фон */
+  background-color: var(--color-primary-soft);
+  /* эмодзи 28px */
+  font-size: 1.75rem;
+  /* кольцо цвета карточки — аватар «отделён» от линий */
+  box-shadow: 0 0 0 4px var(--color-surface);
+  /* поверх рисунка */
+  z-index: 1;
+  /* плавная подсветка и увеличение */
+  transition: box-shadow 0.35s ease, transform 0.35s ease;
+/* конец правила */
+}
+
+/* Амир — сверху по центру (x = 200/400, y = 78/340 в координатах рисунка) */
+.node-a {
+  /* 50% от левого края */
+  left: 50%;
+  /* 22.94% от верха */
+  top: 22.94%;
+/* конец правила */
+}
+
+/* Лена — справа снизу (x = 330, y = 270) */
+.node-b {
+  /* 82.5% от левого края */
+  left: 82.5%;
+  /* 79.41% от верха */
+  top: 79.41%;
+/* конец правила */
+}
+
+/* Тимур — слева снизу (x = 70, y = 270) */
+.node-c {
+  /* 17.5% от левого края */
+  left: 17.5%;
+  /* 79.41% от верха */
+  top: 79.41%;
+/* конец правила */
+}
+
+/* подсветка двух учеников, которые сейчас занимаются: шаг 1 — Амир и Лена */
+.cycle[data-step="1"] .node-a,
+/* Лена на шаге 1 */
+.cycle[data-step="1"] .node-b,
+/* шаг 2 — Лена и Тимур */
+.cycle[data-step="2"] .node-b,
+/* Тимур на шаге 2 */
+.cycle[data-step="2"] .node-c,
+/* шаг 3 — Тимур и Амир */
+.cycle[data-step="3"] .node-c,
+/* Амир на шаге 3 */
+.cycle[data-step="3"] .node-a {
+  /* кольцо цвета карточки и снаружи кольцо основного цвета */
+  box-shadow: 0 0 0 4px var(--color-surface), 0 0 0 7px var(--color-primary);
+  /* чуть больше; translate сохраняем, иначе аватар сместится */
+  transform: translate(-50%, -50%) scale(1.08);
+/* конец правила */
+}
+
+/* .cycle-node::after — зелёная галочка «получил помощь» (появляется на последнем шаге) */
+.cycle-node::after {
+  /* символ галочки */
+  content: "✓";
+  /* абсолютно, в правом нижнем углу аватара */
+  position: absolute;
+  /* правее края на 6% */
+  right: -6%;
+  /* ниже края на 6% */
+  bottom: -6%;
+  /* 42% размера аватара */
+  width: 42%;
+  /* круг */
+  aspect-ratio: 1;
+  /* сетка для центрирования */
+  display: grid;
+  /* по центру */
+  place-items: center;
+  /* круг */
+  border-radius: 50%;
+  /* зелёный фон */
+  background-color: var(--color-success);
+  /* цвет галочки = цвет карточки */
+  color: var(--color-surface);
+  /* 16px */
+  font-size: var(--font-size-sm);
+  /* очень жирная */
+  font-weight: 800;
+  /* сжата до нуля — не видна */
+  transform: scale(0);
+  /* пружинящее появление */
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+/* конец правила */
+}
+
+/* последний шаг: галочки у всех */
+.cycle.show-4 .cycle-node::after {
+  /* обычный размер */
+  transform: scale(1);
+/* конец правила */
+}
+
+/* галочка Лены чуть позже Амира — «волной» */
+.cycle.show-4 .node-b::after {
+  /* задержка 0.12 с */
+  transition-delay: 0.12s;
+/* конец правила */
+}
+
+/* галочка Тимура — ещё позже */
+.cycle.show-4 .node-c::after {
+  /* задержка 0.24 с */
+  transition-delay: 0.24s;
+/* конец правила */
+}
+
+/* .cycle-name — имя под аватаром */
+.cycle-name {
+  /* абсолютно относительно аватара */
+  position: absolute;
+  /* ниже аватара на 6px */
+  top: calc(100% + 0.375rem);
+  /* по центру по горизонтали */
+  left: 50%;
+  /* сдвиг на половину своей ширины */
+  transform: translateX(-50%);
+  /* 16px */
+  font-size: var(--font-size-sm);
+  /* жирное */
+  font-weight: 700;
+  /* white-space: nowrap — имя в одну строку */
+  white-space: nowrap;
+/* конец правила */
+}
+
+/* у Амира (сверху) имя над аватаром, чтобы не мешать линиям, уходящим вниз */
+.node-a .cycle-name {
+  /* сбрасываем top */
+  top: auto;
+  /* выше аватара на 6px */
+  bottom: calc(100% + 0.375rem);
+/* конец правила */
+}
+
+/* .cycle-center — надпись в центре треугольника (меняется на каждом шаге) */
+.cycle-center {
+  /* абсолютно */
+  position: absolute;
+  /* по центру по горизонтали */
+  left: 50%;
+  /* центр треугольника по высоте */
+  top: 60%;
+  /* центр надписи в этой точке */
+  transform: translate(-50%, -50%);
+  /* не шире 42% — помещается между линиями */
+  width: 42%;
+  /* по центру */
+  text-align: center;
+  /* 16px */
+  font-size: var(--font-size-sm);
+  /* очень жирная */
+  font-weight: 800;
+  /* межстрочный интервал поменьше */
+  line-height: 1.3;
+/* конец правила */
+}
+
+/* @media (prefers-reduced-motion: reduce) — человек просил меньше движения: бесконечные анимации выключаем совсем */
+@media (prefers-reduced-motion: reduce) {
+  /* волна поиска и бегущий пунктир */
+  .pair-demo .match-ring::after,
+  /* пунктир круга тройки */
+  .cycle.show-4 .cycle-orbit {
+    /* animation: none — без анимации */
+    animation: none;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* .subjects-cloud — «облако» плашек предметов */
+.subjects-cloud {
+  /* флексбокс */
+  display: flex;
+  /* перенос на новые строки */
+  flex-wrap: wrap;
+  /* по центру по горизонтали */
+  justify-content: center;
+  /* промежуток 12px */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* .subjects-cloud .chip — плашки в облаке делаем крупнее */
+.subjects-cloud .chip {
+  /* 17px */
+  font-size: var(--font-size-base);
+  /* больше отступы */
+  padding: 0.5rem 1rem;
+  /* фон карточки */
+  background-color: var(--color-surface);
+  /* рамка */
+  border: 1px solid var(--color-border);
+  /* лёгкая тень */
+  box-shadow: var(--shadow-sm);
+  /* плавное движение при наведении */
+  transition: transform var(--transition);
+/* конец правила */
+}
+
+/* наведение на плашку предмета */
+.subjects-cloud .chip:hover {
+  /* чуть поднимается */
+  transform: translateY(-2px);
+/* конец правила */
+}
+
+/* .feature-icon — иконка в карточке преимущества */
+.feature-icon {
+  /* блочный элемент, отдельной строкой */
+  display: block;
+  /* 36px */
+  font-size: 2.25rem;
+  /* отступ снизу 12px */
+  margin-bottom: var(--space-3);
+/* конец правила */
+}
+
+/* .cta — цветной блок призыва (call to action — «призыв к действию») */
+.cta {
+  /* по центру */
+  text-align: center;
+  /* большие отступы */
+  padding: var(--space-7) var(--space-5);
+  /* большое скругление */
+  border-radius: var(--radius-lg);
+  /* градиентный фон */
+  background: linear-gradient(135deg, var(--color-primary), #7b4fd0 55%, var(--color-accent));
+  /* белый текст */
+  color: #ffffff;
+  /* большая тень */
+  box-shadow: var(--shadow-lg);
+/* конец правила */
+}
+
+/* .cta p — текст в блоке призыва */
+.cta p {
+  /* rgba(255,255,255,0.9) — белый с прозрачностью 90% */
+  color: rgba(255, 255, 255, 0.9);
+/* конец правила */
+}
+
+/* .cta-actions — кнопки в блоке призыва */
+.cta-actions {
+  /* по центру */
+  justify-content: center;
+  /* отступ сверху 24px */
+  margin-top: var(--space-5);
+/* конец правила */
+}
+
+/* .cta-btn — белая кнопка на цветном фоне */
+.cta-btn {
+  /* белый фон */
+  background-color: #ffffff;
+  /* индиго текст (фиксированный, чтобы в тёмной теме не стал светлым на белом) */
+  color: #4643c0;
+/* конец правила */
+}
+
+/* наведение на белую кнопку */
+.cta-btn:hover {
+  /* текст того же цвета */
+  color: #4643c0;
+  /* тень */
+  box-shadow: var(--shadow-md);
+/* конец правила */
+}
+
+/* .cta-link — белая ссылка */
+.cta-link {
+  /* белая */
+  color: #ffffff;
+  /* жирная */
+  font-weight: 700;
+/* конец правила */
+}
+
+/* наведение на белую ссылку */
+.cta-link:hover {
+  /* остаётся белой */
+  color: #ffffff;
+/* конец правила */
+}
+
+/* @media (max-width: 900px) — планшеты и телефоны: колонки складываем в одну */
+@media (max-width: 900px) {
+  /* первый экран */
+  .hero {
+    /* одна колонка */
+    grid-template-columns: 1fr;
+    /* меньше отступы */
+    padding-block: var(--space-6);
+    /* меньше промежуток */
+    gap: var(--space-6);
+  /* конец правила */
+  }
+
+  /* карточка про тройки */
+  .triangle-card {
+    /* одна колонка */
+    grid-template-columns: 1fr;
+  /* конец правила */
+  }
+
+  /* шаги */
+  .steps {
+    /* одна колонка */
+    grid-template-columns: 1fr;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* @media (max-width: 480px) — маленькие телефоны */
+@media (max-width: 480px) {
+  /* карточки иллюстрации на всю ширину */
+  .demo-card {
+    /* 100% */
+    width: 100%;
+  /* конец правила */
+  }
+
+  /* круг совместимости делаем меньше */
+  .match-ring {
+    /* 76px */
+    width: 4.75rem;
+    /* 76px */
+    height: 4.75rem;
+  /* конец правила */
+  }
+
+  /* подпись под анимацией может занять 3 строки — место оставляем заранее */
+  .demo-status {
+    /* 3 строки */
+    min-height: 5em;
+  /* конец правила */
+  }
+
+  /* эмодзи в аватарах тройки чуть меньше */
+  .cycle-node {
+    /* 24px */
+    font-size: 1.5rem;
+  /* конец правила */
+  }
+/* конец @media */
+}

@@ -1,0 +1,1001 @@
+/* ============================================================================ */
+/* Файл: css/components.css                                                      */
+/* Зачем нужен: стили повторяющихся «деталей» интерфейса: кнопки, карточки,    */
+/* поля форм, плашки-чипы, аватары, шапка сайта, нижнее меню на телефоне,      */
+/* всплывающие сообщения (тосты), состояния «загрузка / пусто / ошибка».       */
+/* Как связан с остальными: использует переменные из variables.css.            */
+/* HTML-разметку для шапки и меню создаёт js/layout.js, а тосты — js/utils.js; */
+/* здесь только их внешний вид.                                                */
+/* ============================================================================ */
+
+/* ------------------------------ КНОПКИ ------------------------------------- */
+
+/* .btn — общий класс для всех кнопок (и для ссылок, которые выглядят как кнопки) */
+.btn {
+  /* display: inline-flex — кнопка стоит в строке, но внутри раскладывается флексбоксом */
+  display: inline-flex;
+  /* align-items: center — содержимое по центру по вертикали */
+  align-items: center;
+  /* justify-content: center — содержимое по центру по горизонтали */
+  justify-content: center;
+  /* gap — промежуток между иконкой и текстом 8px */
+  gap: var(--space-2);
+  /* min-height: 44px — удобно нажимать пальцем (рекомендация для сенсорных экранов) */
+  min-height: 2.75rem;
+  /* padding — внутренние отступы: 10px сверху/снизу, 20px слева/справа */
+  padding: 0.625rem 1.25rem;
+  /* border — прозрачная рамка 2px, чтобы кнопки с рамкой и без были одного размера */
+  border: 2px solid transparent;
+  /* border-radius — скругление углов */
+  border-radius: var(--radius-md);
+  /* font-weight: 700 — жирный текст */
+  font-weight: 700;
+  /* font-size — обычный размер */
+  font-size: var(--font-size-base);
+  /* line-height: 1.2 — компактная высота строки */
+  line-height: 1.2;
+  /* text-decoration: none — у ссылок-кнопок убираем подчёркивание */
+  text-decoration: none;
+  /* cursor: pointer — курсор «рука» */
+  cursor: pointer;
+  /* transition — плавная смена фона, цвета, тени и положения */
+  transition: background-color var(--transition), color var(--transition), box-shadow var(--transition), transform var(--transition);
+  /* user-select: none — текст кнопки не выделяется при двойном клике */
+  user-select: none;
+/* конец правила .btn */
+}
+
+/* .btn:active — :active значит «кнопку сейчас нажимают» */
+.btn:active {
+  /* scale(0.97) — кнопка чуть сжимается, так нажатие ощущается */
+  transform: scale(0.97);
+/* конец правила */
+}
+
+/* .btn:disabled — отключённая кнопка; .btn[aria-disabled="true"] — ссылка-кнопка, помеченная как отключённая */
+.btn:disabled,
+/* атрибут aria-disabled используется у ссылок, потому что у <a> нет свойства disabled */
+.btn[aria-disabled="true"] {
+  /* opacity: 0.6 — кнопка полупрозрачная */
+  opacity: 0.6;
+  /* cursor: not-allowed — курсор «запрещено» */
+  cursor: not-allowed;
+  /* убираем эффект сжатия */
+  transform: none;
+/* конец правила */
+}
+
+/* .btn-primary — главная кнопка (заливка основным цветом) */
+.btn-primary {
+  /* фон — основной цвет */
+  background-color: var(--color-primary);
+  /* текст — белый */
+  color: var(--color-on-primary);
+  /* лёгкая тень */
+  box-shadow: var(--shadow-sm);
+/* конец правила */
+}
+
+/* .btn-primary:hover:not(:disabled) — при наведении, но только если кнопка НЕ отключена (:not — «не») */
+.btn-primary:hover:not(:disabled) {
+  /* фон темнее */
+  background-color: var(--color-primary-hover);
+  /* цвет текста не меняется (иначе сработало бы правило a:hover) */
+  color: var(--color-on-primary);
+  /* тень больше */
+  box-shadow: var(--shadow-md);
+/* конец правила */
+}
+
+/* .btn-secondary — второстепенная кнопка: прозрачная с рамкой */
+.btn-secondary {
+  /* фон — цвет карточки */
+  background-color: var(--color-surface);
+  /* текст — основной цвет */
+  color: var(--color-primary);
+  /* рамка — основной цвет */
+  border-color: var(--color-primary);
+/* конец правила */
+}
+
+/* наведение на второстепенную кнопку */
+.btn-secondary:hover:not(:disabled) {
+  /* фон — светлый индиго */
+  background-color: var(--color-primary-soft);
+  /* текст не меняется */
+  color: var(--color-primary);
+/* конец правила */
+}
+
+/* .btn-ghost — «призрачная» кнопка: без фона и рамки, для мелких действий */
+.btn-ghost {
+  /* прозрачный фон */
+  background-color: transparent;
+  /* обычный цвет текста */
+  color: var(--color-text);
+/* конец правила */
+}
+
+/* наведение на призрачную кнопку */
+.btn-ghost:hover:not(:disabled) {
+  /* появляется светлый фон */
+  background-color: var(--color-surface-2);
+  /* цвет текста тот же */
+  color: var(--color-text);
+/* конец правила */
+}
+
+/* .btn-danger — опасное действие (удалить, заблокировать) */
+.btn-danger {
+  /* светло-красный фон */
+  background-color: var(--color-danger-soft);
+  /* красный текст */
+  color: var(--color-danger);
+/* конец правила */
+}
+
+/* наведение на опасную кнопку */
+.btn-danger:hover:not(:disabled) {
+  /* фон становится красным */
+  background-color: var(--color-danger);
+  /* текст белый */
+  color: #ffffff;
+/* конец правила */
+}
+
+/* .btn-sm — маленькая кнопка */
+.btn-sm {
+  /* высота 36px */
+  min-height: 2.25rem;
+  /* меньше отступы */
+  padding: 0.375rem 0.875rem;
+  /* текст 16px */
+  font-size: var(--font-size-sm);
+/* конец правила */
+}
+
+/* .btn-lg — большая кнопка (на главной странице) */
+.btn-lg {
+  /* высота 52px */
+  min-height: 3.25rem;
+  /* больше отступы */
+  padding: 0.75rem 1.75rem;
+  /* текст 20px */
+  font-size: var(--font-size-lg);
+/* конец правила */
+}
+
+/* .btn-block — кнопка на всю ширину */
+.btn-block {
+  /* ширина 100% */
+  width: 100%;
+/* конец правила */
+}
+
+/* .btn.is-loading::before — псевдоэлемент перед текстом кнопки, пока идёт отправка (класс ставит js/utils.js) */
+.btn.is-loading::before {
+  /* content: "" — пустое содержимое, но псевдоэлемент появится */
+  content: "";
+  /* ширина кружка 16px */
+  width: 1rem;
+  /* высота кружка 16px */
+  height: 1rem;
+  /* рамка цвета текста */
+  border: 2px solid currentColor;
+  /* правая часть рамки прозрачная — получается «незамкнутый» кружок */
+  border-right-color: transparent;
+  /* border-radius: 50% — делает квадрат кругом */
+  border-radius: 50%;
+  /* бесконечное вращение (linear — с постоянной скоростью, infinite — без конца) */
+  animation: spin 0.7s linear infinite;
+/* конец правила */
+}
+
+/* .icon-btn — круглая кнопка только с иконкой (колокольчик, смена темы) */
+.icon-btn {
+  /* position: relative — чтобы счётчик уведомлений можно было расположить относительно кнопки */
+  position: relative;
+  /* inline-flex для центрирования иконки */
+  display: inline-flex;
+  /* по центру по вертикали */
+  align-items: center;
+  /* по центру по горизонтали */
+  justify-content: center;
+  /* ширина 44px */
+  width: 2.75rem;
+  /* высота 44px */
+  height: 2.75rem;
+  /* без рамки */
+  border: none;
+  /* круглая */
+  border-radius: var(--radius-full);
+  /* прозрачный фон */
+  background: transparent;
+  /* размер иконки-эмодзи 20px */
+  font-size: 1.25rem;
+  /* плавная смена фона */
+  transition: background-color var(--transition);
+/* конец правила */
+}
+
+/* наведение на круглую кнопку */
+.icon-btn:hover {
+  /* светлый фон */
+  background-color: var(--color-surface-2);
+/* конец правила */
+}
+
+/* .count-badge — красный кружок со счётчиком непрочитанных уведомлений */
+.count-badge {
+  /* position: absolute — ставим поверх кнопки в точное место */
+  position: absolute;
+  /* 2px от верхнего края кнопки */
+  top: 2px;
+  /* 2px от правого края кнопки */
+  right: 2px;
+  /* минимальная ширина 20px (для двузначных чисел кружок растягивается) */
+  min-width: 1.25rem;
+  /* высота 20px */
+  height: 1.25rem;
+  /* отступы по бокам 5px */
+  padding: 0 5px;
+  /* форма пилюли */
+  border-radius: var(--radius-full);
+  /* акцентный фон */
+  background-color: var(--color-accent);
+  /* белый текст */
+  color: var(--color-on-accent);
+  /* текст 12px — единственное исключение из правила 16px: это цифра в значке, а не текст для чтения */
+  font-size: 0.75rem;
+  /* жирный */
+  font-weight: 800;
+  /* строка на всю высоту — цифра по центру по вертикали */
+  line-height: 1.25rem;
+  /* цифра по центру по горизонтали */
+  text-align: center;
+/* конец правила */
+}
+
+/* ------------------------------ КАРТОЧКИ ----------------------------------- */
+
+/* .card — карточка: белый блок со скруглёнными углами и мягкой тенью */
+.card {
+  /* фон карточки */
+  background-color: var(--color-surface);
+  /* тонкая рамка */
+  border: 1px solid var(--color-border);
+  /* большое скругление */
+  border-radius: var(--radius-lg);
+  /* мягкая тень */
+  box-shadow: var(--shadow-md);
+  /* внутренний отступ 24px */
+  padding: var(--space-5);
+  /* плавная смена тени, положения и фона */
+  transition: box-shadow var(--transition), transform var(--transition), background-color var(--transition);
+/* конец правила */
+}
+
+/* .card-hover:hover — карточка, которая «приподнимается» при наведении */
+.card-hover:hover {
+  /* translateY(-3px) — поднимаем на 3px вверх */
+  transform: translateY(-3px);
+  /* тень больше, будто карточка ближе */
+  box-shadow: var(--shadow-lg);
+/* конец правила */
+}
+
+/* ------------------------------ ФОРМЫ -------------------------------------- */
+
+/* .form — форма: поля столбиком */
+.form {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* промежуток между полями 16px */
+  gap: var(--space-4);
+/* конец правила */
+}
+
+/* .field — обёртка одного поля: подпись + поле + текст ошибки */
+.field {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* промежуток 6px */
+  gap: 0.375rem;
+/* конец правила */
+}
+
+/* .field label — подпись поля */
+.field label,
+/* .field-label — подпись, если это не тег label (например, для группы чекбоксов) */
+.field-label {
+  /* полужирная */
+  font-weight: 700;
+/* конец правила */
+}
+
+/* .input — поле ввода; этот же класс ставим на select и textarea */
+.input {
+  /* на всю ширину */
+  width: 100%;
+  /* высота 48px, удобно нажимать на телефоне */
+  min-height: 3rem;
+  /* внутренние отступы */
+  padding: 0.625rem 0.875rem;
+  /* фон поля */
+  background-color: var(--color-surface);
+  /* рамка */
+  border: 2px solid var(--color-border);
+  /* скругление */
+  border-radius: var(--radius-sm);
+  /* плавная смена рамки и тени */
+  transition: border-color var(--transition), box-shadow var(--transition);
+/* конец правила */
+}
+
+/* .input:focus — :focus значит «поле сейчас активно, в нём мигает курсор» */
+.input:focus {
+  /* убираем стандартную рамку браузера */
+  outline: none;
+  /* рамка основного цвета */
+  border-color: var(--color-primary);
+  /* мягкое свечение вокруг */
+  box-shadow: var(--focus-ring);
+/* конец правила */
+}
+
+/* textarea.input — многострочное поле */
+textarea.input {
+  /* минимальная высота 110px */
+  min-height: 7rem;
+  /* resize: vertical — можно растягивать только по высоте */
+  resize: vertical;
+/* конец правила */
+}
+
+/* .input.is-invalid — поле с ошибкой (класс ставит js/utils.js при проверке формы) */
+.input.is-invalid {
+  /* красная рамка */
+  border-color: var(--color-danger);
+/* конец правила */
+}
+
+/* .field-error — текст ошибки под полем */
+.field-error {
+  /* красный цвет */
+  color: var(--color-danger);
+  /* 16px */
+  font-size: var(--font-size-sm);
+  /* полужирный */
+  font-weight: 600;
+/* конец правила */
+}
+
+/* .field-hint — подсказка под полем */
+.field-hint {
+  /* серый цвет */
+  color: var(--color-text-muted);
+  /* 16px */
+  font-size: var(--font-size-sm);
+/* конец правила */
+}
+
+/* ------------------------------ ЧИПЫ, АВАТАРЫ ------------------------------ */
+
+/* .chip — маленькая плашка (предмет, уровень, статус) */
+.chip {
+  /* inline-flex — плашка в строке, иконка и текст рядом */
+  display: inline-flex;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток между иконкой и текстом 6px */
+  gap: 0.375rem;
+  /* отступы */
+  padding: 0.25rem 0.75rem;
+  /* форма пилюли */
+  border-radius: var(--radius-full);
+  /* фон по умолчанию */
+  background-color: var(--color-surface-2);
+  /* 16px */
+  font-size: var(--font-size-sm);
+  /* полужирный */
+  font-weight: 600;
+  /* текст не переносится внутри плашки */
+  white-space: nowrap;
+/* конец правила */
+}
+
+/* .chip-primary — плашка основного цвета */
+.chip-primary {
+  /* светлый индиго */
+  background-color: var(--color-primary-soft);
+  /* индиго текст */
+  color: var(--color-primary);
+/* конец правила */
+}
+
+/* .chip-accent — акцентная плашка */
+.chip-accent {
+  /* светлый коралловый */
+  background-color: var(--color-accent-soft);
+  /* тёмный коралловый текст (strong), чтобы он хорошо читался на светлом фоне */
+  color: var(--color-accent-strong);
+/* конец правила */
+}
+
+/* .chip-success — зелёная плашка */
+.chip-success {
+  /* светло-зелёный */
+  background-color: var(--color-success-soft);
+  /* зелёный текст */
+  color: var(--color-success);
+/* конец правила */
+}
+
+/* .chip-warning — янтарная плашка */
+.chip-warning {
+  /* светло-янтарный */
+  background-color: var(--color-warning-soft);
+  /* янтарный текст */
+  color: var(--color-warning);
+/* конец правила */
+}
+
+/* .chip-danger — красная плашка */
+.chip-danger {
+  /* светло-красный */
+  background-color: var(--color-danger-soft);
+  /* красный текст */
+  color: var(--color-danger);
+/* конец правила */
+}
+
+/* .avatar — круглый аватар с эмодзи вместо фото */
+.avatar {
+  /* flex-shrink: 0 — аватар не сжимается, даже если рядом длинный текст */
+  flex-shrink: 0;
+  /* inline-flex для центрирования эмодзи */
+  display: inline-flex;
+  /* по центру по вертикали */
+  align-items: center;
+  /* по центру по горизонтали */
+  justify-content: center;
+  /* ширина 48px */
+  width: 3rem;
+  /* высота 48px */
+  height: 3rem;
+  /* круг */
+  border-radius: 50%;
+  /* светлый индиго фон */
+  background-color: var(--color-primary-soft);
+  /* эмодзи 26px */
+  font-size: 1.625rem;
+  /* line-height: 1 — эмодзи ровно по центру */
+  line-height: 1;
+/* конец правила */
+}
+
+/* .avatar-lg — большой аватар (на странице профиля) */
+.avatar-lg {
+  /* 88px */
+  width: 5.5rem;
+  /* 88px */
+  height: 5.5rem;
+  /* эмодзи 48px */
+  font-size: 3rem;
+/* конец правила */
+}
+
+/* .avatar-sm — маленький аватар (в чате, в списках) */
+.avatar-sm {
+  /* 36px */
+  width: 2.25rem;
+  /* 36px */
+  height: 2.25rem;
+  /* эмодзи 20px */
+  font-size: 1.25rem;
+/* конец правила */
+}
+
+/* ------------------------------ ШАПКА САЙТА -------------------------------- */
+
+/* .site-header — верхняя шапка */
+.site-header {
+  /* position: sticky — шапка «прилипает» к верху окна при прокрутке */
+  position: sticky;
+  /* прилипает на расстоянии 0 от верха */
+  top: 0;
+  /* z-index: 50 — шапка лежит поверх остального содержимого (чем больше число, тем «выше» слой) */
+  z-index: 50;
+  /* фон шапки */
+  background-color: var(--color-surface);
+  /* тонкая линия снизу */
+  border-bottom: 1px solid var(--color-border);
+  /* плавная смена фона при смене темы */
+  transition: background-color var(--transition);
+/* конец правила */
+}
+
+/* .header-inner — содержимое шапки: логотип слева, меню посередине, кнопки справа */
+.header-inner {
+  /* флексбокс в строку */
+  display: flex;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток 16px */
+  gap: var(--space-4);
+  /* высота шапки */
+  height: var(--header-height);
+/* конец правила */
+}
+
+/* .logo — логотип SkillSwap */
+.logo {
+  /* inline-flex: значок и название рядом */
+  display: inline-flex;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток 8px */
+  gap: var(--space-2);
+  /* очень жирный шрифт */
+  font-weight: 800;
+  /* 20px */
+  font-size: var(--font-size-lg);
+  /* обычный цвет текста */
+  color: var(--color-text);
+  /* без подчёркивания */
+  text-decoration: none;
+  /* flex-shrink: 0 — логотип не сжимается */
+  flex-shrink: 0;
+  /* margin-right: auto — всё свободное место справа от логотипа, поэтому меню и кнопки прижимаются к правому краю */
+  margin-right: auto;
+/* конец правила */
+}
+
+/* .logo:hover — при наведении логотип не меняет цвет */
+.logo:hover {
+  /* тот же цвет */
+  color: var(--color-text);
+/* конец правила */
+}
+
+/* .logo-mark — цветной квадратик со значком обмена */
+.logo-mark {
+  /* inline-flex для центрирования */
+  display: inline-flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* центр по горизонтали */
+  justify-content: center;
+  /* 36px */
+  width: 2.25rem;
+  /* 36px */
+  height: 2.25rem;
+  /* скругление */
+  border-radius: var(--radius-sm);
+  /* linear-gradient — плавный переход цвета от индиго к коралловому под углом 135 градусов */
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  /* белый значок */
+  color: #ffffff;
+  /* 20px */
+  font-size: 1.25rem;
+/* конец правила */
+}
+
+/* .main-nav — меню ссылок в шапке (на компьютере) */
+.main-nav {
+  /* флексбокс в строку */
+  display: flex;
+  /* промежуток 4px */
+  gap: var(--space-1);
+/* конец правила */
+}
+
+/* .nav-link — одна ссылка меню */
+.nav-link {
+  /* inline-flex: иконка и текст рядом */
+  display: inline-flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* промежуток 6px */
+  gap: 0.375rem;
+  /* отступы */
+  padding: 0.5rem 0.875rem;
+  /* скругление */
+  border-radius: var(--radius-full);
+  /* серый текст */
+  color: var(--color-text-muted);
+  /* полужирный */
+  font-weight: 700;
+  /* без подчёркивания */
+  text-decoration: none;
+  /* плавная смена фона и цвета */
+  transition: background-color var(--transition), color var(--transition);
+/* конец правила */
+}
+
+/* .nav-link:hover — наведение на ссылку меню */
+.nav-link:hover {
+  /* светлый фон */
+  background-color: var(--color-surface-2);
+  /* тёмный текст */
+  color: var(--color-text);
+/* конец правила */
+}
+
+/* .nav-link.active — ссылка на текущую страницу (класс ставит js/layout.js) */
+.nav-link.active {
+  /* светлый индиго фон */
+  background-color: var(--color-primary-soft);
+  /* индиго текст */
+  color: var(--color-primary);
+/* конец правила */
+}
+
+/* .header-actions — кнопки справа в шапке (колокольчик, тема, выход) */
+.header-actions {
+  /* флексбокс */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* промежуток 4px */
+  gap: var(--space-1);
+/* конец правила */
+}
+
+/* ------------------------------ НИЖНЕЕ МЕНЮ (ТЕЛЕФОН) ---------------------- */
+
+/* .bottom-nav — нижнее меню; по умолчанию (на компьютере) скрыто */
+.bottom-nav {
+  /* display: none — не показываем */
+  display: none;
+/* конец правила */
+}
+
+/* @media (max-width: 767px) — правила внутри работают только на экранах уже 768px (телефоны) */
+@media (max-width: 767px) {
+  /* на телефоне верхнее меню ссылок прячем */
+  .main-nav {
+    /* не показываем */
+    display: none;
+  /* конец правила */
+  }
+
+  /* body.has-bottom-nav — страница с нижним меню (класс ставит js/layout.js) */
+  body.has-bottom-nav {
+    /* снизу отступ на высоту меню, чтобы оно не закрывало содержимое; env(safe-area-inset-bottom) — место под полоской жестов на iPhone */
+    padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
+  /* конец правила */
+  }
+
+  /* нижнее меню на телефоне показываем */
+  .bottom-nav {
+    /* position: fixed — закреплено относительно окна, не прокручивается вместе со страницей */
+    position: fixed;
+    /* снизу 0 */
+    bottom: 0;
+    /* слева 0 */
+    left: 0;
+    /* справа 0 — вместе с left растягивает меню на всю ширину */
+    right: 0;
+    /* поверх содержимого */
+    z-index: 50;
+    /* флексбокс в строку */
+    display: flex;
+    /* высота меню */
+    height: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
+    /* отступ снизу под полоску жестов */
+    padding-bottom: env(safe-area-inset-bottom);
+    /* фон */
+    background-color: var(--color-surface);
+    /* тонкая линия сверху */
+    border-top: 1px solid var(--color-border);
+    /* тень вверх (отрицательное смещение по y) */
+    box-shadow: 0 -4px 14px rgba(29, 30, 70, 0.06);
+  /* конец правила */
+  }
+
+  /* .bottom-nav-link — одна кнопка нижнего меню */
+  .bottom-nav-link {
+    /* flex: 1 — все кнопки одинаковой ширины */
+    flex: 1;
+    /* min-width: 0 — кнопка может стать уже своей подписи (иначе на узком телефоне 6 кнопок не влезают в экран) */
+    min-width: 0;
+    /* флексбокс */
+    display: flex;
+    /* иконка над текстом */
+    flex-direction: column;
+    /* центр по горизонтали */
+    align-items: center;
+    /* центр по вертикали */
+    justify-content: center;
+    /* промежуток 2px */
+    gap: 2px;
+    /* серый цвет */
+    color: var(--color-text-muted);
+    /* без подчёркивания */
+    text-decoration: none;
+    /* подпись 12px — исключение для компактного меню, рядом всегда есть крупная иконка */
+    font-size: 0.75rem;
+    /* жирный */
+    font-weight: 700;
+  /* конец правила */
+  }
+
+  /* .bottom-nav-icon — иконка в нижнем меню */
+  .bottom-nav-icon {
+    /* 22px */
+    font-size: 1.375rem;
+    /* line-height: 1 — без лишней высоты */
+    line-height: 1;
+  /* конец правила */
+  }
+
+  /* .bottom-nav-label — подпись под иконкой */
+  .bottom-nav-label {
+    /* max-width: 100% — не шире кнопки */
+    max-width: 100%;
+    /* white-space: nowrap — в одну строку */
+    white-space: nowrap;
+    /* overflow: hidden — лишнее прячем */
+    overflow: hidden;
+    /* text-overflow: ellipsis — вместо спрятанного текста многоточие «…» */
+    text-overflow: ellipsis;
+  /* конец правила */
+  }
+
+  /* активная кнопка нижнего меню */
+  .bottom-nav-link.active {
+    /* основной цвет */
+    color: var(--color-primary);
+  /* конец правила */
+  }
+/* конец @media для телефонов */
+}
+
+/* ------------------------------ СООБЩЕНИЯ ---------------------------------- */
+
+/* .alert — блок с сообщением внутри страницы (ошибка, успех, подсказка) */
+.alert {
+  /* отступы */
+  padding: var(--space-3) var(--space-4);
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* фон по умолчанию — светлый индиго */
+  background-color: var(--color-primary-soft);
+  /* текст */
+  color: var(--color-text);
+  /* border-left — цветная полоска слева */
+  border-left: 4px solid var(--color-primary);
+/* конец правила */
+}
+
+/* .alert-error — сообщение об ошибке */
+.alert-error {
+  /* светло-красный фон */
+  background-color: var(--color-danger-soft);
+  /* красная полоска */
+  border-left-color: var(--color-danger);
+/* конец правила */
+}
+
+/* .alert-success — сообщение об успехе */
+.alert-success {
+  /* светло-зелёный фон */
+  background-color: var(--color-success-soft);
+  /* зелёная полоска */
+  border-left-color: var(--color-success);
+/* конец правила */
+}
+
+/* .alert-warning — предупреждение */
+.alert-warning {
+  /* светло-янтарный фон */
+  background-color: var(--color-warning-soft);
+  /* янтарная полоска */
+  border-left-color: var(--color-warning);
+/* конец правила */
+}
+
+/* .toast-container — место в углу экрана, куда выезжают всплывающие сообщения */
+.toast-container {
+  /* закреплено относительно окна */
+  position: fixed;
+  /* 16px от верха */
+  top: var(--space-4);
+  /* 16px от правого края */
+  right: var(--space-4);
+  /* поверх всего, даже шапки */
+  z-index: 100;
+  /* флексбокс */
+  display: flex;
+  /* сообщения столбиком */
+  flex-direction: column;
+  /* промежуток 8px */
+  gap: var(--space-2);
+  /* ширина не больше 360px и не больше ширины экрана минус 32px; min() выбирает меньшее */
+  width: min(360px, calc(100vw - 2rem));
+  /* pointer-events: none — сам контейнер «прозрачен» для кликов, клики проходят сквозь него */
+  pointer-events: none;
+/* конец правила */
+}
+
+/* .toast — одно всплывающее сообщение */
+.toast {
+  /* само сообщение кликабельно (можно закрыть нажатием) */
+  pointer-events: auto;
+  /* отступы */
+  padding: var(--space-3) var(--space-4);
+  /* фон */
+  background-color: var(--color-surface);
+  /* рамка */
+  border: 1px solid var(--color-border);
+  /* цветная полоска слева */
+  border-left: 5px solid var(--color-primary);
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* большая тень */
+  box-shadow: var(--shadow-lg);
+  /* анимация появления */
+  animation: fade-up 0.25s ease both;
+  /* курсор-рука: подсказка, что можно закрыть */
+  cursor: pointer;
+/* конец правила */
+}
+
+/* .toast-error — всплывающая ошибка */
+.toast-error {
+  /* красная полоска */
+  border-left-color: var(--color-danger);
+/* конец правила */
+}
+
+/* .toast-success — всплывающий успех */
+.toast-success {
+  /* зелёная полоска */
+  border-left-color: var(--color-success);
+/* конец правила */
+}
+
+/* ------------------------------ СОСТОЯНИЯ ЭКРАНА --------------------------- */
+
+/* .state — блок для состояний «загрузка», «пусто», «ошибка» */
+.state {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* по центру по горизонтали */
+  align-items: center;
+  /* текст по центру */
+  text-align: center;
+  /* промежуток 12px */
+  gap: var(--space-3);
+  /* большие отступы сверху и снизу */
+  padding: var(--space-7) var(--space-4);
+  /* серый текст */
+  color: var(--color-text-muted);
+/* конец правила */
+}
+
+/* .state-icon — крупный эмодзи в состоянии «пусто» или «ошибка» */
+.state-icon {
+  /* 48px */
+  font-size: 3rem;
+  /* без лишней высоты строки */
+  line-height: 1;
+/* конец правила */
+}
+
+/* .state-title — заголовок состояния */
+.state-title {
+  /* основной цвет текста */
+  color: var(--color-text);
+  /* 20px */
+  font-size: var(--font-size-lg);
+  /* жирный */
+  font-weight: 800;
+  /* без отступа */
+  margin: 0;
+/* конец правила */
+}
+
+/* .spinner — крутящийся кружок загрузки */
+.spinner {
+  /* 40px */
+  width: 2.5rem;
+  /* 40px */
+  height: 2.5rem;
+  /* светлая рамка по кругу */
+  border: 4px solid var(--color-primary-soft);
+  /* верхняя четверть рамки — основного цвета */
+  border-top-color: var(--color-primary);
+  /* круг */
+  border-radius: 50%;
+  /* бесконечное вращение */
+  animation: spin 0.8s linear infinite;
+/* конец правила */
+}
+
+/* ------------------------------ ПОДВАЛ ------------------------------------- */
+
+/* .site-footer — подвал сайта */
+.site-footer {
+  /* отступы сверху и снизу */
+  padding-block: var(--space-5);
+  /* линия сверху */
+  border-top: 1px solid var(--color-border);
+  /* серый текст */
+  color: var(--color-text-muted);
+  /* 16px */
+  font-size: var(--font-size-sm);
+/* конец правила */
+}
+
+/* .footer-inner — содержимое подвала */
+.footer-inner {
+  /* флексбокс */
+  display: flex;
+  /* перенос на телефоне */
+  flex-wrap: wrap;
+  /* space-between — элементы по краям: один слева, другой справа */
+  justify-content: space-between;
+  /* промежуток */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* ------------------------------ ОКНО ДИАЛОГА ------------------------------- */
+
+/* .dialog — окно подтверждения (тег <dialog>, его создаёт js/dialog.js) */
+.dialog {
+  /* ширина до 440px, но не шире экрана минус 32px */
+  width: min(27.5rem, calc(100vw - 2rem));
+  /* внутренние отступы */
+  padding: var(--space-5);
+  /* без стандартной рамки браузера */
+  border: none;
+  /* скругление */
+  border-radius: var(--radius-lg);
+  /* фон */
+  background-color: var(--color-surface);
+  /* цвет текста */
+  color: var(--color-text);
+  /* большая тень */
+  box-shadow: var(--shadow-lg);
+  /* анимация появления */
+  animation: fade-up 0.2s ease both;
+/* конец правила */
+}
+
+/* ::backdrop — затемнённый фон позади открытого окна */
+.dialog::backdrop {
+  /* полупрозрачный тёмный фон */
+  background-color: rgba(18, 19, 32, 0.5);
+/* конец правила */
+}
+
+/* .dialog-title — заголовок окна */
+.dialog-title {
+  /* 20px */
+  font-size: var(--font-size-lg);
+  /* без отступа снизу — промежутки даёт .form */
+  margin: 0;
+/* конец правила */
+}
+
+/* .dialog-actions — ряд кнопок внизу окна */
+.dialog-actions {
+  /* флексбокс */
+  display: flex;
+  /* кнопки справа */
+  justify-content: flex-end;
+  /* промежуток */
+  gap: var(--space-2);
+  /* перенос на узком экране */
+  flex-wrap: wrap;
+/* конец правила */
+}

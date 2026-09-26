@@ -1,0 +1,5334 @@
+/* ============================================================================ */
+/* Файл: css/pages.css                                                           */
+/* Зачем нужен: стили страниц ВНУТРИ сайта: вход и регистрация, профиль,       */
+/* совпадения, партнёры, чат, занятия, материалы, вопросы и подсказка ИИ,      */
+/* рейтинг, уведомления, панели учителя и администратора.                      */
+/* Как связан с остальными: подключается на всех страницах из папки pages/     */
+/* после variables.css, base.css и components.css.                             */
+/* ============================================================================ */
+
+/* ------------------------------ ШАПКА: ПОЛЬЗОВАТЕЛЬ ------------------------ */
+
+/* .header-user — аватар и имя в шапке (ссылка на профиль) */
+.header-user {
+  /* inline-flex: аватар и имя в строку */
+  display: inline-flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* промежуток 8px */
+  gap: var(--space-2);
+  /* отступы */
+  padding: 0.25rem 0.75rem 0.25rem 0.25rem;
+  /* пилюля */
+  border-radius: var(--radius-full);
+  /* цвет текста */
+  color: var(--color-text);
+  /* жирный */
+  font-weight: 700;
+  /* без подчёркивания */
+  text-decoration: none;
+  /* white-space: nowrap — имя не переносится на вторую строку */
+  white-space: nowrap;
+  /* плавная смена фона */
+  transition: background-color var(--transition);
+/* конец правила */
+}
+
+/* наведение на имя в шапке */
+.header-user:hover {
+  /* светлый фон */
+  background-color: var(--color-surface-2);
+  /* цвет текста не меняется */
+  color: var(--color-text);
+/* конец правила */
+}
+
+/* @media — на экранах уже 1100px имя прячем, оставляем только аватар (не хватает места рядом с меню) */
+@media (max-width: 1100px) {
+  /* имя в шапке */
+  .header-user-name {
+    /* не показываем */
+    display: none;
+  /* конец правила */
+  }
+
+  /* ссылка с аватаром без лишнего отступа справа */
+  .header-user {
+    /* одинаковые отступы */
+    padding: 0.25rem;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* @media (max-width: 767px) — телефон: в шапке мало места, иначе кнопка «Выйти» уезжает за край экрана */
+@media (max-width: 767px) {
+  /* body.has-bottom-nav — есть нижнее меню, а в нём уже есть «Профиль», поэтому аватар в шапке не нужен */
+  body.has-bottom-nav .header-user {
+    /* не показываем */
+    display: none;
+  /* конец правила */
+  }
+
+  /* содержимое шапки: промежуток 8px вместо 16px */
+  .header-inner {
+    /* меньше промежуток */
+    gap: var(--space-2);
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* @media (max-width: 380px) — самые узкие телефоны (например, 320px) */
+@media (max-width: 380px) {
+  /* .logo > span:last-child — слово «SkillSwap» в логотипе (последний span); оставляем только цветной значок */
+  .logo > span:last-child {
+    /* не показываем */
+    display: none;
+  /* конец правила */
+  }
+
+  /* подписи нижнего меню чуть мельче: 11px вместо 12px */
+  .bottom-nav-link {
+    /* 11px */
+    font-size: 0.6875rem;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* ------------------------------ ФОРМЫ ВХОДА -------------------------------- */
+
+/* .auth-page — страница с одной карточкой по центру */
+.auth-page {
+  /* флексбокс */
+  display: flex;
+  /* по центру по горизонтали */
+  justify-content: center;
+/* конец правила */
+}
+
+/* .auth-card — карточка формы входа или регистрации */
+.auth-card {
+  /* на всю ширину... */
+  width: 100%;
+  /* ...но не шире 480px */
+  max-width: 30rem;
+  /* анимация появления */
+  animation: fade-up 0.35s ease both;
+/* конец правила */
+}
+
+/* .auth-card-wide — более широкая карточка (регистрация: там выбор аватара) */
+.auth-card-wide {
+  /* до 640px */
+  max-width: 40rem;
+/* конец правила */
+}
+
+/* .auth-card h1 — заголовок в карточке */
+.auth-card h1 {
+  /* 28px */
+  font-size: 1.75rem;
+/* конец правила */
+}
+
+/* .auth-links — ссылки под формой («Забыли пароль?», «Регистрация») */
+.auth-links {
+  /* флексбокс */
+  display: flex;
+  /* перенос */
+  flex-wrap: wrap;
+  /* по краям */
+  justify-content: space-between;
+  /* промежуток */
+  gap: var(--space-2);
+  /* отступ сверху 16px */
+  margin-top: var(--space-4);
+/* конец правила */
+}
+
+/* .form-row — два поля в одну строку (имя и фамилия) */
+.form-row {
+  /* сетка */
+  display: grid;
+  /* две равные колонки */
+  grid-template-columns: 1fr 1fr;
+  /* промежуток 16px */
+  gap: var(--space-4);
+/* конец правила */
+}
+
+/* на узком экране поля идут друг под другом */
+@media (max-width: 520px) {
+  /* строка полей */
+  .form-row {
+    /* одна колонка */
+    grid-template-columns: 1fr;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* ------------------------------ ВЫБОР АВАТАРА ------------------------------ */
+
+/* .avatar-picker — сетка аватаров */
+.avatar-picker {
+  /* сетка */
+  display: grid;
+  /* столько колонок по 52px, сколько влезет */
+  grid-template-columns: repeat(auto-fill, minmax(3.25rem, 1fr));
+  /* промежуток 8px */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .avatar-option — один аватар (label с радиокнопкой) */
+.avatar-option {
+  /* от него позиционируется скрытая радиокнопка */
+  position: relative;
+  /* курсор-рука */
+  cursor: pointer;
+/* конец правила */
+}
+
+/* .avatar-option input — сама радиокнопка: прячем, но оставляем доступной с клавиатуры */
+.avatar-option input {
+  /* абсолютное положение поверх */
+  position: absolute;
+  /* прозрачная */
+  opacity: 0;
+  /* нулевой размер */
+  width: 0;
+  /* нулевой размер */
+  height: 0;
+/* конец правила */
+}
+
+/* .avatar-option span — видимый круг с эмодзи */
+.avatar-option span {
+  /* флексбокс для центрирования */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* центр по горизонтали */
+  justify-content: center;
+  /* квадрат: высота равна ширине (aspect-ratio 1 / 1) */
+  aspect-ratio: 1 / 1;
+  /* круг */
+  border-radius: 50%;
+  /* фон */
+  background-color: var(--color-surface-2);
+  /* прозрачная рамка (станет цветной при выборе) */
+  border: 3px solid transparent;
+  /* эмодзи 26px */
+  font-size: 1.625rem;
+  /* плавные изменения */
+  transition: transform var(--transition), border-color var(--transition), background-color var(--transition);
+/* конец правила */
+}
+
+/* наведение на аватар */
+.avatar-option:hover span {
+  /* scale(1.08) — увеличиваем на 8% */
+  transform: scale(1.08);
+/* конец правила */
+}
+
+/* input:checked + span — «+» выбирает соседний элемент сразу после выбранной радиокнопки */
+.avatar-option input:checked + span {
+  /* рамка основного цвета */
+  border-color: var(--color-primary);
+  /* светлый индиго фон */
+  background-color: var(--color-primary-soft);
+/* конец правила */
+}
+
+/* input:focus-visible + span — аватар выбран клавишей Tab */
+.avatar-option input:focus-visible + span {
+  /* рамка фокуса */
+  box-shadow: var(--focus-ring);
+/* конец правила */
+}
+
+/* ------------------------------ ПРОФИЛЬ ------------------------------------ */
+
+/* .profile-hero — верхняя карточка профиля: аватар, имя, очки */
+.profile-hero {
+  /* флексбокс */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* перенос на телефоне */
+  flex-wrap: wrap;
+  /* промежуток 24px */
+  gap: var(--space-5);
+  /* отступ снизу 24px */
+  margin-bottom: var(--space-5);
+/* конец правила */
+}
+
+/* .profile-hero h1 — имя в профиле */
+.profile-hero h1 {
+  /* без нижнего отступа */
+  margin-bottom: var(--space-1);
+/* конец правила */
+}
+
+/* .profile-hero-info — текстовая часть карточки */
+.profile-hero-info {
+  /* flex: 1 — занимает всё свободное место */
+  flex: 1;
+  /* минимальная ширина 160px: на телефоне имя помещается рядом с аватаром, а плашка очков переносится вниз */
+  min-width: 10rem;
+/* конец правила */
+}
+
+/* .stat-box — плашка с числом (очки, занятия) */
+.stat-box {
+  /* текст по центру */
+  text-align: center;
+  /* отступы */
+  padding: var(--space-3) var(--space-4);
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* светлый индиго */
+  background-color: var(--color-primary-soft);
+  /* минимальная ширина 96px */
+  min-width: 6rem;
+/* конец правила */
+}
+
+/* .stat-value — само число */
+.stat-value {
+  /* блочный элемент (отдельная строка) */
+  display: block;
+  /* 28px */
+  font-size: 1.75rem;
+  /* очень жирный */
+  font-weight: 800;
+  /* индиго */
+  color: var(--color-primary);
+  /* без лишней высоты */
+  line-height: 1.2;
+/* конец правила */
+}
+
+/* .stat-label — подпись под числом */
+.stat-label {
+  /* серый */
+  color: var(--color-text-muted);
+  /* 16px */
+  font-size: var(--font-size-sm);
+/* конец правила */
+}
+
+/* .section-card — карточка-раздел с заголовком */
+.section-card {
+  /* отступ снизу 24px между разделами */
+  margin-bottom: var(--space-5);
+/* конец правила */
+}
+
+/* .section-card > h2 — заголовок раздела; «>» — только прямой потомок */
+.section-card > h2 {
+  /* флексбокс: иконка и текст */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .section-hint — пояснение под заголовком раздела */
+.section-hint {
+  /* серый */
+  color: var(--color-text-muted);
+  /* отступ снизу 16px */
+  margin-bottom: var(--space-4);
+/* конец правила */
+}
+
+/* .progress — полоска заполненности */
+.progress {
+  /* высота 12px */
+  height: 0.75rem;
+  /* скругление */
+  border-radius: var(--radius-full);
+  /* фон полоски */
+  background-color: var(--color-surface-2);
+  /* overflow: hidden — заливка не вылезает за скруглённые края */
+  overflow: hidden;
+/* конец правила */
+}
+
+/* .progress-bar — заливка полоски (ширину задаёт JS через style.width) */
+.progress-bar {
+  /* на всю высоту */
+  height: 100%;
+  /* градиент от индиго к коралловому */
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  /* скругление */
+  border-radius: inherit;
+  /* плавное изменение ширины */
+  transition: width 0.4s ease;
+/* конец правила */
+}
+
+/* .checklist — список пунктов «что заполнено» */
+.checklist {
+  /* без маркеров */
+  list-style: none;
+  /* отступ сверху */
+  margin: var(--space-3) 0 0;
+  /* без отступа слева */
+  padding: 0;
+  /* сетка */
+  display: grid;
+  /* колонки от 220px */
+  grid-template-columns: repeat(auto-fill, minmax(13.75rem, 1fr));
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .checklist li — пункт списка */
+.checklist li {
+  /* серый (не выполнено) */
+  color: var(--color-text-muted);
+/* конец правила */
+}
+
+/* .checklist li.done — выполненный пункт */
+.checklist li.done {
+  /* зелёный */
+  color: var(--color-success);
+  /* полужирный */
+  font-weight: 700;
+/* конец правила */
+}
+
+/* ------------------------------ ПРЕДМЕТЫ ----------------------------------- */
+
+/* .subject-grid — сетка карточек предметов */
+.subject-grid {
+  /* сетка */
+  display: grid;
+  /* колонки от 260px */
+  grid-template-columns: repeat(auto-fill, minmax(16.25rem, 1fr));
+  /* промежуток 12px */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* .subject-card — карточка одного предмета */
+.subject-card {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* промежуток 12px */
+  gap: var(--space-3);
+  /* отступы */
+  padding: var(--space-4);
+  /* рамка */
+  border: 2px solid var(--color-border);
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* фон */
+  background-color: var(--color-surface);
+  /* плавная смена рамки и фона */
+  transition: border-color var(--transition), background-color var(--transition);
+/* конец правила */
+}
+
+/* [data-kind="know"] — карточка предмета, который ученик знает (атрибут ставит JS) */
+.subject-card[data-kind="know"] {
+  /* зелёная рамка */
+  border-color: var(--color-success);
+  /* светло-зелёный фон */
+  background-color: var(--color-success-soft);
+/* конец правила */
+}
+
+/* карточка предмета, который ученик хочет подтянуть */
+.subject-card[data-kind="learn"] {
+  /* янтарная рамка */
+  border-color: var(--color-warning);
+  /* светло-янтарный фон */
+  background-color: var(--color-warning-soft);
+/* конец правила */
+}
+
+/* .subject-title — название предмета с иконкой */
+.subject-title {
+  /* флексбокс */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-2);
+  /* жирный */
+  font-weight: 800;
+/* конец правила */
+}
+
+/* .subject-icon — иконка предмета */
+.subject-icon {
+  /* 24px */
+  font-size: 1.5rem;
+/* конец правила */
+}
+
+/* .segmented — переключатель из нескольких кнопок в один ряд («— / Знаю / Хочу») */
+.segmented {
+  /* флексбокс */
+  display: flex;
+  /* фон */
+  background-color: var(--color-surface-2);
+  /* скругление */
+  border-radius: var(--radius-sm);
+  /* внутренний отступ 3px */
+  padding: 3px;
+  /* промежуток 3px */
+  gap: 3px;
+/* конец правила */
+}
+
+/* .segmented label — одна кнопка переключателя */
+.segmented label {
+  /* все кнопки одинаковой ширины */
+  flex: 1;
+  /* курсор-рука */
+  cursor: pointer;
+/* конец правила */
+}
+
+/* радиокнопки внутри переключателя прячем (выбор показываем цветом кнопки) */
+.segmented input,
+/* и в выборе уровня тоже */
+.level-picker input,
+/* и в сетке времени — там чекбоксы */
+.time-toggle input {
+  /* абсолютное положение */
+  position: absolute;
+  /* прозрачные */
+  opacity: 0;
+  /* нулевой размер */
+  width: 0;
+  /* нулевой размер */
+  height: 0;
+/* конец правила */
+}
+
+/* .segmented span — видимая часть кнопки */
+.segmented span {
+  /* блочный элемент */
+  display: block;
+  /* текст по центру */
+  text-align: center;
+  /* отступы */
+  padding: 0.375rem 0.25rem;
+  /* скругление */
+  border-radius: calc(var(--radius-sm) - 2px);
+  /* полужирный */
+  font-weight: 700;
+  /* серый */
+  color: var(--color-text-muted);
+  /* плавная смена */
+  transition: background-color var(--transition), color var(--transition);
+/* конец правила */
+}
+
+/* выбранная кнопка переключателя */
+.segmented input:checked + span {
+  /* фон карточки */
+  background-color: var(--color-surface);
+  /* основной текст */
+  color: var(--color-text);
+  /* лёгкая тень — кнопка будто «приподнята» */
+  box-shadow: var(--shadow-sm);
+/* конец правила */
+}
+
+/* фокус с клавиатуры на кнопке переключателя, уровня или времени */
+.segmented input:focus-visible + span,
+/* выбор уровня */
+.level-picker input:focus-visible + span,
+/* сетка времени */
+.time-toggle input:focus-visible + span {
+  /* рамка фокуса */
+  box-shadow: var(--focus-ring);
+/* конец правила */
+}
+
+/* .level-row — строка «Уровень: 1 2 3 4 5» */
+.level-row {
+  /* флексбокс */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* по краям */
+  justify-content: space-between;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .level-picker — пять кружков с цифрами */
+.level-picker {
+  /* флексбокс */
+  display: flex;
+  /* промежуток 6px */
+  gap: 0.375rem;
+/* конец правила */
+}
+
+/* .level-picker label — один кружок */
+.level-picker label {
+  /* курсор-рука */
+  cursor: pointer;
+/* конец правила */
+}
+
+/* .level-picker span — видимый кружок с цифрой */
+.level-picker span {
+  /* флексбокс для центрирования */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* центр по горизонтали */
+  justify-content: center;
+  /* 36px */
+  width: 2.25rem;
+  /* 36px */
+  height: 2.25rem;
+  /* круг */
+  border-radius: 50%;
+  /* рамка */
+  border: 2px solid var(--color-border);
+  /* фон */
+  background-color: var(--color-surface);
+  /* жирный */
+  font-weight: 800;
+  /* плавная смена */
+  transition: background-color var(--transition), border-color var(--transition), color var(--transition);
+/* конец правила */
+}
+
+/* выбранный уровень */
+.level-picker input:checked + span {
+  /* фон — основной цвет */
+  background-color: var(--color-primary);
+  /* рамка того же цвета */
+  border-color: var(--color-primary);
+  /* белая цифра */
+  color: var(--color-on-primary);
+/* конец правила */
+}
+
+/* ------------------------------ УДОБНОЕ ВРЕМЯ ------------------------------ */
+
+/* .time-grid — таблица «день × часть дня»: строка на каждый день */
+.time-grid {
+  /* сетка */
+  display: grid;
+  /* первая колонка — название дня (48px), дальше три равные колонки частей дня */
+  grid-template-columns: 3rem repeat(3, 1fr);
+  /* промежуток 8px */
+  gap: var(--space-2);
+  /* центр по вертикали */
+  align-items: center;
+/* конец правила */
+}
+
+/* .time-grid-head — заголовок колонки (часть дня) */
+.time-grid-head {
+  /* по центру */
+  text-align: center;
+  /* серый */
+  color: var(--color-text-muted);
+  /* полужирный */
+  font-weight: 700;
+/* конец правила */
+}
+
+/* .time-day — название дня слева */
+.time-day {
+  /* жирный */
+  font-weight: 800;
+/* конец правила */
+}
+
+/* .time-toggle — одна ячейка-переключатель (чекбокс) */
+.time-toggle {
+  /* курсор-рука */
+  cursor: pointer;
+/* конец правила */
+}
+
+/* .time-toggle span — видимая часть ячейки */
+.time-toggle span {
+  /* флексбокс для центрирования */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* центр по горизонтали */
+  justify-content: center;
+  /* высота 44px — удобно нажимать пальцем */
+  min-height: 2.75rem;
+  /* скругление */
+  border-radius: var(--radius-sm);
+  /* рамка */
+  border: 2px solid var(--color-border);
+  /* фон */
+  background-color: var(--color-surface);
+  /* серый текст (галочка «—») */
+  color: var(--color-text-muted);
+  /* жирный */
+  font-weight: 800;
+  /* плавная смена */
+  transition: background-color var(--transition), border-color var(--transition), color var(--transition);
+/* конец правила */
+}
+
+/* выбранная ячейка времени */
+.time-toggle input:checked + span {
+  /* светлый индиго */
+  background-color: var(--color-primary-soft);
+  /* рамка индиго */
+  border-color: var(--color-primary);
+  /* индиго текст */
+  color: var(--color-primary);
+/* конец правила */
+}
+
+/* ::after — псевдоэлемент внутри выбранной ячейки: рисуем галочку */
+.time-toggle input:checked + span::after {
+  /* content — текст псевдоэлемента */
+  content: "✓";
+/* конец правила */
+}
+
+/* .subject-note — подсказка в карточке предмета */
+.subject-note {
+  /* без отступа */
+  margin: 0;
+/* конец правила */
+}
+
+/* на узком экране названия частей дня мельче, чтобы три колонки поместились */
+@media (max-width: 420px) {
+  /* заголовки колонок */
+  .time-grid-head {
+    /* 12px — исключение: это короткие подписи колонок, рядом есть иконки */
+    font-size: 0.75rem;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* .save-bar — панель с кнопкой «Сохранить», прилипает к низу экрана при прокрутке */
+.save-bar {
+  /* sticky — прилипает */
+  position: sticky;
+  /* к низу окна */
+  bottom: var(--space-4);
+  /* поверх карточек */
+  z-index: 10;
+  /* флексбокс */
+  display: flex;
+  /* перенос */
+  flex-wrap: wrap;
+  /* центр по вертикали */
+  align-items: center;
+  /* по краям */
+  justify-content: space-between;
+  /* промежуток */
+  gap: var(--space-3);
+  /* отступы */
+  padding: var(--space-3) var(--space-4);
+  /* фон */
+  background-color: var(--color-surface);
+  /* рамка */
+  border: 1px solid var(--color-border);
+  /* скругление */
+  border-radius: var(--radius-lg);
+  /* большая тень */
+  box-shadow: var(--shadow-lg);
+/* конец правила */
+}
+
+/* на телефоне панель должна быть выше нижнего меню */
+@media (max-width: 767px) {
+  /* панель сохранения */
+  .save-bar {
+    /* над нижним меню: его высота + 12px */
+    bottom: calc(var(--bottom-nav-height) + var(--space-3));
+    /* меньше отступы, чтобы панель была компактной */
+    padding: var(--space-2);
+  /* конец правила */
+  }
+
+  /* текст статуса на телефоне прячем — после сохранения всё равно появится всплывающее сообщение */
+  #save-status {
+    /* не показываем */
+    display: none;
+  /* конец правила */
+  }
+
+  /* кнопка сохранения на всю ширину панели */
+  .save-bar .btn {
+    /* flex: 1 — занимает всё место */
+    flex: 1;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* ------------------------------ СОВПАДЕНИЯ --------------------------------- */
+
+/* .filters — панель фильтров: поля в строку */
+.filters {
+  /* флексбокс */
+  display: flex;
+  /* перенос на телефоне */
+  flex-wrap: wrap;
+  /* выравнивание по нижнему краю — кнопка на одной линии с полями */
+  align-items: flex-end;
+  /* промежуток 16px */
+  gap: var(--space-4);
+/* конец правила */
+}
+
+/* .filters .field — поле фильтра */
+.filters .field {
+  /* растягивается, минимум 200px */
+  flex: 1 1 12.5rem;
+/* конец правила */
+}
+
+/* section h2 со счётчиком: иконка, текст и плашка в строку */
+.section-card > h2 .chip {
+  /* выравниваем плашку по середине строки */
+  vertical-align: middle;
+/* конец правила */
+}
+
+/* .match-card — карточка совпадения */
+.match-card {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* промежуток 16px */
+  gap: var(--space-4);
+/* конец правила */
+}
+
+/* .match-head — верхняя строка: аватар, имя, процент */
+.match-head {
+  /* флексбокс в строку */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* промежуток 12px */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* .match-person — имя и класс */
+.match-person {
+  /* занимает всё свободное место */
+  flex: 1;
+  /* min-width: 0 — разрешает тексту сжиматься, иначе длинное имя «распирает» строку */
+  min-width: 0;
+/* конец правила */
+}
+
+/* заголовок с именем */
+.match-person h3 {
+  /* без отступа */
+  margin: 0;
+  /* overflow-wrap: anywhere — очень длинное имя переносится в любом месте и не залезает на процент */
+  overflow-wrap: anywhere;
+/* конец правила */
+}
+
+/* .match-grid — сетка карточек совпадений: карточки шире обычных (минимум 320px) */
+.match-grid {
+  /* колонки от 320px */
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+/* конец правила */
+}
+
+/* .match-percent — круг с процентом */
+.match-percent {
+  /* флексбокс */
+  display: flex;
+  /* столбиком: число и подпись */
+  flex-direction: column;
+  /* центр по горизонтали */
+  align-items: center;
+  /* центр по вертикали */
+  justify-content: center;
+  /* не сжимается */
+  flex-shrink: 0;
+  /* 76px */
+  width: 4.75rem;
+  /* 76px */
+  height: 4.75rem;
+  /* круг */
+  border-radius: 50%;
+  /* рамка 4px (цвет задают классы ниже) */
+  border: 4px solid currentColor;
+  /* без лишней высоты строк */
+  line-height: 1.1;
+/* конец правила */
+}
+
+/* число процента */
+.match-percent strong {
+  /* 20px */
+  font-size: var(--font-size-lg);
+  /* очень жирное */
+  font-weight: 800;
+/* конец правила */
+}
+
+/* подпись «совпадение» — самое мелкое исключение (подпись внутри круга рядом с крупным числом) */
+.match-percent span {
+  /* 11px */
+  font-size: 0.6875rem;
+  /* серый */
+  color: var(--color-text-muted);
+/* конец правила */
+}
+
+/* высокий процент — зелёный; currentColor в рамке берёт этот цвет */
+.percent-high {
+  /* зелёный */
+  color: var(--color-success);
+  /* светло-зелёный фон */
+  background-color: var(--color-success-soft);
+/* конец правила */
+}
+
+/* средний процент — индиго */
+.percent-mid {
+  /* индиго */
+  color: var(--color-primary);
+  /* светлый индиго фон */
+  background-color: var(--color-primary-soft);
+/* конец правила */
+}
+
+/* низкий процент — янтарный */
+.percent-low {
+  /* янтарный */
+  color: var(--color-warning);
+  /* светло-янтарный фон */
+  background-color: var(--color-warning-soft);
+/* конец правила */
+}
+
+/* .match-exchange — блок «что получаю / что даю» */
+.match-exchange {
+  /* сетка */
+  display: grid;
+  /* промежуток 8px */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .match-line — одна строка обмена */
+.match-line {
+  /* флексбокс */
+  display: flex;
+  /* перенос */
+  flex-wrap: wrap;
+  /* центр по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .match-line-label — подпись «Тебе помогут» / «Ты поможешь» */
+.match-line-label {
+  /* width: 100% — подпись занимает всю строку, а плашка предмета переносится под неё */
+  width: 100%;
+  /* полужирный */
+  font-weight: 700;
+/* конец правила */
+}
+
+/* .match-explain — объяснение простыми словами */
+.match-explain {
+  /* без отступа */
+  margin: 0;
+  /* отступы */
+  padding: var(--space-3);
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* фон */
+  background-color: var(--color-surface-2);
+/* конец правила */
+}
+
+/* .match-details — раскрывающийся блок «из чего процент» */
+.match-details summary {
+  /* курсор-рука */
+  cursor: pointer;
+  /* основной цвет */
+  color: var(--color-primary);
+  /* полужирный */
+  font-weight: 700;
+/* конец правила */
+}
+
+/* список внутри раскрывающегося блока */
+.match-details ul {
+  /* отступ сверху */
+  margin: var(--space-2) 0 0;
+  /* отступ слева для маркеров */
+  padding-left: var(--space-5);
+/* конец правила */
+}
+
+/* .match-sent — плашка «запрос отправлен» */
+.match-sent {
+  /* по центру */
+  justify-content: center;
+  /* перенос текста разрешён */
+  white-space: normal;
+  /* отступы как у кнопки */
+  padding: 0.625rem 1rem;
+/* конец правила */
+}
+
+/* margin-top: auto — прижимает кнопку к низу карточки, чтобы кнопки в ряду были на одной линии */
+.match-card > .btn:last-child,
+/* и плашку «отправлен» тоже */
+.match-card > .match-sent {
+  /* автоматический отступ сверху */
+  margin-top: auto;
+/* конец правила */
+}
+
+/* .triple-avatars — три аватара, наложенные друг на друга */
+.triple-avatars {
+  /* флексбокс */
+  display: flex;
+  /* не сжимается */
+  flex-shrink: 0;
+/* конец правила */
+}
+
+/* каждый аватар, кроме первого, заезжает на предыдущий */
+.triple-avatars .avatar + .avatar {
+  /* отрицательный отступ слева */
+  margin-left: -0.75rem;
+  /* рамка цвета карточки — аватары не сливаются */
+  border: 3px solid var(--color-surface);
+/* конец правила */
+}
+
+/* .triple-steps — список «кто → кому» */
+.triple-steps {
+  /* без стандартных цифр */
+  list-style: none;
+  /* без отступов */
+  margin: 0;
+  /* без отступа слева */
+  padding: 0;
+  /* сетка */
+  display: grid;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .triple-step — один шаг круга */
+.triple-step {
+  /* флексбокс */
+  display: flex;
+  /* перенос */
+  flex-wrap: wrap;
+  /* центр по вертикали */
+  align-items: center;
+  /* промежуток 6px */
+  gap: 0.375rem;
+/* конец правила */
+}
+
+/* ------------------------------ ПАРТНЁРЫ ----------------------------------- */
+
+/* .partner-date — дата на карточке партнёрства */
+.partner-date {
+  /* без отступа */
+  margin: 0;
+/* конец правила */
+}
+
+/* .partner-actions — кнопки внизу карточки партнёрства */
+.partner-actions {
+  /* флексбокс */
+  display: flex;
+  /* перенос */
+  flex-wrap: wrap;
+  /* промежуток */
+  gap: var(--space-2);
+  /* прижимаем к низу карточки */
+  margin-top: auto;
+/* конец правила */
+}
+
+/* .history-summary — заголовок раскрывающейся истории */
+.history-summary {
+  /* курсор-рука */
+  cursor: pointer;
+  /* жирный */
+  font-weight: 800;
+  /* 20px */
+  font-size: var(--font-size-lg);
+/* конец правила */
+}
+
+/* .history-list — карточки истории */
+.history-list {
+  /* отступ сверху */
+  margin-top: var(--space-4);
+/* конец правила */
+}
+
+/* карточки в истории чуть бледнее */
+.history-list .match-card {
+  /* прозрачность 85% */
+  opacity: 0.85;
+  /* без тени */
+  box-shadow: none;
+/* конец правила */
+}
+
+/* ------------------------------ ЧАТ ---------------------------------------- */
+
+/* .chat-page — у страницы чата отступы меньше, чтобы лента была выше */
+.chat-page {
+  /* сверху и снизу 16px */
+  padding-block: var(--space-4);
+/* конец правила */
+}
+
+/* .chat-layout — шапка чата и карточка сообщений столбиком */
+.chat-layout {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* промежуток 12px */
+  gap: var(--space-3);
+  /* ширина не больше 820px — длинные строки читать неудобно */
+  max-width: 51.25rem;
+  /* по центру */
+  margin-inline: auto;
+/* конец правила */
+}
+
+/* .chat-header — верхняя панель чата */
+.chat-header {
+  /* флексбокс */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-3);
+  /* меньше отступы */
+  padding: var(--space-3) var(--space-4);
+  /* относительно неё позиционируется меню */
+  position: relative;
+/* конец правила */
+}
+
+/* .chat-title — имена собеседников */
+.chat-title {
+  /* 20px */
+  font-size: var(--font-size-lg);
+  /* без отступа */
+  margin: 0;
+/* конец правила */
+}
+
+/* .chat-menu summary — кнопка меню: убираем стандартный треугольник */
+.chat-menu summary {
+  /* list-style: none — без треугольника (Firefox) */
+  list-style: none;
+/* конец правила */
+}
+
+/* ::-webkit-details-marker — треугольник в Chrome и Safari */
+.chat-menu summary::-webkit-details-marker {
+  /* не показываем */
+  display: none;
+/* конец правила */
+}
+
+/* .chat-menu-panel — выпадающая панель участников */
+.chat-menu-panel {
+  /* поверх содержимого */
+  position: absolute;
+  /* под шапкой чата */
+  top: calc(100% + var(--space-2));
+  /* у правого края */
+  right: 0;
+  /* поверх ленты */
+  z-index: 20;
+  /* ширина до 340px */
+  width: min(21.25rem, calc(100vw - 2rem));
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* промежуток */
+  gap: var(--space-3);
+  /* большая тень */
+  box-shadow: var(--shadow-lg);
+/* конец правила */
+}
+
+/* .chat-menu-title — заголовок панели */
+.chat-menu-title {
+  /* 17px */
+  font-size: var(--font-size-base);
+  /* без отступа */
+  margin: 0;
+/* конец правила */
+}
+
+/* .chat-members — список участников */
+.chat-members {
+  /* без маркеров */
+  list-style: none;
+  /* без отступов */
+  margin: 0;
+  /* без отступа слева */
+  padding: 0;
+  /* сетка */
+  display: grid;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .chat-member — один участник */
+.chat-member {
+  /* флексбокс */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .chat-member-name — имя участника занимает свободное место */
+.chat-member-name {
+  /* растягивается */
+  flex: 1;
+  /* жирный */
+  font-weight: 700;
+/* конец правила */
+}
+
+/* .chat-card — карточка с лентой и полем ввода */
+.chat-card {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* без внутренних отступов — они у ленты и формы */
+  padding: 0;
+  /* обрезаем углы ленты по скруглению */
+  overflow: hidden;
+/* конец правила */
+}
+
+/* .chat-messages — лента сообщений с прокруткой */
+.chat-messages {
+  /* высота: экран минус шапка сайта, шапка чата и форма; dvh — высота видимой части экрана на телефоне */
+  height: calc(100dvh - 17rem);
+  /* но не меньше 280px */
+  min-height: 17.5rem;
+  /* overflow-y: auto — вертикальная прокрутка, когда сообщений много */
+  overflow-y: auto;
+  /* отступы */
+  padding: var(--space-4);
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* промежуток между сообщениями 8px */
+  gap: var(--space-2);
+  /* фон ленты */
+  background-color: var(--color-surface-2);
+/* конец правила */
+}
+
+/* на телефоне вычитаем ещё и нижнее меню */
+@media (max-width: 767px) {
+  /* лента */
+  .chat-messages {
+    /* ниже на высоту нижнего меню */
+    height: calc(100dvh - 17rem - var(--bottom-nav-height));
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* .chat-empty — подсказка в пустом чате */
+.chat-empty {
+  /* по центру */
+  text-align: center;
+  /* margin: auto — по центру ленты */
+  margin: auto;
+/* конец правила */
+}
+
+/* .chat-day — разделитель по дням */
+.chat-day {
+  /* по центру */
+  text-align: center;
+  /* отступы сверху и снизу */
+  margin-block: var(--space-2);
+/* конец правила */
+}
+
+/* текст разделителя в пилюле */
+.chat-day span {
+  /* отступы */
+  padding: 0.125rem 0.75rem;
+  /* пилюля */
+  border-radius: var(--radius-full);
+  /* фон */
+  background-color: var(--color-surface);
+  /* серый */
+  color: var(--color-text-muted);
+  /* 16px */
+  font-size: var(--font-size-sm);
+/* конец правила */
+}
+
+/* .message — строка одного сообщения */
+.message {
+  /* флексбокс: аватар и пузырь */
+  display: flex;
+  /* прижимаем к низу (аватар у последней строки пузыря) */
+  align-items: flex-end;
+  /* промежуток */
+  gap: var(--space-2);
+  /* ширина не больше 85% ленты */
+  max-width: 85%;
+  /* анимация появления */
+  animation: fade-up 0.2s ease both;
+/* конец правила */
+}
+
+/* .message.own — моё сообщение: справа */
+.message.own {
+  /* align-self: flex-end — прижать к правому краю ленты */
+  align-self: flex-end;
+/* конец правила */
+}
+
+/* .message-bubble — пузырь сообщения */
+.message-bubble {
+  /* отступы */
+  padding: var(--space-2) var(--space-3);
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* левый нижний угол острый — хвостик к собеседнику */
+  border-bottom-left-radius: 4px;
+  /* фон */
+  background-color: var(--color-surface);
+  /* лёгкая тень */
+  box-shadow: var(--shadow-sm);
+  /* min-width: 0 — длинные слова не растягивают пузырь */
+  min-width: 0;
+/* конец правила */
+}
+
+/* мой пузырь — индиго, хвостик справа */
+.message.own .message-bubble {
+  /* светлый индиго */
+  background-color: var(--color-primary-soft);
+  /* левый угол снова круглый */
+  border-bottom-left-radius: var(--radius-md);
+  /* правый нижний — острый */
+  border-bottom-right-radius: 4px;
+/* конец правила */
+}
+
+/* .message-author — имя автора (в тройке) */
+.message-author {
+  /* блочный элемент */
+  display: block;
+  /* жирный */
+  font-weight: 800;
+  /* индиго */
+  color: var(--color-primary);
+/* конец правила */
+}
+
+/* .message-text — текст сообщения */
+.message-text {
+  /* без отступа */
+  margin: 0;
+  /* pre-wrap — сохраняем переводы строк (Shift+Enter) */
+  white-space: pre-wrap;
+  /* длинные слова и ссылки переносятся */
+  overflow-wrap: anywhere;
+/* конец правила */
+}
+
+/* .message-warning — предупреждение о контактах под текстом */
+.message-warning {
+  /* отступ сверху */
+  margin: var(--space-1) 0 0;
+  /* янтарный */
+  color: var(--color-warning);
+  /* 16px */
+  font-size: var(--font-size-sm);
+  /* полужирный */
+  font-weight: 700;
+/* конец правила */
+}
+
+/* .message-meta — время и кнопка жалобы */
+.message-meta {
+  /* флексбокс */
+  display: flex;
+  /* по краям */
+  justify-content: space-between;
+  /* центр по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-3);
+  /* серый */
+  color: var(--color-text-muted);
+  /* 16px */
+  font-size: var(--font-size-sm);
+/* конец правила */
+}
+
+/* .message-report — кнопка жалобы, похожа на ссылку */
+.message-report {
+  /* без рамки */
+  border: none;
+  /* без фона */
+  background: none;
+  /* без отступов */
+  padding: 0;
+  /* серый */
+  color: var(--color-text-muted);
+  /* подчёркнутая */
+  text-decoration: underline;
+  /* 16px */
+  font-size: var(--font-size-sm);
+/* конец правила */
+}
+
+/* наведение на кнопку жалобы */
+.message-report:hover {
+  /* красный */
+  color: var(--color-danger);
+/* конец правила */
+}
+
+/* .message-reported — отметка «жалоба отправлена» */
+.message-reported {
+  /* зелёный */
+  color: var(--color-success);
+/* конец правила */
+}
+
+/* .chat-closed — сообщение «писать нельзя» внизу карточки */
+.chat-closed {
+  /* без внешнего отступа */
+  margin: 0;
+  /* без скругления — это полоса внизу карточки */
+  border-radius: 0;
+/* конец правила */
+}
+
+/* .chat-form — форма отправки */
+.chat-form {
+  /* отступы */
+  padding: var(--space-3);
+  /* линия сверху */
+  border-top: 1px solid var(--color-border);
+  /* флексбокс */
+  display: flex;
+  /* столбиком: предупреждение над полем */
+  flex-direction: column;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .chat-contact-warning — предупреждение о контактах над полем */
+.chat-contact-warning {
+  /* без отступа */
+  margin: 0;
+/* конец правила */
+}
+
+/* .chat-input-row — поле и кнопка в строку */
+.chat-input-row {
+  /* флексбокс */
+  display: flex;
+  /* прижимаем кнопку к низу растущего поля */
+  align-items: flex-end;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* textarea.chat-input — поле ввода сообщения; «тег + класс» весит больше, чем правило textarea.input из components.css, поэтому наша высота победит */
+textarea.chat-input {
+  /* растягивается */
+  flex: 1;
+  /* минимальная высота как у кнопки */
+  min-height: 2.75rem;
+  /* растягивать мышкой не нужно — поле растёт само */
+  resize: none;
+/* конец правила */
+}
+
+/* ------------------------------ ССЫЛКА НА ПРОФИЛЬ -------------------------- */
+
+/* .person-link — имя-ссылка на профиль ученика: выглядит как обычный текст */
+.person-link {
+  /* цвет текста как у заголовка */
+  color: inherit;
+  /* без подчёркивания */
+  text-decoration: none;
+/* конец правила */
+}
+
+/* при наведении подчёркиваем — видно, что это ссылка */
+.person-link:hover {
+  /* подчёркивание */
+  text-decoration: underline;
+  /* основной цвет */
+  color: var(--color-primary);
+/* конец правила */
+}
+
+/* ------------------------------ ЗАНЯТИЯ ------------------------------------ */
+
+/* .place-field — группа «Где»: убираем стандартную рамку fieldset */
+.place-field {
+  /* без рамки */
+  border: none;
+  /* без отступов */
+  margin: 0;
+  /* без внутренних отступов */
+  padding: 0;
+/* конец правила */
+}
+
+/* .lesson-list — список карточек занятий */
+.lesson-list {
+  /* сетка */
+  display: grid;
+  /* промежуток 12px */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* .lesson-card — карточка занятия: листок календаря слева, текст справа */
+.lesson-card {
+  /* флексбокс */
+  display: flex;
+  /* промежуток */
+  gap: var(--space-4);
+  /* выравнивание по верху */
+  align-items: flex-start;
+/* конец правила */
+}
+
+/* .lesson-date — листок календаря */
+.lesson-date {
+  /* флексбокс */
+  display: flex;
+  /* столбиком: число над месяцем */
+  flex-direction: column;
+  /* по центру */
+  align-items: center;
+  /* не сжимается */
+  flex-shrink: 0;
+  /* ширина 64px */
+  width: 4rem;
+  /* отступы */
+  padding: var(--space-2) 0;
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* светлый индиго */
+  background-color: var(--color-primary-soft);
+  /* индиго текст */
+  color: var(--color-primary);
+  /* без лишней высоты строк */
+  line-height: 1.1;
+/* конец правила */
+}
+
+/* .lesson-day — число */
+.lesson-day {
+  /* 28px */
+  font-size: 1.75rem;
+  /* очень жирное */
+  font-weight: 800;
+/* конец правила */
+}
+
+/* .lesson-month — месяц */
+.lesson-month {
+  /* 16px */
+  font-size: var(--font-size-sm);
+  /* полужирный */
+  font-weight: 700;
+/* конец правила */
+}
+
+/* .lesson-body — текстовая часть карточки */
+.lesson-body {
+  /* занимает свободное место */
+  flex: 1;
+  /* текст может сжиматься */
+  min-width: 0;
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .lesson-top — тема и статус в строку */
+.lesson-top {
+  /* флексбокс */
+  display: flex;
+  /* перенос */
+  flex-wrap: wrap;
+  /* по краям */
+  justify-content: space-between;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* тема занятия */
+.lesson-top h3 {
+  /* без отступа */
+  margin: 0;
+  /* длинные слова переносятся */
+  overflow-wrap: anywhere;
+/* конец правила */
+}
+
+/* .lesson-meta — время, место, партнёр */
+.lesson-meta {
+  /* без отступа */
+  margin: 0;
+/* конец правила */
+}
+
+/* .lesson-review — моя оценка */
+.lesson-review {
+  /* без отступа */
+  margin: 0;
+  /* длинный отзыв переносится */
+  overflow-wrap: anywhere;
+/* конец правила */
+}
+
+/* .review-form — форма оценки внутри карточки */
+.review-form {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* кнопка не растягивается на всю ширину */
+  align-items: flex-start;
+  /* промежуток */
+  gap: var(--space-2);
+  /* отступы */
+  padding: var(--space-3);
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* фон */
+  background-color: var(--color-surface-2);
+/* конец правила */
+}
+
+/* textarea.review-comment — поле отзыва ниже обычного и на всю ширину */
+textarea.review-comment {
+  /* высота 72px */
+  min-height: 4.5rem;
+/* конец правила */
+}
+
+/* ------------------------------ ЗВЁЗДЫ ------------------------------------- */
+
+/* .stars — оценка звёздами (только показ) */
+.stars {
+  /* янтарный цвет звёзд */
+  color: #f5a623;
+  /* расстояние между звёздами */
+  letter-spacing: 1px;
+/* конец правила */
+}
+
+/* .star-picker — выбор оценки */
+.star-picker {
+  /* флексбокс */
+  display: flex;
+  /* промежуток */
+  gap: var(--space-1);
+/* конец правила */
+}
+
+/* каждая звезда — label с радиокнопкой */
+.star-picker label {
+  /* курсор-рука */
+  cursor: pointer;
+  /* 32px — удобно нажимать */
+  font-size: 2rem;
+  /* без лишней высоты */
+  line-height: 1;
+  /* пустая звезда — цвет рамки */
+  color: var(--color-border);
+  /* плавная смена цвета и размера */
+  transition: color var(--transition), transform var(--transition);
+/* конец правила */
+}
+
+/* радиокнопки звёзд прячем */
+.star-picker input {
+  /* абсолютное положение */
+  position: absolute;
+  /* прозрачные */
+  opacity: 0;
+  /* нулевой размер */
+  width: 0;
+  /* нулевой размер */
+  height: 0;
+/* конец правила */
+}
+
+/* закрашенная звезда (класс ставит updateStarPicker в js/reviews.js) */
+.star-picker label.filled {
+  /* янтарный */
+  color: #f5a623;
+/* конец правила */
+}
+
+/* наведение — звезда чуть увеличивается */
+.star-picker label:hover {
+  /* увеличение на 15% */
+  transform: scale(1.15);
+/* конец правила */
+}
+
+/* фокус с клавиатуры на звезде */
+.star-picker input:focus-visible + span {
+  /* рамка фокуса */
+  box-shadow: var(--focus-ring);
+  /* скругление рамки */
+  border-radius: var(--radius-sm);
+/* конец правила */
+}
+
+/* ------------------------------ ОТЗЫВЫ ------------------------------------- */
+
+/* .reviews — список отзывов */
+.reviews {
+  /* без маркеров */
+  list-style: none;
+  /* без отступов */
+  margin: 0;
+  /* без отступа слева */
+  padding: 0;
+  /* сетка */
+  display: grid;
+  /* промежуток */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* .review — один отзыв */
+.review {
+  /* отступы */
+  padding: var(--space-3);
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* фон */
+  background-color: var(--color-surface-2);
+/* конец правила */
+}
+
+/* .review-head — автор, звёзды, дата */
+.review-head {
+  /* флексбокс */
+  display: flex;
+  /* перенос */
+  flex-wrap: wrap;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .review-date — дата справа */
+.review-date {
+  /* margin-left: auto — отодвигает дату к правому краю */
+  margin-left: auto;
+/* конец правила */
+}
+
+/* .review-text — текст отзыва */
+.review-text {
+  /* отступ сверху */
+  margin: var(--space-2) 0 0;
+  /* длинные слова переносятся */
+  overflow-wrap: anywhere;
+/* конец правила */
+}
+
+/* .history-lessons — список проведённых занятий в профиле */
+.history-lessons {
+  /* отступ сверху */
+  margin: var(--space-3) 0 0;
+  /* отступ слева для маркеров */
+  padding-left: var(--space-5);
+  /* сетка */
+  display: grid;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .profile-after-form — первый раздел после формы профиля: отступ сверху */
+.profile-after-form {
+  /* 24px */
+  margin-top: var(--space-5);
+/* конец правила */
+}
+
+/* ------------------------------ МАТЕРИАЛЫ ---------------------------------- */
+
+/* .dropzone — зона «перетащи файл сюда» */
+.dropzone {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* по центру */
+  align-items: center;
+  /* текст по центру */
+  text-align: center;
+  /* промежуток */
+  gap: var(--space-2);
+  /* большие отступы */
+  padding: var(--space-6) var(--space-4);
+  /* пунктирная рамка */
+  border: 3px dashed var(--color-border);
+  /* скругление */
+  border-radius: var(--radius-lg);
+  /* фон */
+  background-color: var(--color-surface-2);
+  /* курсор-рука: зона кликабельна */
+  cursor: pointer;
+  /* плавная смена рамки и фона */
+  transition: border-color var(--transition), background-color var(--transition);
+/* конец правила */
+}
+
+/* наведение на зону и файл над зоной (класс is-dragging ставит скрипт) */
+.dropzone:hover,
+/* файл перетаскивают над зоной */
+.dropzone.is-dragging {
+  /* рамка основного цвета */
+  border-color: var(--color-primary);
+  /* светлый индиго фон */
+  background-color: var(--color-primary-soft);
+/* конец правила */
+}
+
+/* :has(...) — «форма, внутри которой есть поле выбора файла в фокусе»; само поле спрятано, поэтому при выборе клавишей Tab рисуем рамку фокуса на зоне */
+.form:has(#file-input:focus-visible) .dropzone {
+  /* рамка фокуса */
+  box-shadow: var(--focus-ring);
+/* конец правила */
+}
+
+/* .dropzone-icon — большая иконка */
+.dropzone-icon {
+  /* 40px */
+  font-size: 2.5rem;
+  /* без лишней высоты */
+  line-height: 1;
+/* конец правила */
+}
+
+/* .selected-file — выбранный файл перед загрузкой */
+.selected-file {
+  /* флексбокс */
+  display: flex;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-3);
+  /* отступы */
+  padding: var(--space-3);
+  /* рамка */
+  border: 1px solid var(--color-border);
+  /* скругление */
+  border-radius: var(--radius-md);
+/* конец правила */
+}
+
+/* .selected-file-icon — иконка выбранного файла */
+.selected-file-icon {
+  /* 28px */
+  font-size: 1.75rem;
+/* конец правила */
+}
+
+/* .file-info — имя и подробности файла */
+.file-info {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* занимает свободное место */
+  flex: 1;
+  /* текст может сжиматься */
+  min-width: 0;
+/* конец правила */
+}
+
+/* .file-name — имя файла; длинные имена переносятся */
+.file-name {
+  /* перенос в любом месте */
+  overflow-wrap: anywhere;
+/* конец правила */
+}
+
+/* .file-card — карточка файла */
+.file-card {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* промежуток */
+  gap: var(--space-3);
+  /* меньше отступы */
+  padding: var(--space-4);
+/* конец правила */
+}
+
+/* .file-thumb — превью файла */
+.file-thumb {
+  /* флексбокс для центрирования значка */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* центр по горизонтали */
+  justify-content: center;
+  /* соотношение сторон 4:3 — все превью одинаковой формы */
+  aspect-ratio: 4 / 3;
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* фон под картинкой */
+  background-color: var(--color-surface-2);
+  /* обрезаем картинку по скруглённым углам */
+  overflow: hidden;
+  /* без подчёркивания ссылки под значком */
+  text-decoration: none;
+/* конец правила */
+}
+
+/* картинка в превью */
+.file-thumb img {
+  /* на всю ширину */
+  width: 100%;
+  /* на всю высоту */
+  height: 100%;
+  /* object-fit: cover — картинка заполняет рамку без искажений, лишнее обрезается */
+  object-fit: cover;
+  /* плавное увеличение при наведении */
+  transition: transform var(--transition);
+/* конец правила */
+}
+
+/* наведение на превью — картинка чуть увеличивается */
+.file-thumb:hover img {
+  /* увеличение на 5% */
+  transform: scale(1.05);
+/* конец правила */
+}
+
+/* .file-thumb-icon — значок PDF */
+.file-thumb-icon {
+  /* 48px */
+  font-size: 3rem;
+/* конец правила */
+}
+
+/* ------------------------------ БЕЙДЖИ И ОЧКИ ------------------------------ */
+
+/* .badges-grid — сетка бейджей */
+.badges-grid {
+  /* без маркеров */
+  list-style: none;
+  /* без отступов */
+  margin: 0;
+  /* без отступа слева */
+  padding: 0;
+  /* сетка */
+  display: grid;
+  /* колонки от 150px */
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  /* промежуток */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* .badge-card — один бейдж */
+.badge-card {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* по центру */
+  align-items: center;
+  /* текст по центру */
+  text-align: center;
+  /* промежуток */
+  gap: var(--space-1);
+  /* отступы */
+  padding: var(--space-4) var(--space-3);
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* светло-янтарный фон — полученный бейдж «светится» */
+  background-color: var(--color-warning-soft);
+  /* рамка янтарного цвета */
+  border: 2px solid var(--color-warning);
+  /* плавное движение при наведении */
+  transition: transform var(--transition);
+/* конец правила */
+}
+
+/* наведение на бейдж — чуть поднимается */
+.badge-card:hover {
+  /* вверх на 2px */
+  transform: translateY(-2px);
+/* конец правила */
+}
+
+/* .badge-card.locked — ещё не полученный бейдж: серый */
+.badge-card.locked {
+  /* обычный фон */
+  background-color: var(--color-surface-2);
+  /* серая пунктирная рамка */
+  border: 2px dashed var(--color-border);
+/* конец правила */
+}
+
+/* иконка не полученного бейджа — чёрно-белая и бледная */
+.badge-card.locked .badge-icon {
+  /* filter: grayscale(1) — убираем цвет; opacity — полупрозрачность */
+  filter: grayscale(1);
+  /* полупрозрачная */
+  opacity: 0.5;
+/* конец правила */
+}
+
+/* .badge-icon — большая иконка бейджа */
+.badge-icon {
+  /* 40px */
+  font-size: 2.5rem;
+  /* без лишней высоты */
+  line-height: 1.1;
+/* конец правила */
+}
+
+/* .rules-title — подзаголовок «Как заработать очки» */
+.rules-title {
+  /* отступ сверху 24px */
+  margin-top: var(--space-5);
+/* конец правила */
+}
+
+/* .points-rules — список правил очков */
+.points-rules {
+  /* без маркеров */
+  list-style: none;
+  /* без отступов */
+  margin: 0;
+  /* без отступа слева */
+  padding: 0;
+  /* сетка */
+  display: grid;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* число очков в правиле — зелёное */
+.points-rules strong {
+  /* зелёный */
+  color: var(--color-success);
+/* конец правила */
+}
+
+/* ------------------------------ РЕЙТИНГ ------------------------------------ */
+
+/* .podium — пьедестал: три колонки */
+.podium {
+  /* без стандартной нумерации */
+  list-style: none;
+  /* без отступа слева */
+  padding: 0;
+  /* сетка */
+  display: grid;
+  /* три равные колонки */
+  grid-template-columns: repeat(3, 1fr);
+  /* колонки прижаты к низу — разная высота «ступенек» видна сверху */
+  align-items: end;
+  /* промежуток */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* .podium-place — одно место */
+.podium-place {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* по центру */
+  align-items: center;
+  /* текст по центру */
+  text-align: center;
+  /* промежуток */
+  gap: var(--space-1);
+  /* отступы */
+  padding: var(--space-4) var(--space-2);
+  /* скругление только сверху — как ступенька */
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-sm);
+  /* фон */
+  background-color: var(--color-surface);
+  /* рамка */
+  border: 1px solid var(--color-border);
+  /* тень */
+  box-shadow: var(--shadow-md);
+  /* анимация появления */
+  animation: fade-up 0.4s ease both;
+/* конец правила */
+}
+
+/* 1 место: order: 2 — в сетке стоит в середине; выше других за счёт отступа */
+.podium-place.place-1 {
+  /* порядок в сетке — второй (в центре) */
+  order: 2;
+  /* самый большой отступ снизу (64px) — самая высокая ступенька */
+  padding-bottom: var(--space-8);
+  /* светлый янтарный фон — «золото» */
+  background-color: var(--color-warning-soft);
+/* конец правила */
+}
+
+/* 2 место — слева */
+.podium-place.place-2 {
+  /* первый в сетке */
+  order: 1;
+  /* средняя высота (40px снизу) */
+  padding-bottom: 2.5rem;
+/* конец правила */
+}
+
+/* 3 место — справа */
+.podium-place.place-3 {
+  /* третий в сетке */
+  order: 3;
+/* конец правила */
+}
+
+/* моё место на пьедестале и в списке — рамка основного цвета */
+.podium-place.me,
+/* моя строка в списке */
+.leaderboard-row.me {
+  /* индиго рамка */
+  outline: 3px solid var(--color-primary);
+  /* рамка внутри элемента */
+  outline-offset: -3px;
+/* конец правила */
+}
+
+/* .podium-medal — медаль */
+.podium-medal {
+  /* 32px */
+  font-size: 2rem;
+  /* без лишней высоты */
+  line-height: 1;
+/* конец правила */
+}
+
+/* .podium-name — имя; длинные имена переносятся */
+.podium-name {
+  /* перенос в любом месте */
+  overflow-wrap: anywhere;
+/* конец правила */
+}
+
+/* .podium-points — очки на пьедестале */
+.podium-points {
+  /* 20px */
+  font-size: var(--font-size-lg);
+  /* очень жирные */
+  font-weight: 800;
+  /* индиго */
+  color: var(--color-primary);
+/* конец правила */
+}
+
+/* на узком экране аватары на пьедестале меньше */
+@media (max-width: 480px) {
+  /* большой аватар внутри пьедестала */
+  .podium .avatar-lg {
+    /* 56px */
+    width: 3.5rem;
+    /* 56px */
+    height: 3.5rem;
+    /* эмодзи 32px */
+    font-size: 2rem;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* .leaderboard-list — места 4–10 */
+.leaderboard-list {
+  /* без стандартной нумерации (номер рисуем сами через counter) */
+  list-style: none;
+  /* меньше отступы у карточки */
+  padding: var(--space-2);
+  /* counter-reset — заводим счётчик «place», начинаем с 3 (первая строка станет 4) */
+  counter-reset: place 3;
+/* конец правила */
+}
+
+/* .leaderboard-row — одна строка рейтинга */
+.leaderboard-row {
+  /* флексбокс */
+  display: flex;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-3);
+  /* отступы */
+  padding: var(--space-2) var(--space-3);
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* counter-increment — каждая строка увеличивает счётчик на 1 */
+  counter-increment: place;
+/* конец правила */
+}
+
+/* ::before — номер места перед строкой; counter(place) — текущее значение счётчика */
+.leaderboard-row::before {
+  /* выводим номер */
+  content: counter(place);
+  /* ширина 24px, номера стоят ровно */
+  width: 1.5rem;
+  /* жирный */
+  font-weight: 800;
+  /* серый */
+  color: var(--color-text-muted);
+/* конец правила */
+}
+
+/* чередование фона строк: :nth-child(even) — чётные строки */
+.leaderboard-row:nth-child(even) {
+  /* светлый фон */
+  background-color: var(--color-surface-2);
+/* конец правила */
+}
+
+/* .leaderboard-name — имя занимает свободное место */
+.leaderboard-name {
+  /* растягивается */
+  flex: 1;
+  /* текст может сжиматься */
+  min-width: 0;
+/* конец правила */
+}
+
+/* ------------------------------ УВЕДОМЛЕНИЯ -------------------------------- */
+
+/* .bell — обёртка колокольчика: от неё позиционируется выпадающая панель */
+.bell {
+  /* position: relative — точка отсчёта для панели */
+  position: relative;
+/* конец правила */
+}
+
+/* .notif-panel — выпадающая панель с уведомлениями */
+.notif-panel {
+  /* поверх страницы */
+  position: absolute;
+  /* под колокольчиком */
+  top: calc(100% + var(--space-2));
+  /* правый край панели — у правого края колокольчика */
+  right: 0;
+  /* поверх содержимого страницы */
+  z-index: 60;
+  /* ширина до 380px */
+  width: min(23.75rem, calc(100vw - 2rem));
+  /* меньше внутренние отступы */
+  padding: var(--space-3);
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* промежуток */
+  gap: var(--space-2);
+  /* большая тень */
+  box-shadow: var(--shadow-lg);
+  /* анимация появления */
+  animation: fade-up 0.2s ease both;
+/* конец правила */
+}
+
+/* на телефоне панель закрепляем под шапкой на всю ширину экрана */
+@media (max-width: 767px) {
+  /* панель */
+  .notif-panel {
+    /* fixed — относительно окна, а не колокольчика */
+    position: fixed;
+    /* сразу под шапкой */
+    top: calc(var(--header-height) + var(--space-2));
+    /* отступ слева 16px */
+    left: var(--space-4);
+    /* отступ справа 16px */
+    right: var(--space-4);
+    /* ширину задают left и right */
+    width: auto;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* .notif-panel-head — верх панели: заголовок и «Прочитать все» */
+.notif-panel-head {
+  /* флексбокс */
+  display: flex;
+  /* по краям */
+  justify-content: space-between;
+  /* по центру по вертикали */
+  align-items: center;
+/* конец правила */
+}
+
+/* список внутри выпадающей панели — с прокруткой */
+.notif-panel .notif-list {
+  /* не выше 60% высоты экрана */
+  max-height: 60vh;
+  /* прокрутка, если не помещается */
+  overflow-y: auto;
+/* конец правила */
+}
+
+/* .notif-list — список уведомлений */
+.notif-list {
+  /* без маркеров */
+  list-style: none;
+  /* без отступов */
+  margin: 0;
+  /* без отступа слева */
+  padding: 0;
+  /* сетка */
+  display: grid;
+  /* промежуток 4px */
+  gap: var(--space-1);
+/* конец правила */
+}
+
+/* .notif-link — одно уведомление целиком является ссылкой */
+.notif-link {
+  /* флексбокс: иконка и текст */
+  display: flex;
+  /* по верхнему краю */
+  align-items: flex-start;
+  /* промежуток */
+  gap: var(--space-3);
+  /* отступы */
+  padding: var(--space-2) var(--space-3);
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* цвет текста обычный, не как у ссылки */
+  color: var(--color-text);
+  /* без подчёркивания */
+  text-decoration: none;
+  /* плавная смена фона */
+  transition: background-color var(--transition);
+/* конец правила */
+}
+
+/* наведение на уведомление */
+.notif-link:hover {
+  /* светлый фон */
+  background-color: var(--color-surface-2);
+  /* цвет текста не меняется */
+  color: var(--color-text);
+/* конец правила */
+}
+
+/* непрочитанное уведомление выделяем светлым индиго фоном */
+.notif-item.unread .notif-link {
+  /* светлый индиго */
+  background-color: var(--color-primary-soft);
+/* конец правила */
+}
+
+/* .notif-icon — иконка уведомления */
+.notif-icon {
+  /* 22px */
+  font-size: 1.375rem;
+  /* без лишней высоты */
+  line-height: 1.3;
+/* конец правила */
+}
+
+/* .notif-text — заголовок, подробности и время столбиком */
+.notif-text {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* занимает свободное место */
+  flex: 1;
+  /* текст может сжиматься */
+  min-width: 0;
+/* конец правила */
+}
+
+/* .notif-body — подробности: максимум 2 строки, дальше «…» */
+.notif-body {
+  /* display: -webkit-box + line-clamp — обрезать текст до 2 строк с многоточием */
+  display: -webkit-box;
+  /* ориентация строк — вертикальная (нужна для line-clamp) */
+  -webkit-box-orient: vertical;
+  /* максимум 2 строки (с приставкой -webkit- для старых браузеров) */
+  -webkit-line-clamp: 2;
+  /* стандартное свойство — тоже 2 строки */
+  line-clamp: 2;
+  /* лишнее прячем */
+  overflow: hidden;
+  /* длинные слова переносятся */
+  overflow-wrap: anywhere;
+/* конец правила */
+}
+
+/* .notif-time — «5 мин назад» */
+.notif-time {
+  /* 16px */
+  font-size: var(--font-size-sm);
+/* конец правила */
+}
+
+/* .notif-empty — «Уведомлений пока нет» в панели */
+.notif-empty {
+  /* по центру */
+  text-align: center;
+  /* отступы */
+  padding: var(--space-4);
+/* конец правила */
+}
+
+/* .container.narrow — узкий контейнер для списков (удобнее читать) */
+.container.narrow {
+  /* до 720px */
+  max-width: 45rem;
+/* конец правила */
+}
+
+/* .notif-toolbar — фильтр и кнопка «Прочитать все» в строку */
+.notif-toolbar {
+  /* флексбокс */
+  display: flex;
+  /* перенос на узком экране */
+  flex-wrap: wrap;
+  /* по краям */
+  justify-content: space-between;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* переключатель фильтра не растягивается */
+.notif-toolbar .segmented {
+  /* ширина по содержимому, но не меньше 260px */
+  min-width: 16.25rem;
+/* конец правила */
+}
+
+/* .notif-page — карточка со списком на странице уведомлений */
+.notif-page {
+  /* меньше отступы */
+  padding: var(--space-2);
+/* конец правила */
+}
+
+/* ------------------------------ ПАНЕЛЬ УЧИТЕЛЯ ----------------------------- */
+
+/* .stats-grid — плашки статистики в ряд */
+.stats-grid {
+  /* сетка */
+  display: grid;
+  /* колонки от 136px — на планшете все четыре плашки помещаются в ряд, на телефоне по две */
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  /* промежуток */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* .section-head — заголовок раздела и фильтр в одну строку */
+.section-head {
+  /* флексбокс */
+  display: flex;
+  /* перенос на узком экране */
+  flex-wrap: wrap;
+  /* по краям */
+  justify-content: space-between;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-3);
+  /* отступ снизу */
+  margin-bottom: var(--space-3);
+/* конец правила */
+}
+
+/* заголовок внутри строки — без нижнего отступа */
+.section-head h2 {
+  /* без отступа */
+  margin: 0;
+/* конец правила */
+}
+
+/* .bar-chart — простая диаграмма из горизонтальных полосок */
+.bar-chart {
+  /* без маркеров */
+  list-style: none;
+  /* без отступов */
+  margin: 0;
+  /* без отступа слева */
+  padding: 0;
+  /* сетка */
+  display: grid;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .bar-row — строка диаграммы: название, полоска, число */
+.bar-row {
+  /* сетка из трёх колонок: название 180px, полоска — всё оставшееся, число — по содержимому */
+  display: grid;
+  /* колонки */
+  grid-template-columns: 11.25rem 1fr auto;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* на телефоне название над полоской */
+@media (max-width: 520px) {
+  /* строка диаграммы */
+  .bar-row {
+    /* две колонки: полоска и число */
+    grid-template-columns: 1fr auto;
+  /* конец правила */
+  }
+
+  /* название занимает всю первую строку */
+  .bar-label {
+    /* grid-column: 1 / -1 — от первой до последней колонки */
+    grid-column: 1 / -1;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* .bar-track — «дорожка» полоски */
+.bar-track {
+  /* высота 14px */
+  height: 0.875rem;
+  /* скругление */
+  border-radius: var(--radius-full);
+  /* фон дорожки */
+  background-color: var(--color-surface-2);
+  /* заливка не вылезает */
+  overflow: hidden;
+/* конец правила */
+}
+
+/* .bar-fill — закрашенная часть (ширину задаёт скрипт через style) */
+.bar-fill {
+  /* блочный элемент */
+  display: block;
+  /* на всю высоту */
+  height: 100%;
+  /* скругление */
+  border-radius: inherit;
+  /* основной цвет */
+  background-color: var(--color-primary);
+  /* анимация роста полоски при появлении */
+  animation: bar-grow 0.6s ease both;
+  /* transform-origin: left — растёт от левого края */
+  transform-origin: left;
+/* конец правила */
+}
+
+/* @keyframes bar-grow — полоска вырастает слева направо */
+@keyframes bar-grow {
+  /* начало: сжата по горизонтали до нуля */
+  from {
+    /* scaleX(0) — ширина 0 */
+    transform: scaleX(0);
+  /* конец шага */
+  }
+  /* конец: обычная ширина */
+  to {
+    /* scaleX(1) — полная ширина */
+    transform: scaleX(1);
+  /* конец шага */
+  }
+/* конец @keyframes */
+}
+
+/* .bar-value — число справа */
+.bar-value {
+  /* ширина не меньше 32px — числа стоят ровно */
+  min-width: 2rem;
+  /* по правому краю */
+  text-align: right;
+/* конец правила */
+}
+
+/* .complaint-list — список жалоб */
+.complaint-list {
+  /* сетка */
+  display: grid;
+  /* промежуток */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* .complaint-card — карточка жалобы */
+.complaint-card {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* промежуток */
+  gap: var(--space-2);
+  /* красная полоска слева — жалоба требует внимания */
+  border-left: 5px solid var(--color-danger);
+/* конец правила */
+}
+
+/* закрытая жалоба — зелёная полоска и чуть бледнее */
+.complaint-card.closed {
+  /* зелёная полоска */
+  border-left-color: var(--color-success);
+  /* прозрачность 85% */
+  opacity: 0.85;
+/* конец правила */
+}
+
+/* .complaint-line — строка «кто / на кого / причина» */
+.complaint-line {
+  /* без отступа */
+  margin: 0;
+  /* длинные слова переносятся */
+  overflow-wrap: anywhere;
+/* конец правила */
+}
+
+/* .complaint-message — текст сообщения, на которое пожаловались */
+.complaint-message {
+  /* без внешних отступов */
+  margin: 0;
+  /* отступы внутри */
+  padding: var(--space-3);
+  /* полоска слева, как у цитаты */
+  border-left: 4px solid var(--color-border);
+  /* скругление справа */
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  /* фон */
+  background-color: var(--color-surface-2);
+  /* переводы строк сохраняются */
+  white-space: pre-wrap;
+  /* длинные слова переносятся */
+  overflow-wrap: anywhere;
+/* конец правила */
+}
+
+/* ------------------------------ ПАНЕЛЬ АДМИНИСТРАТОРА ---------------------- */
+
+/* .school-form — форма добавления школы: поля и кнопка в строку */
+.school-form {
+  /* флексбокс */
+  display: flex;
+  /* перенос */
+  flex-wrap: wrap;
+  /* кнопка на одной линии с полями */
+  align-items: flex-end;
+  /* промежуток */
+  gap: var(--space-3);
+  /* отступ снизу */
+  margin-bottom: var(--space-4);
+/* конец правила */
+}
+
+/* поля формы школы растягиваются */
+.school-form .field {
+  /* растёт, минимум 200px */
+  flex: 1 1 12.5rem;
+/* конец правила */
+}
+
+/* .table-wrap — обёртка таблицы: на узком экране таблица прокручивается вбок внутри неё, а страница — нет */
+.table-wrap {
+  /* прокрутка по горизонтали при необходимости */
+  overflow-x: auto;
+  /* position: relative — обёртка становится «точкой отсчёта» для элементов с position: absolute внутри (например, скрытой подписи .visually-hidden); без этого такие элементы выпадали из прокрутки и растягивали страницу на телефоне */
+  position: relative;
+/* конец правила */
+}
+
+/* .table — таблица */
+.table {
+  /* на всю ширину */
+  width: 100%;
+  /* border-collapse: collapse — соседние рамки ячеек сливаются в одну */
+  border-collapse: collapse;
+/* конец правила */
+}
+
+/* ячейки заголовка и данных */
+.table th,
+/* ячейки данных */
+.table td {
+  /* отступы */
+  padding: var(--space-2) var(--space-3);
+  /* текст слева */
+  text-align: left;
+  /* линия снизу */
+  border-bottom: 1px solid var(--color-border);
+  /* по центру по вертикали */
+  vertical-align: middle;
+/* конец правила */
+}
+
+/* заголовки столбцов */
+.table th {
+  /* серые */
+  color: var(--color-text-muted);
+  /* 16px */
+  font-size: var(--font-size-sm);
+  /* не переносятся */
+  white-space: nowrap;
+/* конец правила */
+}
+
+/* строка при наведении */
+.table tbody tr:hover {
+  /* светлый фон */
+  background-color: var(--color-surface-2);
+/* конец правила */
+}
+
+/* .table-actions — блок кнопок внутри ячейки (сама ячейка <td> остаётся ячейкой таблицы) */
+.table-actions {
+  /* флексбокс */
+  display: flex;
+  /* перенос */
+  flex-wrap: wrap;
+  /* кнопки справа */
+  justify-content: flex-end;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* поля в режиме редактирования школы — не шире ячейки */
+.table .input {
+  /* минимальная ширина 160px */
+  min-width: 10rem;
+/* конец правила */
+}
+
+/* .input-sm — маленькое поле (выбор школы в таблице) */
+.input-sm {
+  /* высота 36px */
+  min-height: 2.25rem;
+  /* меньше отступы */
+  padding: 0.25rem 0.5rem;
+  /* ширина по содержимому */
+  width: auto;
+/* конец правила */
+}
+
+/* ------------------------------ ВОПРОСЫ И ОТВЕТЫ --------------------------- */
+
+/* .page-title-row — заголовок страницы и кнопка в одну строку */
+.page-title-row {
+  /* флексбокс */
+  display: flex;
+  /* перенос на телефоне */
+  flex-wrap: wrap;
+  /* по краям */
+  justify-content: space-between;
+  /* по нижнему краю */
+  align-items: flex-end;
+  /* промежуток */
+  gap: var(--space-4);
+/* конец правила */
+}
+
+/* текст заголовка занимает свободное место, но не уже 260px */
+.page-title-row > div {
+  /* растягивается */
+  flex: 1 1 16.25rem;
+/* конец правила */
+}
+
+/* .ask-card — форма нового вопроса: цветная рамка сверху, чтобы её было заметно */
+.ask-card {
+  /* рамка сверху основного цвета */
+  border-top: 4px solid var(--color-primary);
+  /* анимация появления */
+  animation: fade-up 0.25s ease both;
+/* конец правила */
+}
+
+/* .char-counter — счётчик символов «12 / 150» справа от подписи */
+.char-counter {
+  /* серый */
+  color: var(--color-text-muted);
+  /* обычная толщина (подпись жирная) */
+  font-weight: 400;
+  /* 16px */
+  font-size: var(--font-size-sm);
+  /* float: right — прижать вправо внутри строки подписи */
+  float: right;
+/* конец правила */
+}
+
+/* .photo-picker — выбор фото: кнопка, подсказка, превью */
+.photo-picker {
+  /* флексбокс */
+  display: flex;
+  /* перенос */
+  flex-wrap: wrap;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* .photo-button — label-кнопка; position: relative — «точка отсчёта» для скрытого поля внутри (иначе оно выпало бы наружу) */
+.photo-button {
+  /* точка отсчёта */
+  position: relative;
+  /* курсор-рука */
+  cursor: pointer;
+/* конец правила */
+}
+
+/* подсветка кнопки, когда скрытое поле выбрано клавишей Tab */
+.photo-button:has(.photo-input:focus-visible) {
+  /* рамка фокуса */
+  box-shadow: var(--focus-ring);
+/* конец правила */
+}
+
+/* .photo-preview — превью выбранного фото на всю ширину строки */
+.photo-preview {
+  /* на всю ширину */
+  flex-basis: 100%;
+  /* флексбокс */
+  display: flex;
+  /* по нижнему краю */
+  align-items: flex-end;
+  /* промежуток */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* картинка превью */
+.photo-preview img {
+  /* высота 120px */
+  height: 7.5rem;
+  /* ширина по пропорциям, но не больше 200px */
+  max-width: 12.5rem;
+  /* object-fit: cover — заполнить без искажений */
+  object-fit: cover;
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* рамка */
+  border: 1px solid var(--color-border);
+/* конец правила */
+}
+
+/* ошибка фото на всю ширину */
+.photo-picker .photo-error {
+  /* на всю ширину */
+  flex-basis: 100%;
+  /* без отступа */
+  margin: 0;
+/* конец правила */
+}
+
+/* .question-list — лента вопросов */
+.question-list {
+  /* сетка */
+  display: grid;
+  /* промежуток */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* .question-card — карточка-ссылка вопроса */
+.question-card {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* промежуток */
+  gap: var(--space-2);
+  /* цвет текста обычный (это ссылка) */
+  color: var(--color-text);
+  /* без подчёркивания */
+  text-decoration: none;
+/* конец правила */
+}
+
+/* наведение на карточку-ссылку — цвет текста не меняется */
+.question-card:hover {
+  /* обычный цвет */
+  color: var(--color-text);
+/* конец правила */
+}
+
+/* .question-top — предмет и статус */
+.question-top {
+  /* флексбокс */
+  display: flex;
+  /* перенос */
+  flex-wrap: wrap;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .question-title — заголовок вопроса */
+.question-title {
+  /* без отступа */
+  margin: 0;
+  /* длинные слова переносятся */
+  overflow-wrap: anywhere;
+/* конец правила */
+}
+
+/* .question-excerpt — отрывок подробностей: максимум 2 строки */
+.question-excerpt {
+  /* без отступа */
+  margin: 0;
+  /* серый */
+  color: var(--color-text-muted);
+  /* обрезка до 2 строк: как в уведомлениях */
+  display: -webkit-box;
+  /* ориентация для line-clamp */
+  -webkit-box-orient: vertical;
+  /* 2 строки */
+  -webkit-line-clamp: 2;
+  /* стандартное свойство */
+  line-clamp: 2;
+  /* лишнее прячем */
+  overflow: hidden;
+/* конец правила */
+}
+
+/* .question-meta — автор, время, значки */
+.question-meta {
+  /* флексбокс */
+  display: flex;
+  /* перенос */
+  flex-wrap: wrap;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-2);
+  /* серый */
+  color: var(--color-text-muted);
+  /* 16px */
+  font-size: var(--font-size-sm);
+/* конец правила */
+}
+
+/* .question-full — карточка вопроса на его странице */
+.question-full {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* промежуток */
+  gap: var(--space-3);
+  /* полоска сверху основного цвета */
+  border-top: 4px solid var(--color-primary);
+/* конец правила */
+}
+
+/* .question-heading — заголовок вопроса на его странице */
+.question-heading {
+  /* 28px */
+  font-size: 1.75rem;
+  /* без отступа */
+  margin: 0;
+  /* длинные слова переносятся */
+  overflow-wrap: anywhere;
+/* конец правила */
+}
+
+/* .qa-text — текст вопроса или ответа: сохраняем переводы строк */
+.qa-text {
+  /* без отступа */
+  margin: 0;
+  /* pre-wrap — переводы строк из текста видны */
+  white-space: pre-wrap;
+  /* длинные слова переносятся */
+  overflow-wrap: anywhere;
+/* конец правила */
+}
+
+/* .qa-photo — фото к вопросу или ответу */
+.qa-photo {
+  /* блок по ширине содержимого */
+  display: inline-block;
+  /* не шире карточки */
+  max-width: 100%;
+/* конец правила */
+}
+
+/* картинка фото */
+.qa-photo img {
+  /* не выше 360px */
+  max-height: 22.5rem;
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* рамка */
+  border: 1px solid var(--color-border);
+  /* курсор «увеличить» — по клику откроется полностью */
+  cursor: zoom-in;
+/* конец правила */
+}
+
+/* .qa-footer — автор и кнопка удаления в строку */
+.qa-footer {
+  /* флексбокс */
+  display: flex;
+  /* перенос */
+  flex-wrap: wrap;
+  /* по краям */
+  justify-content: space-between;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .qa-author — аватар, имя, класс, время */
+.qa-author {
+  /* флексбокс */
+  display: flex;
+  /* перенос */
+  flex-wrap: wrap;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .answer-list — список ответов */
+.answer-list {
+  /* сетка */
+  display: grid;
+  /* промежуток */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* .answer-card — карточка ответа: цветная полоска слева по статусу */
+.answer-card {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* промежуток */
+  gap: var(--space-2);
+  /* полоска слева; цвет задают классы status-… ниже */
+  border-left: 5px solid var(--color-warning);
+/* конец правила */
+}
+
+/* одобренный ответ — зелёная полоска и лёгкий зелёный фон */
+.answer-card.status-approved {
+  /* зелёная полоска */
+  border-left-color: var(--color-success);
+  /* градиент: слева светло-зелёный, дальше фон карточки */
+  background-image: linear-gradient(90deg, var(--color-success-soft), var(--color-surface) 40%);
+/* конец правила */
+}
+
+/* удалённый ответ — красная полоска, бледнее */
+.answer-card.status-removed {
+  /* красная полоска */
+  border-left-color: var(--color-danger);
+  /* прозрачность */
+  opacity: 0.9;
+/* конец правила */
+}
+
+/* .answer-head — автор слева, статус справа */
+.answer-head {
+  /* флексбокс */
+  display: flex;
+  /* перенос */
+  flex-wrap: wrap;
+  /* по краям */
+  justify-content: space-between;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* .admin-comment — комментарий администратора */
+.admin-comment {
+  /* без отступа */
+  margin: 0;
+  /* отступы */
+  padding: var(--space-2) var(--space-3);
+  /* скругление */
+  border-radius: var(--radius-sm);
+  /* светло-зелёный фон (одобрение) */
+  background-color: var(--color-success-soft);
+  /* длинные слова переносятся */
+  overflow-wrap: anywhere;
+/* конец правила */
+}
+
+/* комментарий при удалении — светло-красный */
+.admin-comment.removed {
+  /* светло-красный фон */
+  background-color: var(--color-danger-soft);
+/* конец правила */
+}
+
+/* textarea.answer-input — поле ответа повыше */
+textarea.answer-input {
+  /* 160px */
+  min-height: 10rem;
+/* конец правила */
+}
+
+/* ------------------------------ МОДЕРАЦИЯ ---------------------------------- */
+
+/* .mod-tabs — вкладки модерации: ровная сетка (4 в ряд на компьютере, 2×2 на телефоне) */
+.mod-tabs {
+  /* display: grid — сетка вместо ряда */
+  display: grid;
+  /* repeat(2, 1fr) — две равные колонки (2×2 на телефоне и планшете) */
+  grid-template-columns: repeat(2, 1fr);
+  /* отступ снизу */
+  margin-bottom: var(--space-4);
+/* конец правила */
+}
+
+/* на широком экране (от 1024px) — все 4 вкладки в один ряд */
+@media (min-width: 64rem) {
+  /* сетка вкладок */
+  .mod-tabs {
+    /* четыре равные колонки */
+    grid-template-columns: repeat(4, 1fr);
+  /* конец правила */
+  }
+/* конец медиазапроса */
+}
+
+/* текст вкладки не разрывается на строки */
+.mod-tabs span {
+  /* white-space: nowrap — всё в одну строку */
+  white-space: nowrap;
+/* конец правила */
+}
+
+/* .mod-list — список карточек модерации */
+.mod-list {
+  /* сетка */
+  display: grid;
+  /* промежуток */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* .mod-card — карточка в модерации: чуть плотнее обычной */
+.mod-card {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* промежуток */
+  gap: var(--space-2);
+  /* меньше внутренние отступы */
+  padding: var(--space-4);
+/* конец правила */
+}
+
+/* .mod-context — школа, предмет и вопрос над ответом */
+.mod-context {
+  /* флексбокс */
+  display: flex;
+  /* перенос */
+  flex-wrap: wrap;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-2);
+  /* жирный (ссылка на вопрос) */
+  font-weight: 700;
+/* конец правила */
+}
+
+/* .mod-question — текст вопроса кратко */
+.mod-question {
+  /* без отступа */
+  margin: 0;
+  /* длинные слова переносятся */
+  overflow-wrap: anywhere;
+/* конец правила */
+}
+
+/* mark.bad-word — подсвеченное грубое слово */
+mark.bad-word {
+  /* светло-красный фон */
+  background-color: var(--color-danger-soft);
+  /* красный текст */
+  color: var(--color-danger);
+  /* жирный */
+  font-weight: 800;
+  /* скругление */
+  border-radius: 4px;
+  /* небольшие отступы */
+  padding: 0 0.125rem;
+/* конец правила */
+}
+
+/* .bad-words-flag — плашка «Грубые слова: …» */
+.bad-words-flag {
+  /* ширина по содержимому */
+  align-self: flex-start;
+  /* без отступа */
+  margin: 0;
+  /* текст может переноситься */
+  white-space: normal;
+/* конец правила */
+}
+
+/* ------------------------------ НИЖНЕЕ МЕНЮ: 6 ПУНКТОВ ---------------------- */
+
+/* на телефоне в нижнем меню до 6 пунктов — подписи не должны вылезать */
+@media (max-width: 767px) {
+  /* кнопка нижнего меню */
+  .bottom-nav-link {
+    /* min-width: 0 — кнопка может быть уже своего текста */
+    min-width: 0;
+    /* небольшие отступы по бокам */
+    padding-inline: 2px;
+  /* конец правила */
+  }
+
+  /* .bottom-nav-label — подпись под иконкой */
+  .bottom-nav-label {
+    /* не шире кнопки */
+    max-width: 100%;
+    /* длинная подпись обрезается... */
+    overflow: hidden;
+    /* ...многоточием */
+    text-overflow: ellipsis;
+    /* в одну строку */
+    white-space: nowrap;
+    /* подпись 11px — исключение: в меню крупная иконка над подписью */
+    font-size: 0.6875rem;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* .q-mode — переключатель «Все / Без ответа / Мои» на странице вопросов */
+.q-mode {
+  /* ширина не меньше, чем нужно тексту; на узком экране — на всю строку */
+  flex: 1 1 16rem;
+/* конец правила */
+}
+
+/* .q-mode span — кнопка переключателя */
+.q-mode span {
+  /* white-space: nowrap — «Без ответа» не разрывается на две строки */
+  white-space: nowrap;
+  /* отступы по бокам побольше — кнопки не слипаются */
+  padding-inline: var(--space-3);
+/* конец правила */
+}
+
+
+/* ================= ПОДТВЕРЖДЁННЫЙ УРОВЕНЬ, СЕРИИ, МИНИ-ТЕСТ ================= */
+
+/* .verified-mark — зелёная отметка «✔ подтверждено тестом» */
+.verified-mark {
+  /* в строку с текстом */
+  display: inline-flex;
+  /* по центру по вертикали */
+  align-items: center;
+  /* небольшой промежуток слева от предмета */
+  margin-left: var(--space-1);
+  /* отступы внутри */
+  padding: 0.125rem 0.5rem;
+  /* круглые края */
+  border-radius: var(--radius-full);
+  /* светло-зелёный фон */
+  background-color: var(--color-success-soft);
+  /* зелёный текст */
+  color: var(--color-success);
+  /* мелкий шрифт */
+  font-size: 0.8125rem;
+  /* жирный */
+  font-weight: 800;
+  /* не переносить внутри */
+  white-space: nowrap;
+/* конец правила */
+}
+
+/* --------------------------------- СЕРИЯ ----------------------------------- */
+
+/* .streak-main — огонёк, число недель и рекорд в одну строку */
+.streak-main {
+  /* флексбокс */
+  display: flex;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-4);
+/* конец правила */
+}
+
+/* .streak-flame — большой огонёк; без серии он серый */
+.streak-flame {
+  /* крупный эмодзи 48px */
+  font-size: 3rem;
+  /* высота строки как у шрифта */
+  line-height: 1;
+  /* grayscale — без цвета; opacity — полупрозрачный */
+  filter: grayscale(1);
+  /* полупрозрачный */
+  opacity: 0.45;
+  /* плавная смена */
+  transition: filter var(--transition), opacity var(--transition);
+/* конец правила */
+}
+
+/* серия есть — огонёк цветной и «дышит» */
+.streak-main.is-active .streak-flame {
+  /* обычный цвет */
+  filter: none;
+  /* непрозрачный */
+  opacity: 1;
+  /* animation — анимация flicker, 2 секунды, бесконечно */
+  animation: flicker 2s ease-in-out infinite;
+/* конец правила */
+}
+
+/* @keyframes — кадры анимации «пламя чуть увеличивается и уменьшается» */
+@keyframes flicker {
+  /* начало и конец — обычный размер */
+  0%, 100% { transform: scale(1) rotate(-2deg); }
+  /* середина — чуть больше */
+  50% { transform: scale(1.08) rotate(2deg); }
+/* конец @keyframes */
+}
+
+/* пользователь просил меньше движения (настройка системы) — без анимации */
+@media (prefers-reduced-motion: reduce) {
+  /* огонёк */
+  .streak-main.is-active .streak-flame {
+    /* выключаем анимацию */
+    animation: none;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* .streak-numbers — число и подпись столбиком */
+.streak-numbers {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* занимает свободное место */
+  flex: 1;
+/* конец правила */
+}
+
+/* .streak-number — большое число недель */
+.streak-number {
+  /* 40px */
+  font-size: 2.5rem;
+  /* высота строки */
+  line-height: 1;
+  /* очень жирный */
+  font-weight: 800;
+  /* оранжевый, как огонь */
+  color: var(--color-accent);
+/* конец правила */
+}
+
+/* .streak-best — «Рекорд» справа */
+.streak-best {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* по центру */
+  align-items: center;
+  /* отступы */
+  padding: var(--space-2) var(--space-3);
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* фон */
+  background-color: var(--color-surface-2);
+/* конец правила */
+}
+
+/* число рекорда */
+.streak-best strong {
+  /* 24px */
+  font-size: 1.5rem;
+/* конец правила */
+}
+
+/* .streak-weeks — 8 кружков недель в ряд */
+.streak-weeks {
+  /* сетка */
+  display: grid;
+  /* 8 равных колонок */
+  grid-template-columns: repeat(8, 1fr);
+  /* промежуток */
+  gap: var(--space-2);
+  /* без стандартных отступов списка */
+  padding: 0;
+  /* отступ сверху */
+  margin: var(--space-4) 0 0;
+  /* без номеров */
+  list-style: none;
+/* конец правила */
+}
+
+/* .streak-week — одна неделя: кружок и подпись */
+.streak-week {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* по центру */
+  align-items: center;
+  /* промежуток */
+  gap: 0.25rem;
+/* конец правила */
+}
+
+/* .streak-dot — кружок недели */
+.streak-dot {
+  /* флексбокс для центрирования */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* центр по горизонтали */
+  justify-content: center;
+  /* ширина: не больше 40px, но сжимается на узком экране */
+  width: min(2.5rem, 100%);
+  /* квадрат (круг) */
+  aspect-ratio: 1;
+  /* круглый */
+  border-radius: var(--radius-full);
+  /* серый фон */
+  background-color: var(--color-surface-2);
+  /* серый текст (точка) */
+  color: var(--color-text-muted);
+  /* размер эмодзи */
+  font-size: 1.125rem;
+/* конец правила */
+}
+
+/* засчитанная неделя — тёплый фон */
+.streak-week.done .streak-dot {
+  /* светло-оранжевый */
+  background-color: var(--color-accent-soft);
+/* конец правила */
+}
+
+/* текущая неделя — рамка */
+.streak-week.current .streak-dot {
+  /* пунктирная рамка основного цвета */
+  outline: 2px dashed var(--color-primary);
+  /* рамка чуть снаружи */
+  outline-offset: 2px;
+/* конец правила */
+}
+
+/* подпись недели */
+.streak-week-label {
+  /* мелкий */
+  font-size: 0.75rem;
+  /* серый */
+  color: var(--color-text-muted);
+  /* не переносить */
+  white-space: nowrap;
+/* конец правила */
+}
+
+/* .streak-hint — подсказка под серией */
+.streak-hint {
+  /* отступ сверху */
+  margin: var(--space-4) 0 0;
+  /* отступы внутри */
+  padding: var(--space-3);
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* фон */
+  background-color: var(--color-surface-2);
+  /* полужирный */
+  font-weight: 600;
+/* конец правила */
+}
+
+/* серия под угрозой — предупреждающий цвет */
+.streak-hint.is-risk {
+  /* светло-жёлтый */
+  background-color: var(--color-warning-soft);
+/* конец правила */
+}
+
+/* на телефоне подписи недель прячем (кроме «эта») — не помещаются */
+@media (max-width: 520px) {
+  /* подписи прошлых недель */
+  .streak-week:not(.current) .streak-week-label {
+    /* скрываем, но место оставляем, чтобы кружки стояли ровно */
+    visibility: hidden;
+  /* конец правила */
+  }
+  /* число недель поменьше */
+  .streak-number {
+    /* 32px */
+    font-size: 2rem;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* .streak-chip — значок «🔥 5» в шапке сайта */
+.streak-chip {
+  /* в строку */
+  display: inline-flex;
+  /* по центру */
+  align-items: center;
+  /* высота как у кнопок шапки */
+  height: 2.25rem;
+  /* отступы */
+  padding: 0 0.75rem;
+  /* круглые края */
+  border-radius: var(--radius-full);
+  /* светло-оранжевый фон */
+  background-color: var(--color-accent-soft);
+  /* текст */
+  color: var(--color-text);
+  /* жирный */
+  font-weight: 800;
+  /* без подчёркивания */
+  text-decoration: none;
+  /* не переносить */
+  white-space: nowrap;
+/* конец правила */
+}
+
+/* наведение */
+.streak-chip:hover {
+  /* чуть темнее */
+  filter: brightness(0.95);
+/* конец правила */
+}
+
+/* серия под угрозой — значок мягко пульсирует */
+.streak-chip.at-risk {
+  /* анимация pulse, 1,6 секунды, бесконечно */
+  animation: pulse-chip 1.6s ease-in-out infinite;
+/* конец правила */
+}
+
+/* кадры пульсации: тень появляется и исчезает */
+@keyframes pulse-chip {
+  /* начало и конец — без тени */
+  0%, 100% { box-shadow: 0 0 0 0 transparent; }
+  /* середина — оранжевое свечение */
+  50% { box-shadow: 0 0 0 6px var(--color-accent-soft); }
+/* конец @keyframes */
+}
+
+/* ------------------------- ПОДТВЕРДИ СВОИ ЗНАНИЯ --------------------------- */
+
+/* .verify-list — список предметов для теста */
+.verify-list {
+  /* сетка */
+  display: grid;
+  /* промежуток */
+  gap: var(--space-2);
+  /* без стандартных отступов */
+  padding: 0;
+  /* отступ сверху */
+  margin: var(--space-3) 0 0;
+  /* без точек */
+  list-style: none;
+/* конец правила */
+}
+
+/* .verify-item — строка: предмет слева, кнопка или отметка справа */
+.verify-item {
+  /* флексбокс */
+  display: flex;
+  /* по центру по вертикали */
+  align-items: center;
+  /* по краям */
+  justify-content: space-between;
+  /* перенос на узком экране */
+  flex-wrap: wrap;
+  /* промежуток */
+  gap: var(--space-2);
+  /* отступы */
+  padding: var(--space-2) var(--space-3);
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* фон */
+  background-color: var(--color-surface-2);
+/* конец правила */
+}
+
+/* подтверждённый предмет — зелёная полоска слева */
+.verify-item.verified {
+  /* полоска */
+  box-shadow: inset 4px 0 0 var(--color-success);
+/* конец правила */
+}
+
+/* ------------------------------- МИНИ-ТЕСТ --------------------------------- */
+
+/* .quiz-page — узкая колонка по центру */
+.quiz-page {
+  /* ширина не больше 720px */
+  max-width: 45rem;
+/* конец правила */
+}
+
+/* .quiz-hero — шапка теста: иконка и название */
+.quiz-hero {
+  /* флексбокс */
+  display: flex;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-4);
+  /* отступ снизу */
+  margin-bottom: var(--space-4);
+/* конец правила */
+}
+
+/* заголовок теста */
+.quiz-hero h1 {
+  /* 28px */
+  font-size: var(--font-size-2xl);
+  /* небольшой отступ снизу */
+  margin: 0 0 var(--space-2);
+/* конец правила */
+}
+
+/* .quiz-subject-icon — большая иконка предмета в кружке */
+.quiz-subject-icon {
+  /* флексбокс для центрирования */
+  display: flex;
+  /* центр */
+  align-items: center;
+  /* центр */
+  justify-content: center;
+  /* не сжимается */
+  flex-shrink: 0;
+  /* 72×72 */
+  width: 4.5rem;
+  /* высота */
+  height: 4.5rem;
+  /* круг */
+  border-radius: var(--radius-full);
+  /* светлый фон основного цвета */
+  background-color: var(--color-primary-soft);
+  /* эмодзи 36px */
+  font-size: 2.25rem;
+/* конец правила */
+}
+
+/* .quiz-intro-title — «Готов показать…» */
+.quiz-intro-title {
+  /* 22px */
+  font-size: var(--font-size-xl);
+/* конец правила */
+}
+
+/* .quiz-intro-list — правила теста */
+.quiz-intro-list {
+  /* сетка */
+  display: grid;
+  /* промежуток */
+  gap: var(--space-2);
+  /* отступ слева для точек */
+  padding-left: 1.25rem;
+  /* отступы сверху и снизу */
+  margin: var(--space-3) 0 var(--space-5);
+/* конец правила */
+}
+
+/* .quiz-top — «Вопрос 2 из 5» и время */
+.quiz-top {
+  /* флексбокс */
+  display: flex;
+  /* по краям */
+  justify-content: space-between;
+  /* по центру */
+  align-items: center;
+  /* отступ снизу */
+  margin-bottom: var(--space-2);
+  /* полужирный */
+  font-weight: 700;
+/* конец правила */
+}
+
+/* .quiz-timer — оставшееся время */
+.quiz-timer {
+  /* цифры одинаковой ширины — время не «прыгает» */
+  font-variant-numeric: tabular-nums;
+  /* серый */
+  color: var(--color-text-muted);
+/* конец правила */
+}
+
+/* меньше минуты — красным */
+.quiz-timer.is-urgent {
+  /* красный */
+  color: var(--color-danger);
+/* конец правила */
+}
+
+/* .quiz-question — текст вопроса */
+.quiz-question {
+  /* 22px */
+  font-size: var(--font-size-xl);
+  /* отступы */
+  margin: var(--space-5) 0 var(--space-4);
+  /* длинные слова переносятся */
+  overflow-wrap: anywhere;
+/* конец правила */
+}
+
+/* .quiz-options — варианты ответа */
+.quiz-options {
+  /* сетка */
+  display: grid;
+  /* промежуток */
+  gap: var(--space-2);
+/* конец правила */
+}
+
+/* на широком экране — две колонки */
+@media (min-width: 640px) {
+  /* варианты */
+  .quiz-options {
+    /* две равные колонки */
+    grid-template-columns: 1fr 1fr;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* .quiz-option — кнопка варианта ответа */
+.quiz-option {
+  /* флексбокс */
+  display: flex;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-3);
+  /* на всю ширину колонки */
+  width: 100%;
+  /* отступы */
+  padding: var(--space-3) var(--space-4);
+  /* рамка */
+  border: 2px solid var(--color-border);
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* фон */
+  background-color: var(--color-surface);
+  /* цвет текста */
+  color: var(--color-text);
+  /* шрифт сайта */
+  font: inherit;
+  /* текст слева */
+  text-align: left;
+  /* курсор-рука */
+  cursor: pointer;
+  /* плавная смена */
+  transition: border-color var(--transition), background-color var(--transition), transform var(--transition);
+/* конец правила */
+}
+
+/* наведение */
+.quiz-option:hover {
+  /* рамка основного цвета */
+  border-color: var(--color-primary);
+  /* чуть приподнимаем */
+  transform: translateY(-1px);
+/* конец правила */
+}
+
+/* выбранный вариант */
+.quiz-option.selected {
+  /* рамка основного цвета */
+  border-color: var(--color-primary);
+  /* светлый фон */
+  background-color: var(--color-primary-soft);
+/* конец правила */
+}
+
+/* .quiz-letter — буква варианта в кружке */
+.quiz-letter {
+  /* флексбокс для центрирования */
+  display: flex;
+  /* центр */
+  align-items: center;
+  /* центр */
+  justify-content: center;
+  /* не сжимается */
+  flex-shrink: 0;
+  /* 32×32 */
+  width: 2rem;
+  /* высота */
+  height: 2rem;
+  /* круг */
+  border-radius: var(--radius-full);
+  /* фон */
+  background-color: var(--color-surface-2);
+  /* жирный */
+  font-weight: 800;
+/* конец правила */
+}
+
+/* буква выбранного варианта — закрашена */
+.quiz-option.selected .quiz-letter {
+  /* основной цвет */
+  background-color: var(--color-primary);
+  /* белый текст */
+  color: var(--color-on-primary);
+/* конец правила */
+}
+
+/* .quiz-keys — подсказка про клавиши */
+.quiz-keys {
+  /* мелкий */
+  font-size: var(--font-size-sm);
+  /* отступ сверху */
+  margin: var(--space-3) 0 0;
+/* конец правила */
+}
+
+/* на сенсорных экранах (без мыши) подсказка про клавиши не нужна */
+@media (hover: none) {
+  /* подсказка */
+  .quiz-keys {
+    /* прячем */
+    display: none;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* .quiz-nav — «Назад» слева, «Дальше» справа */
+.quiz-nav {
+  /* флексбокс */
+  display: flex;
+  /* по краям */
+  justify-content: space-between;
+  /* отступ сверху */
+  margin-top: var(--space-5);
+/* конец правила */
+}
+
+/* .quiz-result — блок итогов по центру */
+.quiz-result {
+  /* текст по центру */
+  text-align: center;
+/* конец правила */
+}
+
+/* .quiz-score — круг с результатом; --score — процент верных (задаёт JS) */
+.quiz-score {
+  /* флексбокс для центрирования */
+  display: flex;
+  /* центр */
+  align-items: center;
+  /* центр */
+  justify-content: center;
+  /* 140×140 */
+  width: 8.75rem;
+  /* высота */
+  height: 8.75rem;
+  /* по центру и отступ снизу */
+  margin: 0 auto var(--space-4);
+  /* круг */
+  border-radius: var(--radius-full);
+  /* conic-gradient — «круговая диаграмма»: цветная часть = доля верных, дальше серая */
+  background: conic-gradient(var(--ring-color) calc(var(--score) * 1%), var(--color-surface-2) 0);
+  /* цвет кольца по умолчанию */
+  --ring-color: var(--color-warning);
+/* конец правила */
+}
+
+/* сдал — зелёное кольцо */
+.quiz-result.passed .quiz-score {
+  /* зелёный */
+  --ring-color: var(--color-success);
+/* конец правила */
+}
+
+/* белый круг внутри — получается кольцо */
+.quiz-score span {
+  /* флексбокс */
+  display: flex;
+  /* центр */
+  align-items: center;
+  /* центр */
+  justify-content: center;
+  /* внутренний круг 108×108 */
+  width: 6.75rem;
+  /* высота */
+  height: 6.75rem;
+  /* круг */
+  border-radius: var(--radius-full);
+  /* фон карточки */
+  background-color: var(--color-surface);
+  /* 20px */
+  font-size: 1.25rem;
+  /* серый «/5» */
+  color: var(--color-text-muted);
+/* конец правила */
+}
+
+/* число верных — крупно */
+.quiz-score strong {
+  /* 40px */
+  font-size: 2.5rem;
+  /* цвет текста */
+  color: var(--color-text);
+/* конец правила */
+}
+
+/* кнопки под результатом */
+.quiz-result-actions {
+  /* по центру */
+  justify-content: center;
+  /* отступ сверху */
+  margin-top: var(--space-4);
+/* конец правила */
+}
+
+/* заголовок разбора */
+.quiz-review-title {
+  /* отступ сверху */
+  margin-top: var(--space-6);
+/* конец правила */
+}
+
+/* .quiz-review — список разбора */
+.quiz-review {
+  /* сетка */
+  display: grid;
+  /* промежуток */
+  gap: var(--space-3);
+  /* без стандартных отступов */
+  padding: 0;
+  /* без номеров (номер пишем сами) */
+  list-style: none;
+/* конец правила */
+}
+
+/* .quiz-review-item — один вопрос разбора */
+.quiz-review-item {
+  /* отступы */
+  padding: var(--space-3) var(--space-4);
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* фон */
+  background-color: var(--color-surface-2);
+  /* цветная полоска слева */
+  border-left: 4px solid var(--color-success);
+/* конец правила */
+}
+
+/* неверный ответ — красная полоска */
+.quiz-review-item.wrong {
+  /* красный */
+  border-left-color: var(--color-danger);
+/* конец правила */
+}
+
+/* вопрос в разборе */
+.quiz-review-question {
+  /* жирный */
+  font-weight: 700;
+  /* отступ снизу */
+  margin: 0 0 var(--space-2);
+/* конец правила */
+}
+
+/* строки «Твой ответ» / «Правильно» */
+.quiz-review-line {
+  /* небольшой отступ */
+  margin: 0 0 0.25rem;
+/* конец правила */
+}
+
+/* пояснение */
+.quiz-review-explain {
+  /* отступ сверху */
+  margin: var(--space-2) 0 0;
+  /* мелкий */
+  font-size: var(--font-size-sm);
+  /* серый */
+  color: var(--color-text-muted);
+/* конец правила */
+}
+
+
+/* ================= ЧАТ: ДОСКА, ТАЙМЕР, ГОЛОСОВЫЕ СООБЩЕНИЯ ================= */
+
+/* .chat-tools — кнопки «Доска» и «Таймер» в шапке чата */
+.chat-tools {
+  /* флексбокс */
+  display: flex;
+  /* промежуток */
+  gap: 0.25rem;
+  /* margin-left: auto — прижимаем к правому краю (перед меню ⋯) */
+  margin-left: auto;
+/* конец правила */
+}
+
+/* .chat-tool — одна кнопка инструмента */
+.chat-tool {
+  /* для точки «есть новое» */
+  position: relative;
+  /* промежуток между иконкой и подписью */
+  gap: 0.375rem;
+/* конец правила */
+}
+
+/* на узком экране подписи прячем — остаются иконки */
+@media (max-width: 640px) {
+  /* подпись */
+  .chat-tool-label {
+    /* прячем */
+    display: none;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* has-news — оранжевая точка: на доске что-то нарисовали, пока она закрыта */
+.chat-tool.has-news::after {
+  /* ::after — «псевдоэлемент» после содержимого; пустой текст */
+  content: '';
+  /* поверх кнопки */
+  position: absolute;
+  /* сверху */
+  top: 4px;
+  /* справа */
+  right: 4px;
+  /* 10×10 */
+  width: 0.625rem;
+  /* высота */
+  height: 0.625rem;
+  /* круг */
+  border-radius: var(--radius-full);
+  /* оранжевый */
+  background-color: var(--color-accent);
+  /* белая обводка */
+  box-shadow: 0 0 0 2px var(--color-surface);
+/* конец правила */
+}
+
+/* ------------------------------- ТАЙМЕР ------------------------------------ */
+
+/* .timer-panel — панель настройки таймера */
+.timer-panel {
+  /* отступы */
+  padding: var(--space-4);
+/* конец правила */
+}
+
+/* заголовок панели */
+.timer-panel-title {
+  /* 20px */
+  font-size: var(--font-size-lg);
+  /* отступ снизу */
+  margin: 0 0 var(--space-1);
+/* конец правила */
+}
+
+/* подпись группы («Длина занятия») */
+.timer-label {
+  /* жирный */
+  font-weight: 700;
+  /* отступы */
+  margin: var(--space-3) 0 var(--space-2);
+/* конец правила */
+}
+
+/* поле «или своё: ___ мин» */
+.timer-custom {
+  /* флексбокс */
+  display: flex;
+  /* по центру */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-2);
+  /* отступ сверху */
+  margin-top: var(--space-2);
+  /* серый текст подписи */
+  color: var(--color-text-muted);
+/* конец правила */
+}
+
+/* само числовое поле — узкое */
+.timer-custom .input {
+  /* 110px */
+  width: 6.875rem;
+/* конец правила */
+}
+
+/* кнопки внизу панели */
+.timer-panel-actions {
+  /* флексбокс */
+  display: flex;
+  /* справа */
+  justify-content: flex-end;
+  /* промежуток */
+  gap: var(--space-2);
+  /* отступ сверху */
+  margin-top: var(--space-4);
+/* конец правила */
+}
+
+/* .timer-bar — полоска идущего таймера */
+.timer-bar {
+  /* флексбокс */
+  display: flex;
+  /* по центру по вертикали */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-3);
+  /* отступы */
+  padding: var(--space-2) var(--space-4);
+/* конец правила */
+}
+
+/* [hidden] должен побеждать display: flex */
+.timer-bar[hidden] {
+  /* прячем */
+  display: none;
+/* конец правила */
+}
+
+/* .timer-ring — кольцо с временем внутри */
+.timer-ring {
+  /* относительно него располагаем время */
+  position: relative;
+  /* не сжимается */
+  flex-shrink: 0;
+  /* 60×60 */
+  width: 3.75rem;
+  /* высота */
+  height: 3.75rem;
+  /* цвет дуги для занятия */
+  --ring: var(--color-primary);
+/* конец правила */
+}
+
+/* перерыв — зелёная дуга */
+.timer-ring.timer-break {
+  /* зелёный */
+  --ring: var(--color-success);
+/* конец правила */
+}
+
+/* время вышло — оранжевая */
+.timer-ring.timer-done {
+  /* оранжевый */
+  --ring: var(--color-accent);
+/* конец правила */
+}
+
+/* на паузе — серая */
+.timer-ring.is-paused {
+  /* серый */
+  --ring: var(--color-text-muted);
+/* конец правила */
+}
+
+/* svg — на весь размер кольца */
+.timer-ring svg {
+  /* ширина */
+  width: 100%;
+  /* высота */
+  height: 100%;
+/* конец правила */
+}
+
+/* подложка кольца */
+.timer-ring-bg {
+  /* без заливки */
+  fill: none;
+  /* серая линия */
+  stroke: var(--color-surface-2);
+  /* толщина */
+  stroke-width: 6;
+/* конец правила */
+}
+
+/* цветная дуга */
+.timer-ring-fg {
+  /* без заливки */
+  fill: none;
+  /* цвет фазы */
+  stroke: var(--ring);
+  /* толщина */
+  stroke-width: 6;
+  /* круглые концы */
+  stroke-linecap: round;
+  /* плавное движение каждую секунду */
+  transition: stroke-dashoffset 1s linear;
+/* конец правила */
+}
+
+/* время в центре кольца */
+.timer-clock {
+  /* поверх svg */
+  position: absolute;
+  /* на всё кольцо */
+  inset: 0;
+  /* флексбокс */
+  display: flex;
+  /* центр */
+  align-items: center;
+  /* центр */
+  justify-content: center;
+  /* 13px */
+  font-size: 0.8125rem;
+  /* жирный */
+  font-weight: 800;
+  /* цифры одинаковой ширины */
+  font-variant-numeric: tabular-nums;
+/* конец правила */
+}
+
+/* подписи таймера */
+.timer-info {
+  /* флексбокс */
+  display: flex;
+  /* столбиком */
+  flex-direction: column;
+  /* занимает свободное место */
+  flex: 1;
+  /* длинный текст не растягивает строку */
+  min-width: 0;
+/* конец правила */
+}
+
+/* кнопки пауза/стоп */
+.timer-actions {
+  /* флексбокс */
+  display: flex;
+  /* промежуток */
+  gap: 0.25rem;
+/* конец правила */
+}
+
+/* когда таймер виден — лента сообщений ниже на его высоту (:has — «содержит») */
+.chat-layout:has(.timer-bar:not([hidden])) .chat-messages {
+  /* минус примерно 76px */
+  height: calc(100dvh - 21.75rem);
+/* конец правила */
+}
+
+/* то же на телефоне с нижним меню */
+@media (max-width: 767px) {
+  /* лента */
+  .chat-layout:has(.timer-bar:not([hidden])) .chat-messages {
+    /* ещё минус нижнее меню */
+    height: calc(100dvh - 21.75rem - var(--bottom-nav-height));
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* ------------------------- ГОЛОСОВЫЕ СООБЩЕНИЯ ----------------------------- */
+
+/* .chat-mic — кнопка микрофона */
+.chat-mic {
+  /* размер эмодзи */
+  font-size: 1.25rem;
+  /* квадратная кнопка */
+  padding-inline: 0.75rem;
+/* конец правила */
+}
+
+/* .voice-recorder — панель записи */
+.voice-recorder {
+  /* флексбокс */
+  display: flex;
+  /* по центру */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-3);
+  /* высота как у поля */
+  min-height: 2.75rem;
+/* конец правила */
+}
+
+/* [hidden] должен побеждать display: flex */
+.voice-recorder[hidden] {
+  /* прячем */
+  display: none;
+/* конец правила */
+}
+
+/* красная мигающая точка */
+.voice-rec-dot {
+  /* 12×12 */
+  width: 0.75rem;
+  /* высота */
+  height: 0.75rem;
+  /* не сжимается */
+  flex-shrink: 0;
+  /* круг */
+  border-radius: var(--radius-full);
+  /* красный */
+  background-color: var(--color-danger);
+  /* анимация мигания */
+  animation: rec-blink 1s ease-in-out infinite;
+/* конец правила */
+}
+
+/* кадры мигания */
+@keyframes rec-blink {
+  /* ярко */
+  0%, 100% { opacity: 1; }
+  /* бледно */
+  50% { opacity: 0.25; }
+/* конец @keyframes */
+}
+
+/* время записи */
+.voice-rec-time {
+  /* жирный */
+  font-weight: 800;
+  /* цифры одинаковой ширины */
+  font-variant-numeric: tabular-nums;
+  /* ширина под «1:59» */
+  min-width: 2.75rem;
+/* конец правила */
+}
+
+/* .voice-meter — полоски громкости */
+.voice-meter {
+  /* флексбокс */
+  display: flex;
+  /* полоски растут снизу... от центра */
+  align-items: center;
+  /* промежуток */
+  gap: 3px;
+  /* занимает свободное место */
+  flex: 1;
+  /* высота */
+  height: 2rem;
+  /* лишнее обрезаем */
+  overflow: hidden;
+/* конец правила */
+}
+
+/* одна полоска громкости (высоту задаёт JS) */
+.voice-meter span {
+  /* ширина */
+  width: 4px;
+  /* не сжимается */
+  flex-shrink: 0;
+  /* скругление */
+  border-radius: 2px;
+  /* основной цвет */
+  background-color: var(--color-primary);
+/* конец правила */
+}
+
+/* .voice-player — плеер в сообщении */
+.voice-player {
+  /* флексбокс */
+  display: flex;
+  /* по центру */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-2);
+  /* ширина плеера: фиксированная, иначе в «пузыре» по размеру содержимого волна сжимается в ноль */
+  width: 14rem;
+  /* но не шире пузыря на узком экране */
+  max-width: 100%;
+/* конец правила */
+}
+
+/* кнопка ▶ */
+.voice-play {
+  /* флексбокс для центрирования */
+  display: flex;
+  /* центр */
+  align-items: center;
+  /* центр */
+  justify-content: center;
+  /* не сжимается */
+  flex-shrink: 0;
+  /* 36×36 */
+  width: 2.25rem;
+  /* высота */
+  height: 2.25rem;
+  /* без рамки */
+  border: none;
+  /* круг */
+  border-radius: var(--radius-full);
+  /* основной цвет */
+  background-color: var(--color-primary);
+  /* белый значок */
+  color: var(--color-on-primary);
+  /* размер значка */
+  font-size: 0.875rem;
+  /* курсор-рука */
+  cursor: pointer;
+/* конец правила */
+}
+
+/* «волна» из полосок */
+.voice-wave {
+  /* флексбокс */
+  display: flex;
+  /* полоски от центра */
+  align-items: center;
+  /* промежуток */
+  gap: 2px;
+  /* занимает свободное место */
+  flex: 1;
+  /* высота */
+  height: 1.75rem;
+  /* курсор-рука: можно перематывать */
+  cursor: pointer;
+/* конец правила */
+}
+
+/* одна полоска волны; --h — высота (задаёт JS) */
+.voice-bar {
+  /* растягиваются поровну */
+  flex: 1;
+  /* высота из переменной */
+  height: var(--h);
+  /* скругление */
+  border-radius: 2px;
+  /* бледная, пока не проиграна */
+  background-color: var(--color-text-muted);
+  /* полупрозрачная */
+  opacity: 0.35;
+/* конец правила */
+}
+
+/* проигранная часть — основной цвет */
+.voice-bar.played {
+  /* основной цвет */
+  background-color: var(--color-primary);
+  /* непрозрачная */
+  opacity: 1;
+/* конец правила */
+}
+
+/* время в плеере */
+.voice-time {
+  /* мелкий */
+  font-size: 0.8125rem;
+  /* серый */
+  color: var(--color-text-muted);
+  /* цифры одинаковой ширины */
+  font-variant-numeric: tabular-nums;
+  /* ширина под «1:05» */
+  min-width: 2.25rem;
+  /* справа */
+  text-align: right;
+/* конец правила */
+}
+
+/* плеер в жалобе у учителя — отступ сверху */
+.complaint-card .voice-player {
+  /* отступ */
+  margin-top: var(--space-2);
+/* конец правила */
+}
+
+/* -------------------------------- ДОСКА ------------------------------------ */
+
+/* body.board-open — пока доска открыта, страница под ней не прокручивается */
+body.board-open {
+  /* без прокрутки */
+  overflow: hidden;
+/* конец правила */
+}
+
+/* .board — доска во весь экран поверх всего (кроме всплывающих сообщений) */
+.board {
+  /* fixed — прикреплена к окну */
+  position: fixed;
+  /* на весь экран */
+  inset: 0;
+  /* выше шапки и нижнего меню, ниже всплывающих сообщений */
+  z-index: 80;
+  /* флексбокс */
+  display: flex;
+  /* столбиком: строка сверху, холст, инструменты */
+  flex-direction: column;
+  /* промежуток */
+  gap: var(--space-2);
+  /* отступы */
+  padding: var(--space-3);
+  /* фон страницы */
+  background-color: var(--color-bg);
+/* конец правила */
+}
+
+/* [hidden] должен побеждать display: flex */
+.board[hidden] {
+  /* прячем */
+  display: none;
+/* конец правила */
+}
+
+/* верхняя строка доски */
+.board-bar {
+  /* флексбокс */
+  display: flex;
+  /* по центру */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-3);
+/* конец правила */
+}
+
+/* название */
+.board-title {
+  /* 20px */
+  font-size: var(--font-size-lg);
+  /* без отступов */
+  margin: 0;
+  /* не переносить */
+  white-space: nowrap;
+/* конец правила */
+}
+
+/* статус («Лена рисует…») */
+.board-status {
+  /* занимает свободное место */
+  flex: 1;
+  /* серый */
+  color: var(--color-text-muted);
+  /* мелкий */
+  font-size: var(--font-size-sm);
+  /* длинный текст обрезаем многоточием */
+  overflow: hidden;
+  /* многоточие */
+  text-overflow: ellipsis;
+  /* одна строка */
+  white-space: nowrap;
+/* конец правила */
+}
+
+/* .board-stage — место для холста */
+.board-stage {
+  /* занимает всё свободное место */
+  flex: 1;
+  /* флексбокс */
+  display: flex;
+  /* холст по центру */
+  align-items: center;
+  /* по центру */
+  justify-content: center;
+  /* min-height: 0 — можно сжиматься меньше холста */
+  min-height: 0;
+/* конец правила */
+}
+
+/* .board-canvas — сам холст: белая «тетрадь в клетку» */
+.board-canvas {
+  /* не шире и не выше сцены; пропорции 16 : 10 холст сохранит сам */
+  max-width: 100%;
+  /* высота */
+  max-height: 100%;
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* тень */
+  box-shadow: var(--shadow-md);
+  /* белый лист; клетка — две линейные «градиентные» сетки по 40px */
+  background-color: #ffffff;
+  /* клеточки */
+  background-image: linear-gradient(#e8ecf5 1px, transparent 1px), linear-gradient(90deg, #e8ecf5 1px, transparent 1px);
+  /* размер клетки */
+  background-size: 2.5% 4%;
+  /* touch-action: none — палец рисует, а не прокручивает страницу */
+  touch-action: none;
+  /* курсор-перекрестие */
+  cursor: crosshair;
+/* конец правила */
+}
+
+/* сообщение «только просмотр» */
+.board-readonly {
+  /* по центру */
+  text-align: center;
+  /* серый */
+  color: var(--color-text-muted);
+  /* без отступов */
+  margin: 0;
+/* конец правила */
+}
+
+/* .board-tools — панель инструментов снизу */
+.board-tools {
+  /* флексбокс */
+  display: flex;
+  /* перенос на узком экране */
+  flex-wrap: wrap;
+  /* по центру */
+  justify-content: center;
+  /* по центру */
+  align-items: center;
+  /* промежуток */
+  gap: var(--space-3);
+  /* отступы */
+  padding: var(--space-2) var(--space-3);
+  /* скругление */
+  border-radius: var(--radius-lg);
+  /* фон карточки */
+  background-color: var(--color-surface);
+  /* тень */
+  box-shadow: var(--shadow-sm);
+/* конец правила */
+}
+
+/* группа кнопок */
+.board-group {
+  /* флексбокс */
+  display: flex;
+  /* по центру */
+  align-items: center;
+  /* промежуток */
+  gap: 0.375rem;
+/* конец правила */
+}
+
+/* кнопка цвета — цветной кружок; --swatch — цвет (задаёт JS) */
+.board-color {
+  /* 32×32 */
+  width: 2rem;
+  /* высота */
+  height: 2rem;
+  /* круг */
+  border-radius: var(--radius-full);
+  /* белая обводка */
+  border: 3px solid var(--color-surface);
+  /* цвет */
+  background-color: var(--swatch);
+  /* тонкая внешняя рамка */
+  box-shadow: 0 0 0 1px var(--color-border);
+  /* курсор-рука */
+  cursor: pointer;
+  /* плавно */
+  transition: transform var(--transition);
+/* конец правила */
+}
+
+/* выбранный цвет — кольцо и чуть больше */
+.board-color.active {
+  /* кольцо основного цвета */
+  box-shadow: 0 0 0 2px var(--color-primary);
+  /* увеличение */
+  transform: scale(1.12);
+/* конец правила */
+}
+
+/* кнопка толщины */
+.board-size {
+  /* флексбокс для центрирования */
+  display: flex;
+  /* центр */
+  align-items: center;
+  /* центр */
+  justify-content: center;
+  /* 36×36 */
+  width: 2.25rem;
+  /* высота */
+  height: 2.25rem;
+  /* рамка */
+  border: 2px solid transparent;
+  /* скругление */
+  border-radius: var(--radius-sm);
+  /* фон */
+  background-color: var(--color-surface-2);
+  /* курсор-рука */
+  cursor: pointer;
+/* конец правила */
+}
+
+/* выбранная толщина */
+.board-size.active {
+  /* рамка основного цвета */
+  border-color: var(--color-primary);
+/* конец правила */
+}
+
+/* точка нужного размера внутри кнопки толщины; --dot — диаметр */
+.board-size span {
+  /* ширина */
+  width: var(--dot);
+  /* высота */
+  height: var(--dot);
+  /* круг */
+  border-radius: var(--radius-full);
+  /* цвет текста */
+  background-color: var(--color-text);
+/* конец правила */
+}
+
+/* кнопки ластик / отменить / очистить / скачать */
+.board-tool {
+  /* флексбокс */
+  display: flex;
+  /* столбиком: значок и подпись */
+  flex-direction: column;
+  /* по центру */
+  align-items: center;
+  /* промежуток */
+  gap: 0.125rem;
+  /* отступы */
+  padding: 0.25rem 0.5rem;
+  /* рамка */
+  border: 2px solid transparent;
+  /* скругление */
+  border-radius: var(--radius-sm);
+  /* без фона */
+  background: transparent;
+  /* цвет текста */
+  color: var(--color-text);
+  /* размер значка */
+  font-size: 1.125rem;
+  /* курсор-рука */
+  cursor: pointer;
+/* конец правила */
+}
+
+/* подпись под значком */
+.board-tool span {
+  /* мелкий */
+  font-size: 0.6875rem;
+  /* жирный */
+  font-weight: 700;
+  /* серый */
+  color: var(--color-text-muted);
+/* конец правила */
+}
+
+/* наведение */
+.board-tool:hover {
+  /* лёгкий фон */
+  background-color: var(--color-surface-2);
+/* конец правила */
+}
+
+/* нажатый ластик */
+.board-tool[aria-pressed="true"] {
+  /* рамка основного цвета */
+  border-color: var(--color-primary);
+  /* светлый фон */
+  background-color: var(--color-primary-soft);
+/* конец правила */
+}
+
+/* действия отделены чертой слева */
+.board-actions {
+  /* черта */
+  border-left: 1px solid var(--color-border);
+  /* отступ от черты */
+  padding-left: var(--space-3);
+/* конец правила */
+}
+
+/* на телефоне — компактнее */
+@media (max-width: 640px) {
+  /* доска */
+  .board {
+    /* меньше отступы */
+    padding: var(--space-2);
+  /* конец правила */
+  }
+  /* панель инструментов */
+  .board-tools {
+    /* меньше промежутки */
+    gap: var(--space-2);
+    /* меньше отступы */
+    padding: var(--space-2);
+  /* конец правила */
+  }
+  /* действия без черты (переносятся на новую строку) */
+  .board-actions {
+    /* без черты */
+    border-left: none;
+    /* без отступа */
+    padding-left: 0;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* ------------------------ ШАПКА НА СРЕДНИХ ЭКРАНАХ ------------------------- */
+
+/* 768–1439px: шесть пунктов меню с подписями не помещаются в 1120px — у неактивных пунктов оставляем только иконку */
+@media (min-width: 768px) and (max-width: 1439px) {
+  /* подпись неактивного пункта: прячем с экрана, но программа чтения её прочитает (как .visually-hidden) */
+  .nav-link:not(.active) .nav-label {
+    /* вынимаем из потока */
+    position: absolute;
+    /* размер 1×1 */
+    width: 1px;
+    /* высота */
+    height: 1px;
+    /* лишнее обрезаем */
+    overflow: hidden;
+    /* clip — видимая область пустая */
+    clip: rect(0 0 0 0);
+    /* текст в одну строку */
+    white-space: nowrap;
+  /* конец правила */
+  }
+  /* неактивный пункт — компактная круглая кнопка с иконкой */
+  .nav-link:not(.active) {
+    /* меньше отступы */
+    padding: 0.5rem 0.625rem;
+    /* подсказка (title) появится при наведении */
+    position: relative;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* от 1440px: экран широкий — шапка шире обычного контейнера, и все подписи меню помещаются */
+@media (min-width: 1440px) {
+  /* контейнер шапки */
+  .header-inner.container {
+    /* 1360px вместо 1120px */
+    max-width: 85rem;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* шапка чата: имя занимает свободное место и обрезается многоточием, кнопки инструментов не сжимаются */
+.chat-header .match-person {
+  /* растягивается */
+  flex: 1;
+  /* min-width: 0 — можно сжиматься меньше длины текста */
+  min-width: 0;
+/* конец правила */
+}
+
+/* имя и статус в шапке чата — в одну строку с многоточием */
+.chat-header .chat-title,
+/* и строка статуса */
+.chat-header #chat-subtitle {
+  /* блок, чтобы работало многоточие */
+  display: block;
+  /* лишнее прячем */
+  overflow: hidden;
+  /* многоточие */
+  text-overflow: ellipsis;
+  /* одна строка */
+  white-space: nowrap;
+/* конец правила */
+}
+
+/* кнопки инструментов не сжимаются и стоят сразу после имени */
+.chat-header .chat-tools {
+  /* не сжимаются */
+  flex-shrink: 0;
+  /* без автоматического отступа: место уже занимает имя */
+  margin-left: 0;
+/* конец правила */
+}
+
+/* на телефоне кнопки инструментов компактнее */
+@media (max-width: 640px) {
+  /* кнопка инструмента */
+  .chat-header .chat-tool {
+    /* меньше отступы */
+    padding-inline: 0.5rem;
+  /* конец правила */
+  }
+  /* шапка чата */
+  .chat-header {
+    /* меньше промежутки */
+    gap: var(--space-2);
+    /* меньше отступы */
+    padding-inline: var(--space-2);
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* очень узкий телефон: аватар собеседника в шапке чата прячем — имени нужно место */
+@media (max-width: 420px) {
+  /* аватары в шапке чата */
+  .chat-header .triple-avatars {
+    /* прячем */
+    display: none;
+  /* конец правила */
+  }
+/* конец @media */
+}
+
+/* ------------------------ ПОДСКАЗКА ОТ ИИ (страница вопроса) --------------- */
+/* Разметка — pages/question.html (id="ai-card"), логика — js/ai.js.          */
+
+/* .ai-card — карточка подсказки с цветной рамкой-градиентом */
+.ai-card {
+  /* рамка 2px прозрачная — сквозь неё виден градиент фона border-box */
+  border: 2px solid transparent;
+  /* два фона: снизу градиент на всю карточку вместе с рамкой (border-box), сверху цвет карточки только внутри рамки (padding-box) — получается цветная рамка */
+  background: linear-gradient(var(--color-surface), var(--color-surface)) padding-box, linear-gradient(135deg, var(--color-primary), var(--color-accent)) border-box;
+/* конец правила */
+}
+
+/* .ai-head — шапка: значок, заголовок, плашка */
+.ai-head {
+  /* флексбокс в строку */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* промежуток 12px */
+  gap: var(--space-3);
+  /* на узком экране плашка переносится на новую строку */
+  flex-wrap: wrap;
+/* конец правила */
+}
+
+/* .ai-icon — лампочка в цветном кружке */
+.ai-icon {
+  /* кружок не сжимается */
+  flex-shrink: 0;
+  /* сетка для центрирования */
+  display: grid;
+  /* по центру */
+  place-items: center;
+  /* 48px */
+  width: 3rem;
+  /* 48px */
+  height: 3rem;
+  /* круг */
+  border-radius: 50%;
+  /* мягкий градиент из светлых версий основного и акцентного цвета */
+  background: linear-gradient(135deg, var(--color-primary-soft), var(--color-accent-soft));
+  /* 24px */
+  font-size: 1.5rem;
+/* конец правила */
+}
+
+/* .ai-title — заголовок блока */
+.ai-title {
+  /* 20px */
+  font-size: var(--font-size-lg);
+  /* без отступов */
+  margin: 0;
+/* конец правила */
+}
+
+/* .ai-sub — пояснение под заголовком */
+.ai-sub {
+  /* без отступов */
+  margin: 0;
+/* конец правила */
+}
+
+/* .ai-badge — плашка «Gemini» справа */
+.ai-badge {
+  /* margin-left: auto — прижимаем вправо */
+  margin-left: auto;
+  /* светлый индиго фон */
+  background-color: var(--color-primary-soft);
+  /* индиго текст */
+  color: var(--color-primary);
+/* конец правила */
+}
+
+/* .ai-body — содержимое блока (меняется скриптом) */
+.ai-body {
+  /* отступ сверху 16px */
+  margin-top: var(--space-4);
+/* конец правила */
+}
+
+/* .ai-lead — вводный текст */
+.ai-lead {
+  /* отступ снизу 12px */
+  margin: 0 0 var(--space-3);
+/* конец правила */
+}
+
+/* .ai-actions — кнопка и остаток лимита в строку */
+.ai-actions {
+  /* флексбокс */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* промежуток 12px */
+  gap: var(--space-3);
+  /* перенос на узком экране */
+  flex-wrap: wrap;
+/* конец правила */
+}
+
+/* .ai-left — «Осталось сегодня: 7 из 10» */
+.ai-left {
+  /* 16px */
+  font-size: var(--font-size-sm);
+/* конец правила */
+}
+
+/* .ai-thinking — строка «ИИ думает…» */
+.ai-thinking {
+  /* флексбокс: точки и текст */
+  display: flex;
+  /* центр по вертикали */
+  align-items: center;
+  /* промежуток 10px */
+  gap: 0.625rem;
+  /* полужирный */
+  font-weight: 700;
+  /* основной цвет */
+  color: var(--color-primary);
+  /* отступ снизу 12px */
+  margin: 0 0 var(--space-3);
+/* конец правила */
+}
+
+/* .ai-dots — три точки */
+.ai-dots {
+  /* точки в строку */
+  display: inline-flex;
+  /* промежуток 4px */
+  gap: var(--space-1);
+/* конец правила */
+}
+
+/* .ai-dots i — одна точка */
+.ai-dots i {
+  /* 8px */
+  width: 0.5rem;
+  /* 8px */
+  height: 0.5rem;
+  /* круг */
+  border-radius: 50%;
+  /* основной цвет */
+  background-color: var(--color-primary);
+  /* анимация ai-bounce: 1.1 с, бесконечно */
+  animation: ai-bounce 1.1s ease-in-out infinite;
+/* конец правила */
+}
+
+/* вторая точка прыгает чуть позже первой */
+.ai-dots i:nth-child(2) {
+  /* задержка 0.15 с */
+  animation-delay: 0.15s;
+/* конец правила */
+}
+
+/* третья точка — ещё позже: получается «волна» */
+.ai-dots i:nth-child(3) {
+  /* задержка 0.3 с */
+  animation-delay: 0.3s;
+/* конец правила */
+}
+
+/* @keyframes ai-bounce — точка подпрыгивает и становится ярче */
+@keyframes ai-bounce {
+  /* в начале и в конце: внизу, полупрозрачная */
+  0%, 100% {
+    /* на месте */
+    transform: translateY(0);
+    /* видна на 40% */
+    opacity: 0.4;
+  /* конец шага */
+  }
+  /* в середине: наверху, яркая */
+  50% {
+    /* на 5px выше */
+    transform: translateY(-5px);
+    /* полностью видна */
+    opacity: 1;
+  /* конец шага */
+  }
+/* конец @keyframes */
+}
+
+/* .ai-skeleton — серые полоски вместо будущего текста */
+.ai-skeleton {
+  /* сетка столбиком */
+  display: grid;
+  /* промежуток 10px */
+  gap: 0.625rem;
+/* конец правила */
+}
+
+/* .ai-skeleton span — одна полоска с бегущим бликом */
+.ai-skeleton span {
+  /* высота 14px */
+  height: 0.875rem;
+  /* скругление */
+  border-radius: var(--radius-full);
+  /* градиент: светлый блик посередине серой полоски */
+  background: linear-gradient(90deg, var(--color-surface-2) 25%, var(--color-border) 50%, var(--color-surface-2) 75%);
+  /* фон вдвое шире полоски — его можно двигать */
+  background-size: 200% 100%;
+  /* анимация ai-shimmer: блик бежит слева направо */
+  animation: ai-shimmer 1.4s ease-in-out infinite;
+/* конец правила */
+}
+
+/* первая полоска — почти во всю ширину */
+.ai-skeleton span:nth-child(1) {
+  /* 92% */
+  width: 92%;
+/* конец правила */
+}
+
+/* вторая полоска короче */
+.ai-skeleton span:nth-child(2) {
+  /* 78% */
+  width: 78%;
+/* конец правила */
+}
+
+/* третья — ещё короче, как последняя строка абзаца */
+.ai-skeleton span:nth-child(3) {
+  /* 56% */
+  width: 56%;
+/* конец правила */
+}
+
+/* @keyframes ai-shimmer — сдвигаем фон, блик «бежит» по полоске */
+@keyframes ai-shimmer {
+  /* начало: фон сдвинут вправо */
+  from {
+    /* позиция фона 100% */
+    background-position: 100% 0;
+  /* конец шага */
+  }
+  /* конец: фон сдвинут влево */
+  to {
+    /* позиция фона −100% */
+    background-position: -100% 0;
+  /* конец шага */
+  }
+/* конец @keyframes */
+}
+
+/* .ai-hint — текст подсказки; появляется плавно (анимация fade-up из base.css) */
+.ai-hint {
+  /* fade-up за 0.4 с */
+  animation: fade-up 0.4s ease both;
+/* конец правила */
+}
+
+/* абзацы подсказки */
+.ai-hint p {
+  /* отступ снизу 12px */
+  margin: 0 0 var(--space-3);
+/* конец правила */
+}
+
+/* .ai-steps — шаги подсказки: свои кружки с номерами вместо стандартных цифр */
+.ai-steps {
+  /* без стандартных цифр */
+  list-style: none;
+  /* отступ снизу 12px */
+  margin: 0 0 var(--space-3);
+  /* без отступа слева */
+  padding: 0;
+  /* сетка */
+  display: grid;
+  /* промежуток 10px */
+  gap: 0.625rem;
+  /* counter-reset — заводим счётчик step (CSS сам считает пункты) */
+  counter-reset: step;
+/* конец правила */
+}
+
+/* .ai-steps li — один шаг */
+.ai-steps li {
+  /* сетка: кружок-номер и текст */
+  display: grid;
+  /* 2 колонки: 28px под номер и остальное под текст */
+  grid-template-columns: 1.75rem 1fr;
+  /* промежуток 12px */
+  gap: var(--space-3);
+  /* по верхнему краю */
+  align-items: start;
+  /* counter-increment — +1 к счётчику на каждом пункте */
+  counter-increment: step;
+  /* шаги появляются по очереди: задержка = номер пункта (--i задаёт js/ai.js) × 0.09 с */
+  animation: fade-up 0.4s ease both;
+  /* calc — вычисление в CSS */
+  animation-delay: calc(var(--i, 0) * 90ms + 150ms);
+/* конец правила */
+}
+
+/* ::before — кружок с номером шага */
+.ai-steps li::before {
+  /* counter(step) — текущее значение счётчика */
+  content: counter(step);
+  /* сетка для центрирования */
+  display: grid;
+  /* по центру */
+  place-items: center;
+  /* 28px */
+  width: 1.75rem;
+  /* 28px */
+  height: 1.75rem;
+  /* круг */
+  border-radius: 50%;
+  /* светлый индиго */
+  background-color: var(--color-primary-soft);
+  /* индиго цифра */
+  color: var(--color-primary);
+  /* очень жирная */
+  font-weight: 800;
+  /* 16px */
+  font-size: var(--font-size-sm);
+/* конец правила */
+}
+
+/* .ai-check — плашка «Проверь себя» */
+.ai-check {
+  /* отступы */
+  padding: var(--space-2) var(--space-3);
+  /* скругление */
+  border-radius: var(--radius-md);
+  /* светло-зелёный фон */
+  background-color: var(--color-success-soft);
+  /* полужирный */
+  font-weight: 600;
+/* конец правила */
+}
+
+/* .ai-note — предупреждение «ИИ может ошибаться» */
+.ai-note {
+  /* отступ сверху 12px */
+  margin: var(--space-3) 0 0;
+  /* отступ до линии */
+  padding-top: var(--space-3);
+  /* тонкая линия сверху */
+  border-top: 1px solid var(--color-border);
+  /* 16px */
+  font-size: var(--font-size-sm);
+  /* серый */
+  color: var(--color-text-muted);
+/* конец правила */
+}
+
+/* .ai-error — ошибка внутри блока */
+.ai-error {
+  /* отступ снизу 12px */
+  margin-bottom: var(--space-3);
+/* конец правила */
+}
+
+/* меньше движения: бесконечные анимации выключаем совсем (иначе при сверхкороткой длительности они мигали бы) */
+@media (prefers-reduced-motion: reduce) {
+  /* точки и полоски */
+  .ai-dots i,
+  /* полоски загрузки */
+  .ai-skeleton span {
+    /* без анимации */
+    animation: none;
+  /* конец правила */
+  }
+/* конец @media */
+}
