@@ -1,0 +1,11 @@
+# .vercelignore — файлы, которые НЕ публикуются на Vercel (сайту они не нужны)
+# SQL-скрипты базы — выполняются в Supabase, а не на сайте
+sql/
+# серверная функция ИИ — загружается в Supabase командой supabase functions deploy
+supabase/
+# автотесты — запускаются на компьютере командой npm test
+tests/
+# батник для запуска на своём компьютере
+start.bat
+# библиотеки npm
+node_modules/

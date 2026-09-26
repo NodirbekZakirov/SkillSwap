@@ -1,0 +1,22 @@
+{
+  "name": "skillswap",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "SkillSwap — школьники учат друг друга",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server . -p 5500 -c-1",
+    "dev": "http-server . -p 5500 -c-1",
+    "test": "node tests/matching.test.mjs && node tests/files.test.mjs && node tests/moderation.test.mjs && node tests/safety.test.mjs"
+  },
+  "keywords": [
+    "skillswap",
+    "education",
+    "peer-to-peer"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

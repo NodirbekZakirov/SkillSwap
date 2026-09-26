@@ -1,0 +1,15 @@
+# .gitignore — файлы и папки, которые НЕ загружаются на GitHub
+# node_modules — библиотеки из npm install; они большие и ставятся заново командой npm install
+node_modules/
+# служебные файлы Supabase CLI (появляются после supabase link / deploy)
+supabase/.temp/
+# настройки проекта Vercel на этом компьютере (появляются после команды vercel)
+.vercel/
+# файлы с секретами — ключи никогда не загружаем в репозиторий
+.env
+.env.*
+# журнал ошибок npm
+npm-debug.log*
+# служебные файлы Windows и macOS
+Thumbs.db
+.DS_Store

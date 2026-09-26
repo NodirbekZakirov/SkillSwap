@@ -1,0 +1,415 @@
+<!-- ======================================================================== -->
+<!-- Файл: index.html — ГЛАВНАЯ страница сайта для тех, кто ещё не вошёл.     -->
+<!-- Рассказывает, что такое SkillSwap и как он работает (3 шага), и ведёт   -->
+<!-- на страницы регистрации и входа (pages/register.html, pages/login.html). -->
+<!-- Связи: стили — css/variables.css, base.css, components.css, landing.css; -->
+<!-- тема — js/theme-init.js; поведение страницы — js/pages/landing.js.       -->
+<!-- ======================================================================== -->
+<!-- <!DOCTYPE html> говорит браузеру: это современный документ HTML5 -->
+<!DOCTYPE html>
+<!-- <html> — корневой тег; lang="ru" — язык страницы русский (важно для переносов и программ чтения с экрана) -->
+<html lang="ru">
+<!-- <head> — «голова» документа: служебная информация, которую не видно на странице -->
+<head>
+  <!-- meta charset="UTF-8" — кодировка, в которой правильно отображаются русские буквы и эмодзи -->
+  <meta charset="UTF-8">
+  <!-- meta viewport — на телефоне ширина страницы равна ширине экрана, масштаб 1 (без этого сайт на телефоне был бы мелким) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- meta description — краткое описание страницы для поисковиков -->
+  <meta name="description" content="SkillSwap — школьники учат друг друга: ты помогаешь с тем, что знаешь, а тебе помогают с тем, что нужно подтянуть.">
+  <!-- <title> — название страницы во вкладке браузера -->
+  <title>SkillSwap — школьники учат друг друга</title>
+  <!-- link rel="icon" — значок сайта во вкладке; type — формат картинки SVG -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <!-- rel="preconnect" — заранее подключаемся к серверу Google Fonts, чтобы шрифт загрузился быстрее -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- второй сервер Google, откуда приходят сами файлы шрифта; crossorigin нужен для загрузки шрифтов с другого сайта -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- подключаем шрифт Manrope в начертаниях 400, 600, 700, 800; display=swap — пока шрифт грузится, текст виден запасным шрифтом -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+  <!-- CSS-переменные дизайна (цвета, отступы, радиусы) — подключаем первыми; / в начале пути — от корня сайта -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <!-- базовые стили всего сайта -->
+  <link rel="stylesheet" href="/css/base.css">
+  <!-- стили компонентов: кнопки, карточки, шапка -->
+  <link rel="stylesheet" href="/css/components.css">
+  <!-- стили только для главной страницы -->
+  <link rel="stylesheet" href="/css/landing.css">
+  <!-- обычный скрипт (не модуль): сразу ставит светлую или тёмную тему, чтобы не было «вспышки» -->
+  <script src="/js/theme-init.js"></script>
+  <!-- type="module" — скрипт-модуль, в нём работают import/export; модули выполняются после загрузки HTML -->
+  <script type="module" src="/js/pages/landing.js"></script>
+<!-- закрываем <head> -->
+</head>
+<!-- <body> — всё видимое содержимое страницы -->
+<body>
+  <!-- <header> — шапка сайта; класс site-header описан в components.css -->
+  <header class="site-header">
+    <!-- container — ограничивает ширину и центрирует; header-inner — логотип слева, кнопки справа -->
+    <div class="container header-inner">
+      <!-- <a> — ссылка; href="/" — на главную; aria-label — подпись для программ чтения с экрана -->
+      <a class="logo" href="/" aria-label="SkillSwap — на главную">
+        <!-- цветной квадратик со стрелками обмена; aria-hidden="true" — значок не зачитывается вслух -->
+        <span class="logo-mark" aria-hidden="true">⇄</span>
+        <!-- название сайта -->
+        <span>SkillSwap</span>
+      <!-- закрываем ссылку-логотип -->
+      </a>
+      <!-- блок кнопок справа; id="guest-actions" — по этому id скрипт найдёт блок и заменит кнопки, если пользователь уже вошёл -->
+      <div class="header-actions" id="guest-actions">
+        <!-- кнопка смены темы; type="button" — обычная кнопка, не отправляет форм; значок подставит js/theme.js -->
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Сменить тему">🌙</button>
+        <!-- ссылка на вход, выглядит как «призрачная» кнопка -->
+        <a class="btn btn-ghost" href="/pages/login.html" data-guest-link>Вход</a>
+        <!-- ссылка на регистрацию; hide-mobile — на узком экране прячем, место в шапке ограничено (кнопка есть ниже на странице) -->
+        <a class="btn btn-primary hide-mobile" href="/pages/register.html" data-guest-link>Регистрация</a>
+        <!-- ссылка для тех, кто уже вошёл; атрибут hidden прячет её, пока скрипт не проверит вход -->
+        <a class="btn btn-primary" href="/pages/matches.html" id="header-app-link" hidden>Открыть SkillSwap</a>
+      <!-- закрываем блок кнопок -->
+      </div>
+    <!-- закрываем контейнер шапки -->
+    </div>
+  <!-- закрываем шапку -->
+  </header>
+
+  <!-- <main> — основное содержимое страницы (на странице он один) -->
+  <main class="page landing">
+    <!-- <section> — смысловой раздел; hero — первый большой экран с главным призывом -->
+    <section class="hero container">
+      <!-- левая колонка: текст и кнопки; fade-in — анимация появления -->
+      <div class="hero-text fade-in">
+        <!-- маленькая плашка над заголовком -->
+        <span class="chip chip-accent">🎓 Для школьников 1–11 классов</span>
+        <!-- главный заголовок страницы; <span> выделяет часть текста цветом -->
+        <h1 class="hero-title">Учитесь друг у друга. <span class="gradient-text">Вместе проще.</span></h1>
+        <!-- подзаголовок с объяснением идеи -->
+        <p class="hero-lead">Отметь, какие предметы ты знаешь хорошо, а какие хочешь подтянуть. SkillSwap найдёт в твоей школе партнёра: он поможет тебе, а ты — ему.</p>
+        <!-- кнопки; id="hero-actions" — скрипт заменит их, если пользователь уже вошёл -->
+        <div class="row" id="hero-actions">
+          <!-- большая главная кнопка регистрации -->
+          <a class="btn btn-primary btn-lg" href="/pages/register.html">Регистрация</a>
+          <!-- большая второстепенная кнопка входа -->
+          <a class="btn btn-secondary btn-lg" href="/pages/login.html">Вход</a>
+        <!-- закрываем блок кнопок -->
+        </div>
+        <!-- маленькая подпись под кнопками -->
+        <p class="muted hero-note">Бесплатно. Без фото и номеров телефонов.</p>
+      <!-- закрываем левую колонку -->
+      </div>
+
+      <!-- правая колонка: АНИМАЦИЯ подбора пары (её оживляет js/landing-animation.js); aria-hidden — это украшение, смысл объясняет текст слева -->
+      <div class="pair-demo fade-in" id="pair-demo" aria-hidden="true">
+        <!-- первая мини-карточка ученика; demo-card-a — карточка сверху слева -->
+        <div class="card demo-card demo-card-a">
+          <!-- строка: аватар, имя и галочка «пара найдена» -->
+          <div class="demo-person">
+            <!-- аватар-эмодзи -->
+            <span class="avatar">🦊</span>
+            <!-- имя и класс -->
+            <div><strong>Амир Т.</strong><div class="muted">8 класс</div></div>
+            <!-- галочка появится на последнем шаге -->
+            <span class="demo-check">✓</span>
+          <!-- закрываем строку -->
+          </div>
+          <!-- что знает: зелёная плашка; data-lane="1" — подсвечивается, когда летит английский (линия 1) -->
+          <div class="demo-line"><span class="muted">Знает</span> <span class="chip chip-success demo-chip" data-lane="1">🔤 Английский · 5</span></div>
+          <!-- что хочет подтянуть: янтарная плашка; data-lane="2" — подсвечивается, когда летит алгебра (линия 2) -->
+          <div class="demo-line"><span class="muted">Хочет</span> <span class="chip chip-warning demo-chip" data-lane="2">🔢 Алгебра · 2</span></div>
+        <!-- закрываем первую карточку -->
+        </div>
+        <!-- полоса между карточками: линии обмена и круг совместимости -->
+        <div class="pair-link">
+          <!-- <svg> — векторный рисунок; viewBox="0 0 400 120" — внутренняя система координат 400×120, рисунок растягивается под ширину блока -->
+          <svg class="pair-svg" viewBox="0 0 400 120">
+            <!-- серая пунктирная «дорожка» линии 1; d — описание линии: M — начальная точка, C — плавная кривая Безье -->
+            <path class="track" d="M150 6 C 70 30, 70 90, 150 114"/>
+            <!-- дорожка линии 2 -->
+            <path class="track" d="M250 114 C 330 90, 330 30, 250 6"/>
+            <!-- цветная линия 1: английский от Амира (сверху) к Лене (снизу); скрипт «прорисовывает» её -->
+            <path class="flow flow-1" data-flow="1" d="M150 6 C 70 30, 70 90, 150 114"/>
+            <!-- цветная линия 2: алгебра от Лены (снизу) к Амиру (сверху) -->
+            <path class="flow flow-2" data-flow="2" d="M250 114 C 330 90, 330 30, 250 6"/>
+            <!-- <g> — группа; кружок-предмет, который летит по линии 1 -->
+            <g class="token token-1" data-token="1"><circle r="17"/><text>🔤</text></g>
+            <!-- кружок-предмет для линии 2 -->
+            <g class="token token-2" data-token="2"><circle r="17"/><text>🔢</text></g>
+          <!-- закрываем рисунок -->
+          </svg>
+          <!-- круг совместимости посередине -->
+          <div class="match-ring">
+            <!-- рисунок кольца; viewBox 100×100 -->
+            <svg viewBox="0 0 100 100">
+              <!-- <defs> — определения, которые используются в рисунке, но сами не видны -->
+              <defs>
+                <!-- linearGradient — плавный переход цвета для кольца; id — по нему кольцо ссылается на градиент -->
+                <linearGradient id="ring-gradient" x1="0" y1="0" x2="1" y2="1">
+                  <!-- stop — точка градиента: в начале основной цвет (задан в CSS) -->
+                  <stop class="ring-stop-start" offset="0"/>
+                  <!-- в конце — акцентный цвет -->
+                  <stop class="ring-stop-end" offset="1"/>
+                <!-- закрываем градиент -->
+                </linearGradient>
+              <!-- закрываем определения -->
+              </defs>
+              <!-- серое кольцо-основа; cx, cy — центр, r — радиус -->
+              <circle class="ring-track" cx="50" cy="50" r="42"/>
+              <!-- цветная дуга; pathLength="100" — считаем длину окружности равной 100, так удобно заполнять в процентах -->
+              <circle class="ring-fill" cx="50" cy="50" r="42" pathLength="100"/>
+            <!-- закрываем рисунок кольца -->
+            </svg>
+            <!-- текст в центре: 🔍, ⇄ или процент -->
+            <span class="match-value">🔍</span>
+          <!-- закрываем круг -->
+          </div>
+        <!-- закрываем полосу -->
+        </div>
+        <!-- вторая мини-карточка ученика; demo-card-b — снизу справа -->
+        <div class="card demo-card demo-card-b">
+          <!-- аватар, имя и галочка -->
+          <div class="demo-person">
+            <!-- аватар-эмодзи -->
+            <span class="avatar">🐼</span>
+            <!-- имя и класс -->
+            <div><strong>Лена К.</strong><div class="muted">7 класс</div></div>
+            <!-- галочка -->
+            <span class="demo-check">✓</span>
+          <!-- закрываем строку -->
+          </div>
+          <!-- что знает: алгебра — это линия 2 -->
+          <div class="demo-line"><span class="muted">Знает</span> <span class="chip chip-success demo-chip" data-lane="2">🔢 Алгебра · 5</span></div>
+          <!-- что хочет: английский — это линия 1 -->
+          <div class="demo-line"><span class="muted">Хочет</span> <span class="chip chip-warning demo-chip" data-lane="1">🔤 Английский · 2</span></div>
+        <!-- закрываем вторую карточку -->
+        </div>
+        <!-- подпись под рисунком: скрипт меняет её на каждом шаге -->
+        <p class="demo-status">Амир поможет Лене с английским, а Лена ему — с алгеброй</p>
+      <!-- закрываем анимацию -->
+      </div>
+    <!-- закрываем первый экран -->
+    </section>
+
+    <!-- раздел «Как это работает»; id="how" — якорь, на него можно сослаться ссылкой href="#how" -->
+    <section class="section container" id="how">
+      <!-- заголовок раздела -->
+      <h2 class="section-title">Как это работает</h2>
+      <!-- <ol> — нумерованный список (ordered list): три шага -->
+      <ol class="steps">
+        <!-- <li> — пункт списка; первый шаг -->
+        <li class="card card-hover step">
+          <!-- номер шага в кружке -->
+          <span class="step-number">1</span>
+          <!-- заголовок шага -->
+          <h3>Заполни профиль</h3>
+          <!-- описание шага -->
+          <p class="muted">Отметь предметы, которые знаешь на 4–5, и те, что хочешь подтянуть. Укажи, когда тебе удобно заниматься.</p>
+        <!-- закрываем первый шаг -->
+        </li>
+        <!-- второй шаг -->
+        <li class="card card-hover step">
+          <!-- номер шага -->
+          <span class="step-number">2</span>
+          <!-- заголовок -->
+          <h3>Найди партнёра</h3>
+          <!-- описание -->
+          <p class="muted">Сайт подберёт ученика твоей школы: он знает то, что нужно тебе, а ты знаешь то, что нужно ему. Покажет и процент совместимости.</p>
+        <!-- закрываем второй шаг -->
+        </li>
+        <!-- третий шаг -->
+        <li class="card card-hover step">
+          <!-- номер шага -->
+          <span class="step-number">3</span>
+          <!-- заголовок -->
+          <h3>Учитесь вместе</h3>
+          <!-- описание -->
+          <p class="muted">Договоритесь в чате, назначьте занятие, делитесь конспектами. За помощь получай очки и бейджи.</p>
+        <!-- закрываем третий шаг -->
+        </li>
+      <!-- закрываем список шагов -->
+      </ol>
+    <!-- закрываем раздел -->
+    </section>
+
+    <!-- раздел про тройки обмена -->
+    <section class="section container">
+      <!-- карточка с двумя колонками: текст и схема -->
+      <div class="card triangle-card">
+        <!-- текстовая колонка -->
+        <div>
+          <!-- заголовок -->
+          <h2>Нет прямой пары? Найдём тройку!</h2>
+          <!-- объяснение -->
+          <p class="muted">Бывает, что никто не знает твой предмет и одновременно не нуждается в твоём. Тогда SkillSwap ищет цепочку из трёх учеников: каждый помогает следующему, и никто не остаётся без помощи.</p>
+          <!-- <ol> — нумерованный список шагов; пункты подсвечиваются вместе со схемой (js/landing-animation.js) -->
+          <ol class="cycle-steps" id="triad-steps">
+            <!-- data-for="1" — пункт относится к шагу 1 анимации -->
+            <li data-for="1"><span class="cycle-step-num">1</span><span>🦊 Амир учит 🐼 Лену английскому</span></li>
+            <!-- шаг 2 -->
+            <li data-for="2"><span class="cycle-step-num">2</span><span>🐼 Лена учит 🐯 Тимура химии</span></li>
+            <!-- шаг 3 -->
+            <li data-for="3"><span class="cycle-step-num">3</span><span>🐯 Тимур учит 🦊 Амира геометрии</span></li>
+            <!-- шаг 4 — итог -->
+            <li data-for="4"><span class="cycle-step-num">🔄</span><span>Круг замкнулся — помощь получил каждый</span></li>
+          <!-- закрываем список -->
+          </ol>
+        <!-- закрываем текстовую колонку -->
+        </div>
+        <!-- АНИМИРОВАННАЯ схема тройки; role="img" и aria-label описывают её словами для программ чтения с экрана -->
+        <div class="cycle" id="triad-demo" role="img" aria-label="Схема: Амир помогает Лене, Лена помогает Тимуру, Тимур помогает Амиру">
+          <!-- рисунок линий; viewBox 400×340; aria-hidden — описание уже есть в aria-label -->
+          <svg class="cycle-svg" viewBox="0 0 400 340" aria-hidden="true">
+            <!-- пунктирный круг через всех троих — «цикл»; на последнем шаге он начинает вращаться -->
+            <circle class="cycle-orbit" cx="200" cy="218" r="140"/>
+            <!-- дорожка Амир → Лена; Q — кривая с одной управляющей точкой (изгиб наружу) -->
+            <path class="track" d="M229.2 121.1 Q 289.8 157.2 300.8 226.9"/>
+            <!-- дорожка Лена → Тимур -->
+            <path class="track" d="M278 270 Q 200 300 122 270"/>
+            <!-- дорожка Тимур → Амир -->
+            <path class="track" d="M99.2 226.9 Q 110.2 157.2 170.8 121.1"/>
+            <!-- цветная стрелка 1: Амир учит Лену английскому -->
+            <path class="flow flow-1" data-flow="1" d="M229.2 121.1 Q 289.8 157.2 300.8 226.9"/>
+            <!-- цветная стрелка 2: Лена учит Тимура химии -->
+            <path class="flow flow-2" data-flow="2" d="M278 270 Q 200 300 122 270"/>
+            <!-- цветная стрелка 3: Тимур учит Амира геометрии -->
+            <path class="flow flow-3" data-flow="3" d="M99.2 226.9 Q 110.2 157.2 170.8 121.1"/>
+            <!-- предмет, который летит по стрелке 1 -->
+            <g class="token token-1" data-token="1"><circle r="17"/><text>🔤</text></g>
+            <!-- предмет для стрелки 2 -->
+            <g class="token token-2" data-token="2"><circle r="17"/><text>🧪</text></g>
+            <!-- предмет для стрелки 3 -->
+            <g class="token token-3" data-token="3"><circle r="17"/><text>📐</text></g>
+          <!-- закрываем рисунок -->
+          </svg>
+          <!-- ученик А (сверху); aria-hidden — схему уже описывает aria-label -->
+          <span class="cycle-node node-a" aria-hidden="true">🦊<span class="cycle-name">Амир</span></span>
+          <!-- ученик Б (справа снизу) -->
+          <span class="cycle-node node-b" aria-hidden="true">🐼<span class="cycle-name">Лена</span></span>
+          <!-- ученик В (слева снизу) -->
+          <span class="cycle-node node-c" aria-hidden="true">🐯<span class="cycle-name">Тимур</span></span>
+          <!-- надпись в центре: меняется на каждом шаге -->
+          <span class="cycle-center" aria-hidden="true">Тройка найдена! 🎉</span>
+        <!-- закрываем схему -->
+        </div>
+      <!-- закрываем карточку -->
+      </div>
+    <!-- закрываем раздел -->
+    </section>
+
+    <!-- раздел со списком предметов -->
+    <section class="section container">
+      <!-- заголовок раздела -->
+      <h2 class="section-title">13 школьных предметов</h2>
+      <!-- сюда js/pages/landing.js вставит плашки предметов из js/config.js -->
+      <div class="subjects-cloud" id="subjects-list"></div>
+    <!-- закрываем раздел -->
+    </section>
+
+    <!-- раздел «Почему это безопасно» -->
+    <section class="section container">
+      <!-- заголовок раздела -->
+      <h2 class="section-title">Безопасно и честно</h2>
+      <!-- сетка из шести карточек (на компьютере 3 + 3) -->
+      <div class="grid features">
+        <!-- карточка-преимущество 1 -->
+        <div class="card card-hover feature">
+          <!-- иконка -->
+          <span class="feature-icon" aria-hidden="true">🏫</span>
+          <!-- заголовок -->
+          <h3>Только твоя школа</h3>
+          <!-- текст -->
+          <p class="muted">Партнёров подбираем только среди учеников твоей школы — можно встретиться в библиотеке.</p>
+        <!-- закрываем карточку -->
+        </div>
+        <!-- карточка-преимущество 2 -->
+        <div class="card card-hover feature">
+          <!-- иконка -->
+          <span class="feature-icon" aria-hidden="true">🦉</span>
+          <!-- заголовок -->
+          <h3>Без фото и телефонов</h3>
+          <!-- текст -->
+          <p class="muted">Вместо фото — аватар из набора. Номер телефона и адрес мы не спрашиваем.</p>
+        <!-- закрываем карточку -->
+        </div>
+        <!-- карточка-преимущество 3 -->
+        <div class="card card-hover feature">
+          <!-- иконка -->
+          <span class="feature-icon" aria-hidden="true">🛡️</span>
+          <!-- заголовок -->
+          <h3>Учитель на связи</h3>
+          <!-- текст -->
+          <p class="muted">На любое сообщение можно пожаловаться. Жалобы разбирает учитель твоей школы.</p>
+        <!-- закрываем карточку -->
+        </div>
+        <!-- карточка-преимущество 4 -->
+        <div class="card card-hover feature">
+          <!-- иконка -->
+          <span class="feature-icon" aria-hidden="true">🏅</span>
+          <!-- заголовок -->
+          <h3>Очки и бейджи</h3>
+          <!-- текст -->
+          <p class="muted">За каждое проведённое занятие и хорошие оценки получай очки, бейджи и место в рейтинге школы.</p>
+        <!-- закрываем карточку -->
+        </div>
+        <!-- карточка-преимущество 5 -->
+        <div class="card card-hover feature">
+          <!-- иконка -->
+          <span class="feature-icon" aria-hidden="true">❓</span>
+          <!-- заголовок -->
+          <h3>Вопросы всех школ</h3>
+          <!-- текст -->
+          <p class="muted">Задай вопрос по любому предмету — ответят ученики из разных школ, а администратор проверит ответы.</p>
+        <!-- закрываем карточку -->
+        </div>
+        <!-- карточка-преимущество 6 -->
+        <div class="card card-hover feature">
+          <!-- иконка -->
+          <span class="feature-icon" aria-hidden="true">🤝</span>
+          <!-- заголовок -->
+          <h3>Честный обмен</h3>
+          <!-- текст -->
+          <p class="muted">Обмен начинается, только когда согласились все участники. Завершить его можно в любой момент.</p>
+        <!-- закрываем карточку -->
+        </div>
+      <!-- закрываем сетку -->
+      </div>
+    <!-- закрываем раздел -->
+    </section>
+
+    <!-- финальный призыв к действию -->
+    <section class="section container">
+      <!-- цветная карточка -->
+      <div class="cta">
+        <!-- заголовок -->
+        <h2>Готов попробовать?</h2>
+        <!-- текст -->
+        <p>Регистрация займёт пару минут.</p>
+        <!-- кнопки; id="cta-actions" — скрипт заменит их, если пользователь уже вошёл -->
+        <div class="row cta-actions" id="cta-actions">
+          <!-- кнопка регистрации -->
+          <a class="btn btn-lg cta-btn" href="/pages/register.html">Создать аккаунт</a>
+          <!-- ссылка на вход -->
+          <a class="cta-link" href="/pages/login.html">У меня уже есть аккаунт</a>
+        <!-- закрываем кнопки -->
+        </div>
+      <!-- закрываем карточку -->
+      </div>
+    <!-- закрываем раздел -->
+    </section>
+  <!-- закрываем основное содержимое -->
+  </main>
+
+  <!-- <footer> — подвал сайта -->
+  <footer class="site-footer">
+    <!-- содержимое подвала -->
+    <div class="container footer-inner">
+      <!-- &copy; — HTML-сущность знака ©; в <span id="year"> скрипт подставит текущий год -->
+      <span>&copy; <span id="year">2026</span> SkillSwap</span>
+      <!-- подпись проекта -->
+      <span>Дипломный проект, STEP Academy</span>
+    <!-- закрываем содержимое подвала -->
+    </div>
+  <!-- закрываем подвал -->
+  </footer>
+<!-- закрываем <body> -->
+</body>
+<!-- закрываем <html> -->
+</html>
